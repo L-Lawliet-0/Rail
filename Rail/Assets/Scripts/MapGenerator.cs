@@ -26,12 +26,39 @@ public class MapGenerator : MonoBehaviour
             {
                 while (!file.EndOfStream)
                 {
+                    string polygonName = "Line";
                     char character = (char)file.Read();
-                    if (READSECONDLEVEL)
+                    if (READSECONDLEVEL && character.Equals('N') && PeekCompare(file, 'L'))
                     {
+                        polygonName = "";
+                        bool findProvince = true;
                         // if read second level, read NL_NAME_1 and NL_NAME_2
                         // this represent the provinance and city
+                        // find NL_NAME_1 
+                        FINDNAME:
+                        for (int i = 0; i < 11; i++)
+                            file.Read();
 
+                        string value = "";
+                        while (!PeekCompare(file, '"'))
+                        {
+                            value += (char)file.Read();
+                        }
+                        polygonName += value;
+
+                        if (findProvince)
+                        {
+                            findProvince = false;
+                            while (!character.Equals('N') || !PeekCompare(file, 'L'))
+                                character = (char)file.Read();
+                            goto FINDNAME;
+                        }
+                        else
+                        {
+                            while (!character.Equals('[') || !PeekCompare(file, '['))
+                                character = (char)file.Read();
+                        }
+                       
                     }
 
                     
@@ -50,9 +77,10 @@ public class MapGenerator : MonoBehaviour
                         if (PeekCompare(file, '['))
                             file.Read();
                         CurrentLine = Instantiate(LinePrefab, transform).GetComponent<LineRenderer>();
+                        CurrentLine.transform.name = polygonName;
                         CurrentLine.transform.localPosition = Vector3.zero;
                         Positions = new List<Vector3>();
-
+                        
 
                     READCOORD:
                         // starts read coord
@@ -65,8 +93,19 @@ public class MapGenerator : MonoBehaviour
                         else
                         {
                             Vector3[] positions = Positions.ToArray();
+                            Vector2[] polyPos = new Vector2[positions.Length];
+                            for (int i = 0; i < positions.Length; i++)
+                            {
+                                polyPos[i] = positions[i];
+                            }
                             CurrentLine.positionCount = positions.Length;
                             CurrentLine.SetPositions(positions);
+
+                            // add a polygon collider to the line renderer
+                            PolygonCollider2D polygon = CurrentLine.gameObject.AddComponent<PolygonCollider2D>();
+                            polygon.pathCount = 1;
+                            polygon.SetPath(0, polyPos);
+
                             // this is either a ]] or a ]]]
                             if (PeekCompare(file, ']'))
                                 file.Read();
