@@ -9,6 +9,10 @@ public class MapGenerator : MonoBehaviour
     public bool RUN;
     public bool DELETE;
 
+    public bool READSECONDLEVEL;
+
+    public string FILENAME = "/Data/gadm41_CHN_0.json";
+
     public GameObject LinePrefab;
     private LineRenderer CurrentLine;
     private List<Vector3> Positions;
@@ -18,11 +22,19 @@ public class MapGenerator : MonoBehaviour
         
         if (RUN)
         {
-            using (StreamReader file = new StreamReader(Application.dataPath + "/Data/gadm41_CHN_0.json"))
+            using (StreamReader file = new StreamReader(Application.dataPath + FILENAME))
             {
                 while (!file.EndOfStream)
                 {
                     char character = (char)file.Read();
+                    if (READSECONDLEVEL)
+                    {
+                        // if read second level, read NL_NAME_1 and NL_NAME_2
+                        // this represent the provinance and city
+
+                    }
+
+                    
                     if (character.Equals('[') && ((char)file.Peek()).Equals('['))
                     {
                         // we enter a new multipolygon
@@ -32,9 +44,11 @@ public class MapGenerator : MonoBehaviour
                         // starts new shape with 2 [[
                         // ends a shape with 2 ]]
 
-                    NEWPOLYGON:     
-                        file.Read();
-                        file.Read();
+                    NEWPOLYGON:
+                        if (PeekCompare(file, '['))
+                            file.Read();
+                        if (PeekCompare(file, '['))
+                            file.Read();
                         CurrentLine = Instantiate(LinePrefab, transform).GetComponent<LineRenderer>();
                         CurrentLine.transform.localPosition = Vector3.zero;
                         Positions = new List<Vector3>();
@@ -44,17 +58,26 @@ public class MapGenerator : MonoBehaviour
                         // starts read coord
                         ReadCoord(file);
 
+                        // three conditions, ], ]], ]]]
                         character = (char)file.Read();
                         if (character.Equals(','))
                             goto READCOORD;
                         else
                         {
-                            // this is either a ]] or a ]]]
-                            file.Read();
-                            // a polygon is done, add it to the line renderer
                             Vector3[] positions = Positions.ToArray();
                             CurrentLine.positionCount = positions.Length;
                             CurrentLine.SetPositions(positions);
+                            // this is either a ]] or a ]]]
+                            if (PeekCompare(file, ']'))
+                                file.Read();
+                            else
+                            {
+                                file.Read();
+                                goto NEWPOLYGON;
+                            }
+
+                            // a polygon is done, add it to the line renderer
+                            
 
                             if (((char)file.Peek()).Equals(']'))
                             {
@@ -69,7 +92,7 @@ public class MapGenerator : MonoBehaviour
                     }
                 }
 
-
+                file.Close();
             }
 
             RUN = false;
@@ -85,9 +108,15 @@ public class MapGenerator : MonoBehaviour
         }
     }
 
+    private bool PeekCompare(StreamReader file, char compare)
+    {
+        return ((char)file.Peek()).Equals(compare);
+    }
+
     private void ReadCoord(StreamReader file)
     {
-        file.Read(); // the [
+        if (PeekCompare(file, '['))
+            file.Read(); // the [
         string v2 = "";
         while (!((char)file.Peek()).Equals(']'))
             v2 += (char)file.Read(); // append the vector
@@ -96,8 +125,15 @@ public class MapGenerator : MonoBehaviour
 
         float x = float.Parse(s_x);
         float y = float.Parse(s_y);
+
+        float lon = x * Mathf.Deg2Rad;
+        float lat = y * Mathf.Deg2Rad;
+
+        float f_x = 100 * lon;
+        float f_y = 100 * Mathf.Log(Mathf.Tan(Mathf.PI * .25f + .5f * lat));
+
         file.Read(); // the ]
 
-        Positions.Add(new Vector3(x, y, 0));
+        Positions.Add(new Vector3(f_x, f_y, 0));
     }
 }
