@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
+using System;
 
 [ExecuteInEditMode]
 public class MapGenerator : MonoBehaviour
@@ -44,7 +45,14 @@ public class MapGenerator : MonoBehaviour
                         {
                             value += (char)file.Read();
                         }
-                        polygonName += value;
+
+                        string[] splits = value.Split('|');
+
+                        if (splits.Length > 1)
+                            polygonName += splits[1];
+                        else
+                            polygonName += value;
+                        polygonName += ",";
 
                         if (findProvince)
                         {
@@ -102,10 +110,12 @@ public class MapGenerator : MonoBehaviour
                             CurrentLine.SetPositions(positions);
 
                             // add a polygon collider to the line renderer
-                            PolygonCollider2D polygon = CurrentLine.gameObject.AddComponent<PolygonCollider2D>();
-                            polygon.pathCount = 1;
-                            polygon.SetPath(0, polyPos);
-
+                            if (READSECONDLEVEL)
+                            {
+                                PolygonCollider2D polygon = CurrentLine.gameObject.AddComponent<PolygonCollider2D>();
+                                polygon.pathCount = 1;
+                                polygon.SetPath(0, polyPos);
+                            }
                             // this is either a ]] or a ]]]
                             if (PeekCompare(file, ']'))
                                 file.Read();
@@ -152,8 +162,13 @@ public class MapGenerator : MonoBehaviour
         return ((char)file.Peek()).Equals(compare);
     }
 
+    private const float smRadius = 6371f;
     private void ReadCoord(StreamReader file)
     {
+        float smRange = smRadius * Mathf.PI * 2;
+        float smLonToX = smRange / 360f;
+        float smRadiansOverDegrees = Mathf.PI / 180f;
+
         if (PeekCompare(file, '['))
             file.Read(); // the [
         string v2 = "";
@@ -165,11 +180,20 @@ public class MapGenerator : MonoBehaviour
         float x = float.Parse(s_x);
         float y = float.Parse(s_y);
 
+        float f_x = x * smLonToX;
+        float f_y = y * smRadiansOverDegrees;
+        f_y = Mathf.Log(Mathf.Tan(f_y) + 1f / Mathf.Cos(f_y), (float)Math.E);
+        f_y *= smRadius;
+
+        /*
         float lon = x * Mathf.Deg2Rad;
         float lat = y * Mathf.Deg2Rad;
 
-        float f_x = 100 * lon;
-        float f_y = 100 * Mathf.Log(Mathf.Tan(Mathf.PI * .25f + .5f * lat));
+        float earth_R = 6371f;
+        float f_x = earth_R * lon;
+        float f_y = earth_R * Mathf.Log(Mathf.Tan(Mathf.PI * .25f + .5f * lat));
+        */
+
 
         file.Read(); // the ]
 
