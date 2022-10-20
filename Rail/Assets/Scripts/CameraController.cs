@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
 
     public float minX, maxX, minY, maxY; // the range of camera positions, update when zoom
 
-    private const float ZoomSpeed = 1300f;
+    private const float ZoomSpeed = 2600f / 5;
 
     private void Awake()
     {
@@ -80,16 +80,22 @@ public class CameraController : MonoBehaviour
         {
             GameMain.Instance.CityLine.SetActive(true);
             GameMain.Instance.ProvinceLine.SetActive(false);
+
+            CityNamesParent.Instance.ActivateNames(1);
         }
         else if (value < 2000)
         {
             GameMain.Instance.CityLine.SetActive(false);
             GameMain.Instance.ProvinceLine.SetActive(true);
+
+            CityNamesParent.Instance.ActivateNames(0);
         }
         else
         {
             GameMain.Instance.CityLine.SetActive(false);
             GameMain.Instance.ProvinceLine.SetActive(false);
+
+            CityNamesParent.Instance.ActivateNames(-1);
         }
     }
 }

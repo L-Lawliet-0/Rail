@@ -29,6 +29,7 @@ public class NamesGenerator : MonoBehaviour
         public int fontSize;
         public string text;
         public string name;
+        public int ParentIndex;
     }
 
     void Update()
@@ -86,8 +87,14 @@ public class NamesGenerator : MonoBehaviour
 
         if (ClearAll)
         {
-            for (int i = transform.childCount - 1; i >= 0; i--)
-                DestroyImmediate(transform.GetChild(i).gameObject);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                for (int j = transform.GetChild(i).childCount - 1; j >= 0; j--)
+                {
+                    DestroyImmediate(transform.GetChild(i).GetChild(j).gameObject);
+                }
+            }
+
             ClearAll = false;
         }
 
@@ -140,18 +147,22 @@ public class NamesGenerator : MonoBehaviour
             List<TextInfo> datas = new List<TextInfo>();
             for (int i = 0; i < transform.childCount; i++)
             {
-                TextInfo data = new TextInfo();
-                RectTransform rect = transform.GetChild(i).GetComponent<RectTransform>();
-                Text txt = transform.GetChild(i).GetComponent<Text>();
-                data.posX = rect.position.x;
-                data.posY = rect.position.y;
-                data.sizeX = rect.sizeDelta.x;
-                data.sizeY = rect.sizeDelta.y;
-                data.text = txt.text;
-                data.fontSize = txt.fontSize;
-                data.name = transform.GetChild(i).name;
+                for (int j = 0; j < transform.GetChild(i).childCount; j++)
+                {
+                    TextInfo data = new TextInfo();
+                    RectTransform rect = transform.GetChild(i).GetChild(j).GetComponent<RectTransform>();
+                    Text txt = transform.GetChild(i).GetChild(j).GetComponent<Text>();
+                    data.posX = rect.position.x;
+                    data.posY = rect.position.y;
+                    data.sizeX = rect.sizeDelta.x;
+                    data.sizeY = rect.sizeDelta.y;
+                    data.text = txt.text;
+                    data.fontSize = txt.fontSize;
+                    data.name = transform.GetChild(i).GetChild(j).name;
+                    data.ParentIndex = i;
 
-                datas.Add(data);
+                    datas.Add(data);
+                }
             }
 
             using (Stream file = File.Open(dataPath, FileMode.OpenOrCreate))
@@ -161,8 +172,13 @@ public class NamesGenerator : MonoBehaviour
             }
 
             // clear all objects
-            for (int i = transform.childCount - 1; i >= 0; i--)
-                DestroyImmediate(transform.GetChild(i).gameObject);
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                for (int j = transform.GetChild(i).childCount - 1; j >= 0; j--)
+                {
+                    DestroyImmediate(transform.GetChild(i).GetChild(j).gameObject);
+                }
+            }
 
             SaveInfo = false;
         }
@@ -185,7 +201,7 @@ public class NamesGenerator : MonoBehaviour
                 RectTransform rect = obj.GetComponent<RectTransform>();
                 Text txt = obj.GetComponent<Text>();
 
-                obj.transform.SetParent(transform);
+                obj.transform.SetParent(transform.GetChild(ti.ParentIndex));
                 rect.position = new Vector3(ti.posX, ti.posY);
                 rect.sizeDelta = new Vector2(ti.sizeX, ti.sizeY);
                 txt.text = ti.text;
