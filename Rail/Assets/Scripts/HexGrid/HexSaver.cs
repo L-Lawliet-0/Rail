@@ -11,7 +11,7 @@ public class HexSaver : MonoBehaviour
     public bool LoadObjects;
 
     [System.Serializable]
-    private class HexInfo
+    public class HexInfo
     {
         public float posX, posY;
         public string name;

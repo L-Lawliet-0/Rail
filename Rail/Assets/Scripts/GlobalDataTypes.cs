@@ -4,6 +4,17 @@ using UnityEngine;
 
 public class GlobalDataTypes : MonoBehaviour
 {
+    public const float HexDistance = 10f; // the distance between two hex, 2 * inner radius
+    public const float Xdistance = 5.7735f * 1.5f; // the horizontal distance between two hex grid on the same row
+    public const int xCount = 831; // how many grids in one row
+    public const int yCount = 520; // how many grids in one column
+
+    public static int GetIndexXY(int x, int y)
+    {
+        // because we generated it right, up order
+        return y * xCount + x;
+    }
+
     // This section declares different datas used in the game
 
     // ?
@@ -94,9 +105,45 @@ public class GlobalDataTypes : MonoBehaviour
         (Province.TaiWan, new ProvinceData("台湾", new Color(240f/255f, 235f/255f, 234f/255f))),
     };
 
-    // ?
-    public enum City
+    public static Mesh GetHexagonMesh(float outerRadius = 5.7735f, float innerRadius = 5f)
     {
+        Mesh mesh = new Mesh();
 
+        Vector3[] vertices = new Vector3[7]; // there are six vertices in a hexagon
+        vertices[0] = -Vector3.right * .5f * outerRadius + Vector3.up * innerRadius;
+        vertices[1] = Vector3.right * .5f * outerRadius + Vector3.up * innerRadius;
+        vertices[2] = Vector3.right * outerRadius;
+        vertices[3] = Vector3.right * .5f * outerRadius - Vector3.up * innerRadius;
+        vertices[4] = -Vector3.right * .5f * outerRadius - Vector3.up * innerRadius;
+        vertices[5] = -Vector3.right * outerRadius;
+        vertices[6] = Vector3.zero;
+        mesh.vertices = vertices;
+
+
+        Vector2[] uvs = new Vector2[]
+        {
+                new Vector2(.25f, 1),
+                new Vector2(.75f, 1),
+                new Vector2(1, .5f),
+                new Vector2(.75f, 0),
+                new Vector2(.25f, 0),
+                new Vector2(0, .5f),
+                new Vector2(.5f, .5f)
+        };
+        mesh.uv = uvs;
+
+
+        int[] triangles = new int[]
+        {
+                6, 5, 0,
+                6, 0, 1,
+                6, 1, 2,
+                6, 2, 3,
+                6, 3, 4,
+                6, 4, 5
+        };
+        mesh.triangles = triangles;
+
+        return mesh;
     }
 }
