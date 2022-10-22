@@ -4,6 +4,16 @@ using UnityEngine;
 
 public class GlobalDataTypes : MonoBehaviour
 {
+    private static GlobalDataTypes m_Instance;
+    public static GlobalDataTypes Instance { get { return m_Instance; } }
+
+    public Material TestHexMaterial;
+
+    private void Awake()
+    {
+        m_Instance = this;
+    }
+
     public const float HexDistance = 10f; // the distance between two hex, 2 * inner radius
     public const float Xdistance = 5.7735f * 1.5f; // the horizontal distance between two hex grid on the same row
     public const int xCount = 831; // how many grids in one row

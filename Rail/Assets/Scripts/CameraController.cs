@@ -20,7 +20,7 @@ public class CameraController : MonoBehaviour
 
     public float minX, maxX, minY, maxY; // the range of camera positions, update when zoom
 
-    private const float ZoomSpeed = 2600f / 5;
+    private const float ZoomSpeed = 2600f / 1;
 
     private void Awake()
     {

@@ -16157,6 +16157,8 @@ GameObject:
   - component: {fileID: 519420033}
   - component: {fileID: 519420035}
   - component: {fileID: 519420036}
+  - component: {fileID: 519420037}
+  - component: {fileID: 519420038}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -16309,8 +16311,8 @@ MonoBehaviour:
   BorderLine: {fileID: 749949414}
   ProvinceLine: {fileID: 1569854754}
   CityLine: {fileID: 37518637}
-  StationIcon: {fileID: 21300000, guid: d45a330c83efd4230b22f28eca77d751, type: 3}
-  CrossIcon: {fileID: 21300000, guid: 994eb64aaec444d1b87e90df24328de7, type: 3}
+  StationIcon: {fileID: 21300000, guid: bc3812324cfcec244820814319c5e8d9, type: 3}
+  CrossIcon: {fileID: 21300000, guid: 6eee62c3562c09342826ee2f6d3e4a94, type: 3}
 --- !u!114 &519420036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16325,6 +16327,39 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   GridDatas: []
   InitSave: 0
+--- !u!114 &519420037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d56692d9b9cf55448e9b1b3c0ab732c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  StartGrid:
+    posX: 0
+    posY: 0
+    name: 
+  CurrentGrid:
+    posX: 0
+    posY: 0
+    name: 
+--- !u!114 &519420038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd710c776a82080439899d8c0d470e97, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  TestHexMaterial: {fileID: 2100000, guid: 1f117b3bde44b3a42ba7d300b9e1e636, type: 2}
 --- !u!1 &520262024
 GameObject:
   m_ObjectHideFlags: 0
@@ -19363,7 +19398,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 607069053}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 519420035}
+        m_TargetAssemblyTypeName: GameMain, Assembly-CSharp
+        m_MethodName: BuildTrack
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &607069053
 MonoBehaviour:
   m_ObjectHideFlags: 0

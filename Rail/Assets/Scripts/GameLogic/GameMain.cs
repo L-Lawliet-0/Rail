@@ -37,17 +37,61 @@ public class GameMain : MonoBehaviour
     public Sprite StationIcon, CrossIcon;
     public void BuildStation()
     {
-        GameObject obj = new GameObject();
-        obj.transform.position = HighLightGrid.PosV3;
-        SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
-        sr.sprite = StationIcon;
+        TryBuild(true);
     }
 
     public void BuildCross()
     {
-        GameObject obj = new GameObject();
-        obj.transform.position = HighLightGrid.PosV3;
-        SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
-        sr.sprite = CrossIcon;
+        TryBuild(false);
+    }
+
+    public void TryBuild(bool station)
+    {
+        if (HighLightHex)
+        {
+            if (HighLightGrid.StationData != null || HighLightGrid.CrossData != null)
+            {
+                Debug.LogError("this hex is already occupied by station or cross");
+                return;
+            }
+
+            GameObject obj = new GameObject();
+            obj.transform.position = HighLightGrid.PosV3;
+            SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
+            sr.sprite = station ? StationIcon : CrossIcon;
+
+            if (station)
+                HighLightGrid.StationData = new GridData.StationSave();
+            else
+                HighLightGrid.CrossData = new GridData.CrossingSave();
+
+            HighLightGrid = null;
+            DestroyHex();
+
+            InputManager.Instance.ExitSelectionMode();
+        }
+    }
+
+    public void DestroyHex()
+    {
+        Destroy(HighLightHex);
+        HighLightHex = null;
+    }
+
+    // when we build track, we enter draw mode
+    public void BuildTrack()
+    {
+        if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
+        {
+            InputManager.Instance.EnterDrawMode(HighLightGrid);
+        }
+    }
+
+    public void PlaceTrain()
+    {
+        if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
+        {
+
+        }
     }
 }
