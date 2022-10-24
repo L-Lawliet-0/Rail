@@ -16339,14 +16339,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d56692d9b9cf55448e9b1b3c0ab732c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RoadLine: {fileID: 6084713671297184943, guid: 11398fb7db779dd4c98d4d36f7f9dfff, type: 3}
   StartGrid:
     posX: 0
     posY: 0
     name: 
+    Index: 0
   CurrentGrid:
     posX: 0
     posY: 0
     name: 
+    Index: 0
 --- !u!114 &519420038
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,6 +15,9 @@ public class InputManager : MonoBehaviour
     private bool Drawing = false;
     private bool Erasing = false;
 
+    private bool ChosedDesination = false;
+    private bool ManipulatePoint = false;
+
     private void Awake()
     {
         m_Instance = this;
@@ -24,6 +27,7 @@ public class InputManager : MonoBehaviour
     {
         if (DrawMode)
         {
+            /*
             if (Drawing || Erasing)
             {
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -60,8 +64,42 @@ public class InputManager : MonoBehaviour
                 if (Drawing || Erasing)
                     return;
             }
+            */
 
-            
+            if (!ChosedDesination)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                    worldPos.z = 0;
+                    ChosedDesination = RoadManager.Instance.TryEndPoint(worldPos);
+                }
+            }
+            else
+            {
+                if (ManipulatePoint)
+                {
+                    if (Input.GetMouseButton(0))
+                    {
+                        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        worldPos.z = 0;
+                        RoadManager.Instance.UpdateControlPoint(worldPos);
+                    }
+                    else
+                        ManipulatePoint = false;
+
+                    return;
+                }
+                else
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                        worldPos.z = 0;
+                        ManipulatePoint = RoadManager.Instance.TryControlPoint(worldPos);
+                    }
+                }
+            }
         }
 
         if (!SelectionMode)

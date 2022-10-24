@@ -16,6 +16,7 @@ public class GridData : MonoBehaviour
     {
         public float posX, posY; // position of this grid
         public string name; // name of this grid
+        public int Index; // the sibling index
         public CrossingSave CrossData;
         public StationSave StationData;
 
@@ -60,9 +61,10 @@ public class GridData : MonoBehaviour
 
             List<GridSave> initDatas = new List<GridSave>();
             // let's generate some hexagons
-            foreach (HexSaver.HexInfo hi in datas)
+            for (int i = 0; i < datas.Count; i ++)
             {
-                initDatas.Add(new GridSave() { name = hi.name, posX = hi.posX, posY = hi.posY, CrossData = null, StationData = null });
+                HexSaver.HexInfo hi = datas[i];
+                initDatas.Add(new GridSave() { name = hi.name, posX = hi.posX, posY = hi.posY, CrossData = null, StationData = null, Index = i });
             }
 
             dataPath = Application.dataPath + "/GridDatas";

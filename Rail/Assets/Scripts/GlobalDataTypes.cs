@@ -25,6 +25,41 @@ public class GlobalDataTypes : MonoBehaviour
         return y * xCount + x;
     }
 
+    public static Vector3 BezierCurve(Vector3 p0, Vector3 p1, Vector3 p2, float t)
+    {
+        return p1 + Mathf.Pow(1 - t, 2) * (p0 - p1) + Mathf.Pow(t, 2) * (p2 - p1);
+    }
+
+
+    // return the six neightbors of this grid
+    public static int[] FindNeighbors(GridData.GridSave grid)
+    {
+        int[] indexs = new int[6];
+
+        int x = grid.Index / xCount;
+        int y = grid.Index % xCount;
+
+        // get the six hex index
+        indexs[0] = (x + 1) * xCount + y;
+        indexs[1] = (x - 1) * xCount + y;
+        if (y % 2 == 0)
+        {
+            indexs[2] = x * xCount + y + 1;
+            indexs[3] = (x - 1) * xCount + y + 1;
+            indexs[4] = x * xCount + y - 1;
+            indexs[5] = (x - 1) * xCount + y - 1;
+        }
+        else
+        {
+            indexs[2] = (x + 1) * xCount + y + 1;
+            indexs[3] = x * xCount + y + 1;
+            indexs[4] = (x + 1) * xCount + y - 1;
+            indexs[5] = x * xCount + y - 1;
+        }
+
+        return indexs;
+    }
+
     // This section declares different datas used in the game
 
     // ?
