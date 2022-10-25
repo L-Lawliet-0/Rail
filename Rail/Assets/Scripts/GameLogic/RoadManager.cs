@@ -11,6 +11,9 @@ public class RoadManager : MonoBehaviour
     private void Awake()
     {
         m_Instance = this;
+
+        AllRoads = new List<List<int>>();
+
         CurrentTrack = new List<GridData.GridSave>();
         VisualGrids = new List<GameObject>();
         ControlPoints = new List<GridData.GridSave>();
@@ -24,6 +27,9 @@ public class RoadManager : MonoBehaviour
     private List<GridData.GridSave> ControlPoints; // the points that used to control the flow of the track
     private int ControlPointIndex;
 
+    public List<List<int>> AllRoads; // this is the data we need
+    public List<GameObject> AllVisuals; // the visualization of the track, indexed
+
     public void InitData(GridData.GridSave grid)
     {
         StartGrid = CurrentGrid = grid;
@@ -31,83 +37,6 @@ public class RoadManager : MonoBehaviour
         ControlPoints.Clear();
 
         CurrentTrack.Add(CurrentGrid);
-    }
-
-    public bool TryStartDraw(Vector3 worldPos)
-    {
-        GridData.GridSave grid = GridData.Instance.GetNearbyGrid(worldPos);
-        if (grid == CurrentGrid)
-        {
-            Debug.LogError("Drawing!");
-            return true;
-        }
-        else
-            return false;
-    }
-
-    public void DrawUpdate(Vector3 worldPos, bool erase = false)
-    {
-        GridData.GridSave grid = GridData.Instance.GetNearbyGrid(worldPos);
-
-        if (!erase && grid != CurrentGrid) // we only check new grid
-        {
-            if (Vector3.Distance(worldPos, CurrentGrid.PosV3) < 6)
-                return;
-
-            if (Vector3.Distance(grid.PosV3, CurrentGrid.PosV3) > 11)
-            {
-                Debug.LogError("User is drawing too fast");
-                return;
-            }
-
-            if (CurrentTrack.Contains(grid))
-            {
-                Debug.LogError("User is drawing a loop");
-                return;
-            }
-
-            CurrentTrack.Add(grid);
-            CurrentGrid = grid;
-
-            if (grid.StationData != null || grid.CrossData != null)
-            {
-                InputManager.Instance.ExitDrawMode();
-            }
-
-            // create a hexagon to keep track the track
-            GameObject hex = new GameObject();
-            hex.transform.position = grid.PosV3;
-            MeshFilter mf = hex.AddComponent<MeshFilter>();
-            mf.mesh = GlobalDataTypes.GetHexagonMesh();
-            MeshRenderer mr = hex.AddComponent<MeshRenderer>();
-            mr.material = GlobalDataTypes.Instance.TestHexMaterial;
-            mr.material.SetColor("_BaseColor", Color.gray);
-
-            VisualGrids.Add(hex);
-
-            int index = VisualGrids.Count - 2;
-            if (index >= 0)
-            {
-                MeshRenderer temp = VisualGrids[index].GetComponent<MeshRenderer>();
-                temp.material.SetColor("_BaseColor", Color.blue);
-            }
-        }
-        else if (erase && grid == CurrentGrid && CurrentTrack.Count > 1)
-        {
-            CurrentTrack.RemoveAt(CurrentTrack.Count - 1);
-            CurrentGrid = CurrentTrack[CurrentTrack.Count - 1];
-
-            GameObject obj = VisualGrids[VisualGrids.Count - 1];
-            VisualGrids.RemoveAt(VisualGrids.Count - 1);
-            Destroy(obj);
-
-            if (VisualGrids.Count > 0)
-            {
-                MeshRenderer temp = VisualGrids[VisualGrids.Count - 1].GetComponent<MeshRenderer>();
-                temp.material.SetColor("_BaseColor", Color.gray);
-            }
-        }
-
     }
 
     public bool TryEndPoint(Vector3 worldPos)
@@ -155,10 +84,25 @@ public class RoadManager : MonoBehaviour
         CurrentTrack.Clear();
         CurrentTrack.AddRange(tempTracks);
 
-        for (int i = 1; i < CurrentTrack.Count - 1; i++)
+        VisualizeGrids(CurrentTrack, true);
+
+        return true;
+    }
+
+    private void VisualizeGrids(List<int> grids, bool addToList = false)
+    {
+        List<GridData.GridSave> values = new List<GridData.GridSave>();
+        foreach (int index in grids)
+            values.Add(GridData.Instance.GridDatas[index]);
+        VisualizeGrids(values, addToList);
+    }
+
+    private void VisualizeGrids(List<GridData.GridSave> grids, bool addToList = false)
+    {
+        for (int i = 1; i < grids.Count - 1; i++)
         {
-            GridData.GridSave g = CurrentTrack[i];
-            
+            GridData.GridSave g = grids[i];
+
             GameObject hex = new GameObject();
             hex.transform.position = g.PosV3;
             MeshFilter mf = hex.AddComponent<MeshFilter>();
@@ -169,14 +113,16 @@ public class RoadManager : MonoBehaviour
 
             if (ControlPoints.Contains(g))
                 mr.material.SetColor("_BaseColor", Color.red);
-            VisualGrids.Add(hex);
-            
+
+            if (addToList)
+                VisualGrids.Add(hex);
+
 
             GameObject line = Instantiate(RoadLine);
             line.transform.position = g.PosV3;
-            Vector3 g0 = CurrentTrack[i - 1].PosV3;
-            Vector3 g1 = CurrentTrack[i].PosV3;
-            Vector3 g2 = CurrentTrack[i + 1].PosV3;
+            Vector3 g0 = grids[i - 1].PosV3;
+            Vector3 g1 = grids[i].PosV3;
+            Vector3 g2 = grids[i + 1].PosV3;
 
             Vector3 p0 = g0 + (g1 - g0) / 2;
             Vector3 p1 = g1;
@@ -192,10 +138,9 @@ public class RoadManager : MonoBehaviour
             }
             lr.SetPositions(positions);
 
-            VisualGrids.Add(line);
+            if (addToList)
+                VisualGrids.Add(line);
         }
-
-        return true;
     }
 
     // we either edit or add a control point here
@@ -320,5 +265,43 @@ public class RoadManager : MonoBehaviour
         {
             return (int)(Vector3.Distance(x.PosV3, Point) - Vector3.Distance(y.PosV3, Point));
         }
+    }
+
+    public void FinishRoad(bool confirm)
+    {
+        if (confirm)
+        {
+            // add or edit existing road
+            List<int> newPath = new List<int>();
+            foreach (GridData.GridSave grid in CurrentTrack)
+                newPath.Add(grid.Index);
+            AllRoads.Add(newPath);
+            TrainManager.Instance.AddOrUpdateConnection(newPath[0], newPath[newPath.Count - 1], AllRoads.Count - 1);
+
+            GameObject parent = new GameObject();
+            parent.transform.position = Vector3.zero;
+            foreach (GameObject visual in VisualGrids)
+                visual.transform.SetParent(parent.transform);
+            AllVisuals.Add(parent.gameObject);
+        }
+        else
+        {
+            // destory visual clues if not in edit mode
+            for (int i = VisualGrids.Count - 1; i >= 0; i--)
+                Destroy(VisualGrids[i]);
+        }
+
+        VisualGrids.Clear();
+        CurrentTrack.Clear();
+
+        InputManager.Instance.ExitRoadMode();
+    }
+
+    public void SetRoadColor(int roadIndex, Color color)
+    {
+        Transform tran = AllVisuals[roadIndex].transform;
+        MeshRenderer[] mrs = tran.GetComponentsInChildren<MeshRenderer>();
+        foreach (MeshRenderer mr in mrs)
+            mr.material.SetColor("_BaseColor", color);
     }
 }

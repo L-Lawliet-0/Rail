@@ -11,12 +11,12 @@ public class InputManager : MonoBehaviour
     private Vector3 InputCache;
 
     private bool SelectionMode = false;
-    private bool DrawMode = false;
-    private bool Drawing = false;
-    private bool Erasing = false;
 
+    private bool RoadMode = false;
     private bool ChosedDesination = false;
     private bool ManipulatePoint = false;
+
+    private bool TrainMode = false;
 
     private void Awake()
     {
@@ -25,47 +25,8 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (DrawMode)
+        if (RoadMode)
         {
-            /*
-            if (Drawing || Erasing)
-            {
-                Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                worldPos.z = 0;
-                if (Drawing && Input.GetMouseButton(0))
-                {
-                    RoadManager.Instance.DrawUpdate(worldPos);
-                }
-                else if (Erasing && Input.GetMouseButton(1))
-                    RoadManager.Instance.DrawUpdate(worldPos, true);
-                else
-                {
-                    Drawing = false;
-                    Erasing = false;
-                }
-
-                return;
-            }
-            else
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    worldPos.z = 0;
-                    Drawing = RoadManager.Instance.TryStartDraw(worldPos);
-                }
-                else if (Input.GetMouseButtonDown(1))
-                {
-                    Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                    worldPos.z = 0;
-                    Erasing = RoadManager.Instance.TryStartDraw(worldPos);
-                }
-
-                if (Drawing || Erasing)
-                    return;
-            }
-            */
-
             if (!ChosedDesination)
             {
                 if (Input.GetMouseButtonDown(0))
@@ -102,6 +63,17 @@ public class InputManager : MonoBehaviour
             }
         }
 
+        if (TrainMode)
+        {
+            if (Input.GetMouseButtonDown(0))
+            {
+                Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+                worldPos.z = 0;
+                if (TrainManager.Instance.TryPoint(worldPos))
+                    return;
+            }
+        }
+
         if (!SelectionMode)
         {
             // update camera position
@@ -131,7 +103,7 @@ public class InputManager : MonoBehaviour
             // update camera zoom
             CameraController.Instance.Zoom(-Input.mouseScrollDelta.y);
 
-            if (!DrawMode && Input.GetMouseButtonDown(1))
+            if (!RoadMode && Input.GetMouseButtonDown(1))
             {
                 // right click, log pressed grid
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -158,19 +130,36 @@ public class InputManager : MonoBehaviour
         SelectionMode = false;
     }
 
-    public void EnterDrawMode(GridData.GridSave startGrid)
+    public void EnterRoadMode(GridData.GridSave startGrid)
     {
         // this is testing shit
         SelectionMode = false;
 
-        DrawMode = true;
-        Drawing = false;
+        RoadMode = true;
+        ChosedDesination = false;
+        ManipulatePoint = false;
         RoadManager.Instance.InitData(startGrid);
     }
 
-    public void ExitDrawMode()
+    public void ExitRoadMode()
     {
-        DrawMode = false;
+        RoadMode = false;
         SelectionMode = false;
+
+        GameMain.Instance.DestroyHex();
+    }
+
+    public void EnterTrainMode(GridData.GridSave startGrid)
+    {
+        SelectionMode = false;
+        TrainMode = true;
+
+        TrainManager.Instance.Init();
+        TrainManager.Instance.NextPoint(startGrid);
+    }
+
+    public void ExitTrainMode()
+    {
+
     }
 }

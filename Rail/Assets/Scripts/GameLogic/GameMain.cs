@@ -83,7 +83,7 @@ public class GameMain : MonoBehaviour
     {
         if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
         {
-            InputManager.Instance.EnterDrawMode(HighLightGrid);
+            InputManager.Instance.EnterRoadMode(HighLightGrid);
         }
     }
 
@@ -91,7 +91,7 @@ public class GameMain : MonoBehaviour
     {
         if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
         {
-
+            InputManager.Instance.EnterTrainMode(HighLightGrid);
         }
     }
 }
