@@ -53,6 +53,9 @@ public class TrainManager : MonoBehaviour
                 if (road[0] == td.Paths[td.CurrentIndex + 1] || road[road.Count - 1] == td.Paths[td.CurrentIndex + 1])
                 {
                     currentPath = road;
+
+                    if (currentPath[0] != td.Paths[td.CurrentIndex])
+                        currentPath.Reverse();
                     break;
                 }
             }
@@ -80,13 +83,48 @@ public class TrainManager : MonoBehaviour
             }
 
             // update sprite position based on progress
+
             float length = td.Progress * wholeDistance;
             int start = Mathf.FloorToInt(length / 10f);
             float hexOffset = length - (start * 10);
-            GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
-            GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
+            if ((start > 0 || hexOffset > 5) && ((start < currentPath.Count - 2) || (start < currentPath.Count - 1 && hexOffset < 5)))
+            {
+                Vector3 g0;
+                Vector3 g1;
+                Vector3 g2;
+                float t;
+                if (hexOffset > 5)
+                {
+                    g0 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
+                    g1 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
+                    g2 = GridData.Instance.GridDatas[currentPath[start + 2]].PosV3;
+                    t = (hexOffset - 5f) / 10f;
+                }
+                else
+                {
+                    g0 = GridData.Instance.GridDatas[currentPath[start - 1]].PosV3;
+                    g1 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
+                    g2 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
+                    t = (hexOffset + 5f) / 10f;
+                }
+                Vector3 p0 = g0 + (g1 - g0) / 2;
+                Vector3 p1 = g1;
+                Vector3 p2 = g1 + (g2 - g1) / 2;
 
-            td.TrainSprite.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
+                td.TrainSprite.position = GlobalDataTypes.BezierCurve(p0, p1, p2, t);
+                if (t < .98f)
+                    td.TrainSprite.up = GlobalDataTypes.BezierCurve(p0, p1, p2, t + .01f) - td.TrainSprite.position;
+                else
+                    td.TrainSprite.up = g2 - td.TrainSprite.position;
+            }
+            else
+            {
+                GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
+                GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
+                td.TrainSprite.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
+                td.TrainSprite.up = (g1.PosV3 - g0.PosV3).normalized;
+            }
+            
 
         }
     }
