@@ -41,7 +41,7 @@ public class TrainManager : MonoBehaviour
     {
         foreach (TrainData td in AllTrains)
         {
-            float travelDistance = td.TrainSpeed * Time.deltaTime * 60; // the distance this train travel in last frame
+            float travelDistance = td.TrainSpeed * Time.deltaTime * 3600; // the distance this train travel in last frame
 
             TOP:
             // get the current road we're travelling
@@ -229,5 +229,7 @@ public class TrainManager : MonoBehaviour
         }
         CurrentPath.Clear();
         CurrentChoices.Clear();
+
+        InputManager.Instance.ExitTrainMode();
     }
 }

@@ -32,6 +32,8 @@ public class GameMain : MonoBehaviour
         //Destroy(hex, 2);
         HighLightHex = hex;
         HighLightGrid = grid;
+
+        HudManager.Instance.RightClickHud(grid);
     }
 
     public Sprite StationIcon, CrossIcon;
@@ -84,6 +86,7 @@ public class GameMain : MonoBehaviour
         if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
         {
             InputManager.Instance.EnterRoadMode(HighLightGrid);
+            HudManager.Instance.TrackMode(HighLightGrid);
         }
     }
 
@@ -92,6 +95,7 @@ public class GameMain : MonoBehaviour
         if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
         {
             InputManager.Instance.EnterTrainMode(HighLightGrid);
+            HudManager.Instance.TrainMode(HighLightGrid);
         }
     }
 }

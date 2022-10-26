@@ -128,6 +128,7 @@ public class InputManager : MonoBehaviour
     {
         GameMain.Instance.DestroyHex();
         SelectionMode = false;
+        HudManager.Instance.SetEmpty();
     }
 
     public void EnterRoadMode(GridData.GridSave startGrid)
@@ -147,6 +148,8 @@ public class InputManager : MonoBehaviour
         SelectionMode = false;
 
         GameMain.Instance.DestroyHex();
+
+        HudManager.Instance.SetEmpty();
     }
 
     public void EnterTrainMode(GridData.GridSave startGrid)
@@ -160,6 +163,11 @@ public class InputManager : MonoBehaviour
 
     public void ExitTrainMode()
     {
+        TrainMode = false;
+        SelectionMode = false;
 
+        GameMain.Instance.DestroyHex();
+
+        HudManager.Instance.SetEmpty();
     }
 }
