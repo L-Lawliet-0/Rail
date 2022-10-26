@@ -92,7 +92,7 @@ public class GameMain : MonoBehaviour
 
     public void PlaceTrain()
     {
-        if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null))
+        if (HighLightGrid != null && (HighLightGrid.StationData != null || HighLightGrid.CrossData != null) && TrainManager.Instance.GridConnectedRoads.ContainsKey(HighLightGrid.Index))
         {
             InputManager.Instance.EnterTrainMode(HighLightGrid);
             HudManager.Instance.TrainMode(HighLightGrid);

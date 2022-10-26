@@ -26,6 +26,8 @@ public class TrainManager : MonoBehaviour
 
     public Dictionary<int, List<int>> GridConnectedRoads;
 
+    private GameObject CurrentHighlight;
+
     private void Awake()
     {
         m_Instance = this;
@@ -165,6 +167,19 @@ public class TrainManager : MonoBehaviour
     /// <param name="grid"></param>
     public void NextPoint(GridData.GridSave grid)
     {
+        Destroy(CurrentHighlight);
+
+        CurrentHighlight = new GameObject();
+        CurrentHighlight.transform.position = grid.PosV3;
+        MeshFilter mf = CurrentHighlight.AddComponent<MeshFilter>();
+        mf.mesh = GlobalDataTypes.GetHexagonMesh();
+        MeshRenderer mr = CurrentHighlight.AddComponent<MeshRenderer>();
+        mr.material = GlobalDataTypes.Instance.TestHexMaterial;
+        mr.material.SetColor("_BaseColor", Color.blue);
+        CurrentHighlight.transform.localScale = Vector3.one * 1.5f;
+        mr.sortingOrder = -1;
+
+
         CurrentPath.Add(grid);
         CurrentChoices.Clear();
 
@@ -231,5 +246,6 @@ public class TrainManager : MonoBehaviour
         CurrentChoices.Clear();
 
         InputManager.Instance.ExitTrainMode();
+        Destroy(CurrentHighlight);
     }
 }
