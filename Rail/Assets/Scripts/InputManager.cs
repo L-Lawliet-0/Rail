@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class InputManager : MonoBehaviour
 {
@@ -17,6 +18,11 @@ public class InputManager : MonoBehaviour
     private bool ManipulatePoint = false;
 
     private bool TrainMode = false;
+    private float PressedTime;
+
+    public GameObject Marker;
+
+    //public EventSystem UIcontrol;
 
     private void Awake()
     {
@@ -25,6 +31,9 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
+        if (EventSystem.current.IsPointerOverGameObject())
+            return;
+
         if (RoadMode)
         {
             if (!ChosedDesination)
@@ -74,36 +83,38 @@ public class InputManager : MonoBehaviour
             }
         }
 
-        if (!SelectionMode)
+        // update camera position
+        if (!MouseHoding)
         {
-            // update camera position
-            if (!MouseHoding)
+            if (Input.GetMouseButtonDown(0))
             {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    InputCache = Input.mousePosition;
-                    MouseHoding = true;
-                }
+                InputCache = Input.mousePosition;
+                MouseHoding = true;
+                PressedTime = 0;
+            }
+        }
+        else
+        {
+            if (Input.GetMouseButton(0))
+            {
+                // update camera position, reverse direction
+                CameraController.Instance.MoveCamera(InputCache - Input.mousePosition);
+                InputCache = Input.mousePosition;
+                PressedTime += Time.deltaTime;
             }
             else
             {
-                if (Input.GetMouseButton(0))
-                {
-                    // update camera position, reverse direction
-                    CameraController.Instance.MoveCamera(InputCache - Input.mousePosition);
-                    InputCache = Input.mousePosition;
-                }
-                else
-                {
-                    // release
-                    MouseHoding = false;
-                }
+                // release
+                MouseHoding = false;
             }
+        }
 
-            // update camera zoom
-            CameraController.Instance.Zoom(-Input.mouseScrollDelta.y);
+        // update camera zoom
+        CameraController.Instance.Zoom(-Input.mouseScrollDelta.y);
 
-            if (!RoadMode && Input.GetMouseButtonDown(1))
+        if (!SelectionMode)
+        {
+            if (!RoadMode && !TrainMode && Input.GetMouseButtonUp(0) && PressedTime < .1f)
             {
                 // right click, log pressed grid
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -114,7 +125,7 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            if (Input.GetMouseButtonDown(1))
+            if (Input.GetMouseButtonUp(0) && PressedTime < .1f)
                 ExitSelectionMode();
         }
     }
@@ -122,6 +133,8 @@ public class InputManager : MonoBehaviour
     public void EnterSelectionMode()
     {
         SelectionMode = true;
+        Marker.SetActive(true);
+        Marker.transform.position = GameMain.Instance.HighLightGrid.PosV3;
     }
 
     public void ExitSelectionMode()
@@ -129,6 +142,8 @@ public class InputManager : MonoBehaviour
         GameMain.Instance.DestroyHex();
         SelectionMode = false;
         HudManager.Instance.SetEmpty();
+
+        Marker.SetActive(false);
     }
 
     public void EnterRoadMode(GridData.GridSave startGrid)
@@ -145,11 +160,7 @@ public class InputManager : MonoBehaviour
     public void ExitRoadMode()
     {
         RoadMode = false;
-        SelectionMode = false;
-
-        GameMain.Instance.DestroyHex();
-
-        HudManager.Instance.SetEmpty();
+        ExitSelectionMode();
     }
 
     public void EnterTrainMode(GridData.GridSave startGrid)
@@ -164,10 +175,6 @@ public class InputManager : MonoBehaviour
     public void ExitTrainMode()
     {
         TrainMode = false;
-        SelectionMode = false;
-
-        GameMain.Instance.DestroyHex();
-
-        HudManager.Instance.SetEmpty();
+        ExitSelectionMode();
     }
 }

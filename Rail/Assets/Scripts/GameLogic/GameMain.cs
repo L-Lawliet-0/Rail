@@ -15,7 +15,7 @@ public class GameMain : MonoBehaviour
     public GameObject BorderLine, ProvinceLine, CityLine;
 
     private GameObject HighLightHex;
-    private GridData.GridSave HighLightGrid;
+    public GridData.GridSave HighLightGrid;
 
     public void OnGridRightClick(Vector3 worldPos)
     {

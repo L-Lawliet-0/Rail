@@ -81,14 +81,14 @@ public class CameraController : MonoBehaviour
             GameMain.Instance.CityLine.SetActive(true);
             GameMain.Instance.ProvinceLine.SetActive(false);
 
-            CityNamesParent.Instance.ActivateNames(1);
+            CityNamesParent.Instance.ActivateNames(1, value / 1000f);
         }
         else if (value < 2000)
         {
             GameMain.Instance.CityLine.SetActive(false);
             GameMain.Instance.ProvinceLine.SetActive(true);
 
-            CityNamesParent.Instance.ActivateNames(0);
+            CityNamesParent.Instance.ActivateNames(0, (value - 1000) / 1000f);
         }
         else
         {
@@ -97,5 +97,7 @@ public class CameraController : MonoBehaviour
 
             CityNamesParent.Instance.ActivateNames(-1);
         }
+
+        InputManager.Instance.Marker.transform.localScale = Vector3.one + Vector3.one * Mathf.Lerp(0, 15f, (value - 48f) / (2600 - 48f));
     }
 }
