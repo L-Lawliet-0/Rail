@@ -114,7 +114,7 @@ public class InputManager : MonoBehaviour
 
         if (!SelectionMode)
         {
-            if (!RoadMode && !TrainMode && Input.GetMouseButtonUp(0) && PressedTime < .1f)
+            if (!RoadMode && !TrainMode && Input.GetMouseButtonUp(0) && PressedTime < .15f)
             {
                 // right click, log pressed grid
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
@@ -125,7 +125,7 @@ public class InputManager : MonoBehaviour
         }
         else
         {
-            if (Input.GetMouseButtonUp(0) && PressedTime < .1f)
+            if (Input.GetMouseButtonUp(0) && PressedTime < .15f)
                 ExitSelectionMode();
         }
     }

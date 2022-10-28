@@ -98,6 +98,9 @@ public class CameraController : MonoBehaviour
             CityNamesParent.Instance.ActivateNames(-1);
         }
 
-        InputManager.Instance.Marker.transform.localScale = Vector3.one + Vector3.one * Mathf.Lerp(0, 15f, (value - 48f) / (2600 - 48f));
+        float scale = (value - 48f) / (2600 - 48f);
+        InputManager.Instance.Marker.transform.localScale = Vector3.one + Vector3.one * Mathf.Lerp(0, 15f, scale);
+        IconManager.Instance.UpdateSize(scale);
+        RoadManager.Instance.UpdateRoadSize(scale);
     }
 }

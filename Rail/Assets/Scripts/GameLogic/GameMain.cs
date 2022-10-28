@@ -62,6 +62,8 @@ public class GameMain : MonoBehaviour
             SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
             sr.sprite = station ? StationIcon : CrossIcon;
 
+            IconManager.Instance.AddOrUpdateIcon(HighLightGrid.Index, obj);
+
             if (station)
                 HighLightGrid.StationData = new GridData.StationSave();
             else

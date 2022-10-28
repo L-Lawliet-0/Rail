@@ -136,6 +136,10 @@ public class RoadManager : MonoBehaviour
             {
                 positions[j] = GlobalDataTypes.BezierCurve(p0, p1, p2, offset * j);
             }
+
+            lr.startWidth = LineSize;
+            lr.endWidth = LineSize;
+
             lr.SetPositions(positions);
 
             if (addToList)
@@ -283,6 +287,11 @@ public class RoadManager : MonoBehaviour
             foreach (GameObject visual in VisualGrids)
                 visual.transform.SetParent(parent.transform);
             AllVisuals.Add(parent.gameObject);
+            for (int i = parent.transform.childCount - 1; i >= 0; i --)
+            {
+                if (!parent.transform.GetChild(i).GetComponent<LineRenderer>())
+                    Destroy(parent.transform.GetChild(i).gameObject);
+            }
         }
         else
         {
@@ -303,5 +312,35 @@ public class RoadManager : MonoBehaviour
         MeshRenderer[] mrs = tran.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer mr in mrs)
             mr.material.SetColor("_BaseColor", color);
+    }
+
+    private float LineSize = 2f;
+    public void UpdateRoadSize(float mult)
+    {
+        LineSize = 2 + 6 * mult;
+        foreach (GameObject parent in AllVisuals)
+        {
+            for (int i = 0; i < parent.transform.childCount; i++)
+            {
+                SizeHelper(parent.transform.GetChild(i), mult);
+            }
+        }
+
+        foreach (GameObject parent in VisualGrids)
+        {
+            SizeHelper(parent.transform, mult);
+        }
+    }
+
+    private void SizeHelper(Transform obj, float mult)
+    {
+        LineRenderer lr = obj.GetComponent<LineRenderer>();
+        if (lr)
+        {
+            lr.SetWidth(LineSize, LineSize);
+            obj.GetComponent<LineRenderer>().startWidth = LineSize;
+            obj.GetComponent<LineRenderer>().endWidth = LineSize;
+        }
+
     }
 }
