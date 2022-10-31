@@ -32,6 +32,7 @@ public class TrainManager : MonoBehaviour
     {
         m_Instance = this;
         AllTrains = new List<TrainData>();
+        RoadIndexs = new Dictionary<GridData.GridSave, GameObject>();
     }
 
     private void Start()
@@ -151,14 +152,19 @@ public class TrainManager : MonoBehaviour
         if (!GridConnectedRoads.ContainsKey(end))
             GridConnectedRoads.Add(end, new List<int>());
 
-        GridConnectedRoads[start].Add(index);
-        GridConnectedRoads[end].Add(index);
+        if (!GridConnectedRoads[start].Contains(index))
+            GridConnectedRoads[start].Add(index);
+
+        if (!GridConnectedRoads[end].Contains(index))
+            GridConnectedRoads[end].Add(index);
     }
 
+    private Dictionary<GridData.GridSave, GameObject> RoadIndexs;
     public void Init()
     {
         CurrentPath = new List<GridData.GridSave>();
         CurrentChoices = new HashSet<GridData.GridSave>();
+        RoadIndexs.Clear();
     }
 
     /// <summary>
@@ -177,7 +183,7 @@ public class TrainManager : MonoBehaviour
         mr.material = GlobalDataTypes.Instance.TestHexMaterial;
         mr.material.SetColor("_BaseColor", Color.blue);
         CurrentHighlight.transform.localScale = Vector3.one * 1.5f;
-        mr.sortingOrder = -1;
+        mr.sortingOrder = 0;
 
 
         CurrentPath.Add(grid);
@@ -187,7 +193,7 @@ public class TrainManager : MonoBehaviour
         {
             List<int> oldConnection = GridConnectedRoads[CurrentPath[CurrentPath.Count - 2].Index];
             foreach (int i in oldConnection)
-                RoadManager.Instance.SetRoadColor(i, Color.blue);
+                RoadManager.Instance.SetRoadColor(i, Color.black);
         }
         List<int> connections = GridConnectedRoads[grid.Index];
         foreach (int i in connections)
@@ -204,6 +210,37 @@ public class TrainManager : MonoBehaviour
                 CurrentChoices.Add(targetG);
                 RoadManager.Instance.SetRoadColor(i, Color.yellow);
             //}
+        }
+
+        // draw the path exsited to color blue
+        if (CurrentPath.Count > 1)
+        {
+            for (int i = 0; i < CurrentPath.Count - 1; i++)
+            {
+                GridData.GridSave g1 = CurrentPath[i];
+                GridData.GridSave g2 = CurrentPath[i + 1];
+
+                List<int> roads = GridConnectedRoads[g1.Index];
+                foreach (int index in roads)
+                {
+                    List<int> road = RoadManager.Instance.AllRoads[index];
+                    if (road[0] == g2.Index || road[road.Count - 1] == g2.Index)
+                    {
+                        RoadManager.Instance.SetRoadColor(index, Color.blue);
+                        break;
+                    }
+                }
+            }
+        }
+
+        // road index
+        if (RoadIndexs.ContainsKey(grid))
+        {
+            CityNamesParent.Instance.CreateTrainIndex(CurrentPath.Count.ToString(), grid.PosV3, RoadIndexs[grid]);
+        }
+        else
+        {
+            RoadIndexs.Add(grid, CityNamesParent.Instance.CreateTrainIndex(CurrentPath.Count.ToString(), grid.PosV3).gameObject);
         }
     }
 
@@ -236,16 +273,29 @@ public class TrainManager : MonoBehaviour
             AllTrains.Add(td);
         }
 
+        // reset all path color to black
+        for (int i = 0; i < RoadManager.Instance.AllRoads.Count; i++)
+        {
+            RoadManager.Instance.SetRoadColor(i, Color.black);
+        }
+
+        /*
         if (CurrentPath.Count > 0)
         {
             List<int> oldConnection = GridConnectedRoads[CurrentPath[CurrentPath.Count - 1].Index];
             foreach (int i in oldConnection)
-                RoadManager.Instance.SetRoadColor(i, Color.blue);
+                RoadManager.Instance.SetRoadColor(i, Color.black);
         }
+        */
+
         CurrentPath.Clear();
         CurrentChoices.Clear();
 
         InputManager.Instance.ExitTrainMode();
         Destroy(CurrentHighlight);
+
+        foreach (KeyValuePair<GridData.GridSave, GameObject> pair in RoadIndexs)
+            Destroy(pair.Value);
+        RoadIndexs.Clear();
     }
 }

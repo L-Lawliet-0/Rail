@@ -279,14 +279,34 @@ public class RoadManager : MonoBehaviour
             List<int> newPath = new List<int>();
             foreach (GridData.GridSave grid in CurrentTrack)
                 newPath.Add(grid.Index);
-            AllRoads.Add(newPath);
-            TrainManager.Instance.AddOrUpdateConnection(newPath[0], newPath[newPath.Count - 1], AllRoads.Count - 1);
 
             GameObject parent = new GameObject();
             parent.transform.position = Vector3.zero;
             foreach (GameObject visual in VisualGrids)
                 visual.transform.SetParent(parent.transform);
-            AllVisuals.Add(parent.gameObject);
+            bool replace = false;
+            for (int i = 0; i < AllRoads.Count; i++)
+            {
+                List<int> road = AllRoads[i];
+                if ((road[0] == newPath[0] && road[road.Count - 1] == newPath[newPath.Count - 1]) || (road[0] == newPath[newPath.Count - 1] && road[road.Count - 1] == newPath[0]))
+                {
+                    // edit existing path
+                    GameObject old = AllVisuals[i];
+                    Destroy(old);
+                    AllVisuals[i] = parent;
+                    AllRoads[i] = newPath;
+                    replace = true;
+                    break;
+                }
+            }
+
+            if (!replace)
+            {
+                AllRoads.Add(newPath);
+                AllVisuals.Add(parent.gameObject);
+            }
+            TrainManager.Instance.AddOrUpdateConnection(newPath[0], newPath[newPath.Count - 1], AllRoads.Count - 1);
+            
             for (int i = parent.transform.childCount - 1; i >= 0; i --)
             {
                 if (!parent.transform.GetChild(i).GetComponent<LineRenderer>())
@@ -309,9 +329,19 @@ public class RoadManager : MonoBehaviour
     public void SetRoadColor(int roadIndex, Color color)
     {
         Transform tran = AllVisuals[roadIndex].transform;
+
+        /*
         MeshRenderer[] mrs = tran.GetComponentsInChildren<MeshRenderer>();
         foreach (MeshRenderer mr in mrs)
             mr.material.SetColor("_BaseColor", color);
+        */
+
+        LineRenderer[] lrs = tran.GetComponentsInChildren<LineRenderer>();
+        foreach (LineRenderer lr in lrs)
+        {
+            lr.startColor = color;
+            lr.endColor = color;
+        }
     }
 
     private float LineSize = 2f;

@@ -8,6 +8,8 @@ public class CityNamesParent : MonoBehaviour
     private static CityNamesParent m_Instance;
     public static CityNamesParent Instance { get { return m_Instance; } }
 
+    public GameObject IndexPrefab;
+
     private void Awake()
     {
         m_Instance = this;
@@ -23,7 +25,7 @@ public class CityNamesParent : MonoBehaviour
         if (index == 0)
             fontAdd = 24;
 
-        for (int i = 0; i < transform.childCount; i++)
+        for (int i = 0; i < 2; i++)
         {
             transform.GetChild(i).gameObject.SetActive(i == index);
 
@@ -44,5 +46,24 @@ public class CityNamesParent : MonoBehaviour
         Text[] texts = GetComponentsInChildren<Text>(true);
         foreach (Text text in texts)
             text.enabled = !value;
+    }
+
+    public GameObject CreateTrainIndex(string text, Vector3 gridPos ,GameObject parent = null)
+    {
+        if (parent == null)
+        {
+            parent = new GameObject();
+            RectTransform parentRect = parent.gameObject.AddComponent<RectTransform>();
+            parentRect.SetParent(transform);
+            parentRect.localPosition = Vector3.zero;
+        }
+
+        GameObject obj = Instantiate(IndexPrefab);
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.SetParent(parent.transform);
+        rect.position = gridPos + new Vector3(10, 10) + rect.GetSiblingIndex() * new Vector3(24, 0);
+        rect.GetComponent<Text>().text = text;
+
+        return parent;
     }
 }
