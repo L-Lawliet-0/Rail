@@ -86,6 +86,13 @@ public class GridData : MonoBehaviour
             BinaryFormatter bf = new BinaryFormatter();
             GridDatas = bf.Deserialize(file) as List<GridSave>;
         }
+
+        HashSet<string> gridNames = new HashSet<string>();
+        foreach (GridSave gs in GridDatas)
+            gridNames.Add(gs.name);
+
+        foreach (string str in gridNames)
+            Debug.LogError(str);
     }
 
     /// <summary>
