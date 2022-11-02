@@ -1,0 +1,1113 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 8
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10ba47386e37c41eb8772d7d0c1eb16b, type: 3}
+  m_Name: EconData
+  m_EditorClassIdentifier: 
+  Sheet1:
+  - CityName: "\u6D77\u5357,\u4E09\u4E9A\u5E02,"
+    Population: 103.7
+    GDP: 6.87
+  - CityName: "\u6D77\u5357,\u6D77\u5357,"
+    Population: 620.5
+    GDP: 6.37
+  - CityName: "\u6D77\u5357,\u6D77\u53E3\u5E02,"
+    Population: 288.7
+    GDP: 6.33
+  - CityName: "\u5E7F\u4E1C,\u6E5B\u6C5F\u5E02,"
+    Population: 703.1
+    GDP: 5.08
+  - CityName: "\u53F0\u6E7E,\u5C4F\u4E1C\u53BF,"
+    Population: 90
+    GDP: 12.95
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u5317\u6D77\u5E02,"
+    Population: 185.6
+    GDP: 6.94
+  - CityName: "\u4E91\u5357,\u897F\u53CC\u7248\u7EB3\u50A3\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 119.6
+    GDP: 3.16
+  - CityName: "\u5E7F\u4E1C,\u8302\u540D\u5E02,"
+    Population: 622
+    GDP: 5.96
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u9632\u57CE\u6E2F\u5E02,"
+    Population: 104.7
+    GDP: 7.75
+  - CityName: "\u5E7F\u4E1C,\u9633\u6C5F\u5E02,"
+    Population: 262.1
+    GDP: 5.8
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u5D07\u5DE6\u5E02,"
+    Population: 209.1
+    GDP: 4.73
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u94A6\u5DDE\u5E02,"
+    Population: 331.1
+    GDP: 4.98
+  - CityName: "\u5E7F\u4E1C,\u6C5F\u95E8\u5E02,"
+    Population: 483.5
+    GDP: 7.47
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u7389\u6797\u5E02,"
+    Population: 581.6
+    GDP: 3.04
+  - CityName: "\u5E7F\u4E1C,\u73E0\u6D77\u5E02,"
+    Population: 246.7
+    GDP: 14.56
+  - CityName: "\u4E91\u5357,\u666E\u6D31\u5E02,"
+    Population: 238.1
+    GDP: 4.3
+  - CityName: "\u53F0\u6E7E,\u53F0\u4E1C\u53BF,"
+    Population: 2.4
+    GDP: 14
+  - CityName: "\u6FB3\u95E8,\u6FB3\u95E8,"
+    Population: 65.84
+    GDP: 33.06
+  - CityName: "\u9999\u6E2F,\u9999\u6E2F,"
+    Population: 741.31
+    GDP: 36.19
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u5357\u5B81\u5E02,"
+    Population: 883.3
+    GDP: 5.47
+  - CityName: "\u5E7F\u4E1C,\u4E2D\u5C71\u5E02,"
+    Population: 446.7
+    GDP: 8.02
+  - CityName: "\u4E91\u5357,\u7EA2\u6CB3\u54C8\u5C3C\u65CF\u5F5D\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 447.84
+    GDP: 6.12
+  - CityName: "\u5E7F\u4E1C,\u6DF1\u5733\u5E02,"
+    Population: 1768.2
+    GDP: 17.37
+  - CityName: "\u5E7F\u4E1C,\u4E91\u6D6E\u5E02,"
+    Population: 239.3
+    GDP: 4.77
+  - CityName: "\u5E7F\u4E1C,\u60E0\u5DDE\u5E02,"
+    Population: 606.6
+    GDP: 8.21
+  - CityName: "\u53F0\u6E7E,\u9AD8\u96C4\u5E02,"
+    Population: 276.4
+    GDP: 21.98
+  - CityName: "\u4E91\u5357,\u6587\u5C71\u58EE\u65CF\u82D7\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 350.32
+    GDP: 2.95
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u68A7\u5DDE\u5E02,"
+    Population: 282.7
+    GDP: 4.85
+  - CityName: "\u5E7F\u4E1C,\u5E7F\u5DDE\u5E02,"
+    Population: 1881.1
+    GDP: 15.04
+  - CityName: "\u5E7F\u4E1C,\u4E1C\u839E\u5E02,"
+    Population: 1053.7
+    GDP: 10.33
+  - CityName: "\u5E7F\u4E1C,\u6C55\u5C3E\u5E02,"
+    Population: 268.7
+    GDP: 4.81
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u8D35\u6E2F\u5E02,"
+    Population: 435
+    GDP: 3.46
+  - CityName: "\u5E7F\u4E1C,\u4F5B\u5C71\u5E02,"
+    Population: 961.3
+    GDP: 11.42
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u767E\u8272\u5E02,"
+    Population: 357.2
+    GDP: 4.39
+  - CityName: "\u5E7F\u4E1C,\u8087\u5E86\u5E02,"
+    Population: 413
+    GDP: 6.43
+  - CityName: "\u5E7F\u4E1C,\u63ED\u9633\u5E02,"
+    Population: 561.7
+    GDP: 4.05
+  - CityName: "\u53F0\u6E7E,\u53F0\u5357,"
+    Population: 188
+    GDP: 12.65
+  - CityName: "\u4E91\u5357,\u4E34\u6CA7\u5E02,"
+    Population: 223.3
+    GDP: 4.05
+  - CityName: "\u5E7F\u4E1C,\u6C55\u5934\u5E02,"
+    Population: 553
+    GDP: 5.31
+  - CityName: "\u53F0\u6E7E,\u82B1\u83B2\u53BF,"
+    Population: 34.1
+    GDP: 4.5
+  - CityName: "\u5E7F\u4E1C,\u6CB3\u6E90\u5E02,"
+    Population: 284.1
+    GDP: 4.49
+  - CityName: "\u5E7F\u4E1C,\u6F6E\u5DDE\u5E02,"
+    Population: 257.5
+    GDP: 4.84
+  - CityName: "\u53F0\u6E7E,\u6F8E\u6E56\u53BF,"
+    Population: 11
+    GDP: 16
+  - CityName: "\u53F0\u6E7E,\u5609\u4E49\u53BF,"
+    Population: 53.31
+    GDP: 11.6
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u6765\u5BBE\u5E02,"
+    Population: 207.8
+    GDP: 4.01
+  - CityName: "\u4E91\u5357,\u7389\u6EAA\u5E02,"
+    Population: 225
+    GDP: 9.13
+  - CityName: "\u5E7F\u4E1C,\u6885\u5DDE\u5E02,"
+    Population: 387.7
+    GDP: 3.38
+  - CityName: "\u5E7F\u4E1C,\u6E05\u8FDC\u5E02,"
+    Population: 398.3
+    GDP: 4.48
+  - CityName: "\u53F0\u6E7E,\u5357\u6295\u53BF,"
+    Population: 53.71
+    GDP: 13.2
+  - CityName: "\u798F\u5EFA,\u6F33\u5DDE\u5E02,"
+    Population: 507
+    GDP: 9.92
+  - CityName: "\u53F0\u6E7E,\u4E91\u6797\u53BF,"
+    Population: 72.84
+    GDP: 11.8
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u6CB3\u6C60\u5E02,"
+    Population: 341.9
+    GDP: 3.05
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u8D3A\u5DDE\u5E02,"
+    Population: 202.7
+    GDP: 4.5
+  - CityName: "\u53F0\u6E7E,\u5F70\u5316\u53BF,"
+    Population: 126.79
+    GDP: 12
+  - CityName: "\u4E91\u5357,\u5FB7\u5B8F\u50A3\u65CF\u666F\u9887\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 132.4
+    GDP: 4.22
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u67F3\u5DDE\u5E02,"
+    Population: 417.5
+    GDP: 7.33
+  - CityName: "\u5E7F\u4E1C,\u97F6\u5173\u5E02,"
+    Population: 286
+    GDP: 5.44
+  - CityName: "\u53F0\u6E7E,\u53F0\u4E2D,"
+    Population: 282.1
+    GDP: 13.65
+  - CityName: "\u4E91\u5357,\u4FDD\u5C71\u5E02,"
+    Population: 241.8
+    GDP: 4.81
+  - CityName: "\u4E91\u5357,\u695A\u96C4\u5F5D\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 265.53
+    GDP: 6.65
+  - CityName: "\u5E7F\u897F\u58EE\u65CF\u81EA\u6CBB\u533A,\u6842\u6797\u5E02,"
+    Population: 494.6
+    GDP: 4.68
+  - CityName: "\u53F0\u6E7E,\u82D7\u6817\u53BF,"
+    Population: 56.57
+    GDP: 13.13
+  - CityName: "\u4E91\u5357,\u66F2\u9756\u5E02,"
+    Population: 570.1
+    GDP: 5.92
+  - CityName: "\u798F\u5EFA,\u91D1\u95E8\u53BF,"
+    Population: 13.1
+    GDP: 17
+  - CityName: "\u53F0\u6E7E,\u5B9C\u5170\u53BF,"
+    Population: 45.8
+    GDP: 14.14
+  - CityName: "\u4E91\u5357,\u6606\u660E\u5E02,"
+    Population: 850.2
+    GDP: 8.06
+  - CityName: "\u798F\u5EFA,\u9F99\u5CA9\u5E02,"
+    Population: 273
+    GDP: 11.29
+  - CityName: "\u798F\u5EFA,\u53A6\u95E8\u5E02,"
+    Population: 528
+    GDP: 13.45
+  - CityName: "\u798F\u5EFA,\u6CC9\u5DDE\u5E02,"
+    Population: 885
+    GDP: 12.82
+  - CityName: "\u53F0\u6E7E,\u65B0\u7AF9\u53BF,"
+    Population: 57.1
+    GDP: 16
+  - CityName: "\u6C5F\u897F,\u8D63\u5DDE\u5E02,"
+    Population: 898
+    GDP: 4.08
+  - CityName: "\u8D35\u5DDE,\u9ED4\u897F\u5357\u5E03\u4F9D\u65CF\u82D7\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 368.81
+    GDP: 4.49
+  - CityName: "\u53F0\u6E7E,\u6843\u56ED\u5E02,"
+    Population: 210
+    GDP: 14.239
+  - CityName: "\u4E91\u5357,\u5927\u7406\u767D\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 364.54
+    GDP: 4.88
+  - CityName: "\u6E56\u5357,\u6C38\u5DDE\u5E02,"
+    Population: 519
+    GDP: 4.31
+  - CityName: "\u53F0\u6E7E,\u65B0\u5317\u5E02,"
+    Population: 400.02
+    GDP: 18.21
+  - CityName: "\u53F0\u6E7E,\u65B0\u7AF9\u5E02,"
+    Population: 40
+    GDP: 18.98
+  - CityName: "\u6E56\u5357,\u90F4\u5DDE\u5E02,"
+    Population: 465.8
+    GDP: 5.93
+  - CityName: "\u798F\u5EFA,\u8386\u7530\u5E02,"
+    Population: 322
+    GDP: 8.97
+  - CityName: "\u53F0\u6E7E,\u53F0\u5317\u5E02,"
+    Population: 259.8
+    GDP: 19.682
+  - CityName: "\u8D35\u5DDE,\u9ED4\u5357\u5E03\u4F9D\u65CF\u82D7\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 349.43
+    GDP: 5
+  - CityName: "\u53F0\u6E7E,\u57FA\u9686\u5E02,"
+    Population: 37
+    GDP: 18.8
+  - CityName: "\u798F\u5EFA,\u798F\u5DDE\u5E02,"
+    Population: 842
+    GDP: 13.53
+  - CityName: "\u8D35\u5DDE,\u516D\u76D8\u6C34\u5E02,"
+    Population: 301.7
+    GDP: 4.87
+  - CityName: "\u8D35\u5DDE,\u9ED4\u4E1C\u5357\u82D7\u65CF\u4F97\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 374.04
+    GDP: 3.34
+  - CityName: "\u8D35\u5DDE,\u5B89\u987A\u5E02,"
+    Population: 245.9
+    GDP: 4.38
+  - CityName: "\u798F\u5EFA,\u4E09\u660E\u5E02,"
+    Population: 248
+    GDP: 11.89
+  - CityName: "\u4E91\u5357,\u6012\u6C5F\u5088\u50F3\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 55.26
+    GDP: 3.81
+  - CityName: "\u6E56\u5357,\u61F7\u5316\u5E02,"
+    Population: 456
+    GDP: 3.98
+  - CityName: "\u798F\u5EFA,\u9A6C\u7956\u5217\u5C9B,"
+    Population: 2
+    GDP: 4
+  - CityName: "\u6E56\u5357,\u90B5\u967D\u5E02,"
+    Population: 646.8
+    GDP: 3.41
+  - CityName: "\u6C5F\u897F,\u5409\u5B89\u5E02,"
+    Population: 442.5
+    GDP: 4.83
+  - CityName: "\u4E91\u5357,\u4E3D\u6C5F\u5E02,"
+    Population: 125.5
+    GDP: 4.08
+  - CityName: "\u56DB\u5DDD,\u51C9\u5C71\u5F5D\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 538
+    GDP: 3.91
+  - CityName: "\u6E56\u5357,\u682A\u6D32\u5E02,"
+    Population: 388.3
+    GDP: 8.79
+  - CityName: "\u56DB\u5DDD,\u6500\u679D\u82B1\u5E02,"
+    Population: 121.4
+    GDP: 8.58
+  - CityName: "\u6E56\u5357,\u8861\u967D\u5E02,"
+    Population: 662.1
+    GDP: 5.79
+  - CityName: "\u8D35\u5DDE,\u8D35\u9633\u5E02,"
+    Population: 610.2
+    GDP: 7.79
+  - CityName: "\u798F\u5EFA,\u5357\u5E73\u5E02,"
+    Population: 267
+    GDP: 7.92
+  - CityName: "\u798F\u5EFA,\u5B81\u5FB7\u5E02,"
+    Population: 315
+    GDP: 10
+  - CityName: "\u8D35\u5DDE,\u6BD5\u8282\u5730\u533A,"
+    Population: 684.5
+    GDP: 3.16
+  - CityName: "\u6C5F\u897F,\u629A\u5DDE\u5E02,"
+    Population: 357.9
+    GDP: 4.99
+  - CityName: "\u4E91\u5357,\u662D\u901A\u5E02,"
+    Population: 501.4
+    GDP: 2.89
+  - CityName: "\u4E91\u5357,\u8FEA\u5E86\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 38.75
+    GDP: 6.86
+  - CityName: "\u6C5F\u897F,\u840D\u4E61\u5E02,"
+    Population: 180.6
+    GDP: 6.14
+  - CityName: "\u6D59\u6C5F,\u6E29\u5DDE\u5E02,"
+    Population: 964.5
+    GDP: 7.89
+  - CityName: "\u8D35\u5DDE,\u9075\u4E49\u5E02,"
+    Population: 659.3
+    GDP: 6.32
+  - CityName: "\u8D35\u5DDE,\u94DC\u4EC1\u5730\u533A,"
+    Population: 328.3
+    GDP: 5.65
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u65E5\u5580\u5219\u5730\u533A,"
+    Population: 79.81
+    GDP: 3.17
+  - CityName: "\u6E56\u5357,\u5A41\u5E95\u5E02,"
+    Population: 379.7
+    GDP: 4.79
+  - CityName: "\u6E56\u5357,\u6E58\u6F6D\u5E02,"
+    Population: 270.9
+    GDP: 9.38
+  - CityName: "\u6D59\u6C5F,\u4E3D\u6C34\u5E02,"
+    Population: 251.4
+    GDP: 6.81
+  - CityName: "\u6C5F\u897F,\u5B9C\u6625\u5E02,"
+    Population: 497.1
+    GDP: 6.4
+  - CityName: "\u6C5F\u897F,\u65B0\u4F59\u5E02,"
+    Population: 120.2
+    GDP: 9.6
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u5C71\u5357\u5730\u533A,"
+    Population: 35.51
+    GDP: 6.65
+  - CityName: "\u56DB\u5DDD,\u6CF8\u5DDE\u5E02,"
+    Population: 425.9
+    GDP: 5.08
+  - CityName: "\u6E56\u5357,\u6E58\u897F\u571F\u5BB6\u65CF\u82D7\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 291.06
+    GDP: 2.7
+  - CityName: "\u56DB\u5DDD,\u5B9C\u5BBE\u5E02,"
+    Population: 460.5
+    GDP: 6.85
+  - CityName: "\u6C5F\u897F,\u9E70\u6F6D\u5E02,"
+    Population: 115.5
+    GDP: 9.91
+  - CityName: "\u6C5F\u897F,\u4E0A\u9976\u5E02,"
+    Population: 643.7
+    GDP: 4.71
+  - CityName: "\u6E56\u5357,\u9577\u6C99\u5E02,"
+    Population: 1023.9
+    GDP: 12.33
+  - CityName: "\u6D59\u6C5F,\u53F0\u5DDE\u5E02,"
+    Population: 666.1
+    GDP: 7.99
+  - CityName: "\u56DB\u5DDD,\u7518\u5B5C\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 110.74
+    GDP: 3.24
+  - CityName: "\u6E56\u5357,\u76CA\u967D\u5E02,"
+    Population: 382.8
+    GDP: 4.78
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u6797\u829D\u5730\u533A,"
+    Population: 23.89
+    GDP: 7.25
+  - CityName: "\u91CD\u5E86,\u91CD\u5E86,"
+    Population: 3212.4
+    GDP: 8.69
+  - CityName: "\u6C5F\u897F,\u5357\u660C\u5E02,"
+    Population: 643.8
+    GDP: 10.48
+  - CityName: "\u6D59\u6C5F,\u8862\u5DDE\u5E02,"
+    Population: 228.7
+    GDP: 8.22
+  - CityName: "\u56DB\u5DDD,\u4E50\u5C71\u5E02,"
+    Population: 315.1
+    GDP: 6.33
+  - CityName: "\u6E56\u5357,\u5E38\u5FB7\u5E02,"
+    Population: 523.8
+    GDP: 7.05
+  - CityName: "\u6E56\u5357,\u5CB3\u967D\u5E02,"
+    Population: 504.2
+    GDP: 8.73
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u660C\u90FD\u5730\u533A,"
+    Population: 76.09
+    GDP: 2.78
+  - CityName: "\u6D59\u6C5F,\u91D1\u534E\u5E02,"
+    Population: 712
+    GDP: 7.55
+  - CityName: "\u6C5F\u897F,\u4E5D\u6C5F\u5E02,"
+    Population: 456.1
+    GDP: 8.16
+  - CityName: "\u6C5F\u897F,\u666F\u5FB7\u9547\u5E02,"
+    Population: 162.1
+    GDP: 6.8
+  - CityName: "\u56DB\u5DDD,\u96C5\u5B89\u5E02,"
+    Population: 143.1
+    GDP: 5.24
+  - CityName: "\u56DB\u5DDD,\u81EA\u8D21\u5E02,"
+    Population: 246.7
+    GDP: 5.81
+  - CityName: "\u6E56\u5357,\u5F35\u5BB6\u754C\u5E02,"
+    Population: 151
+    GDP: 3.67
+  - CityName: "\u6E56\u5317,\u54B8\u5B81\u5E02,"
+    Population: 261.3
+    GDP: 6.62
+  - CityName: "\u6D59\u6C5F,\u5B81\u6CE2\u5E02,"
+    Population: 954.4
+    GDP: 15.39
+  - CityName: "\u6E56\u5317,\u6069\u65BD\u571F\u5BB6\u65CF\u82D7\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 345.61
+    GDP: 0.54
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u62C9\u8428\u5E02,"
+    Population: 86.8
+    GDP: 7.94
+  - CityName: "\u56DB\u5DDD,\u5185\u6C5F\u5E02,"
+    Population: 314.2
+    GDP: 4.62
+  - CityName: "\u6D59\u6C5F,\u676D\u5DDE\u5E02,"
+    Population: 1220.4
+    GDP: 14.99
+  - CityName: "\u6D59\u6C5F,\u7ECD\u5174\u5E02,"
+    Population: 533.7
+    GDP: 12.79
+  - CityName: "\u56DB\u5DDD,\u7709\u5C71\u5E02,"
+    Population: 295.9
+    GDP: 4.81
+  - CityName: "\u5B89\u5FBD,\u9EC4\u5C71\u5E02,"
+    Population: 133.2
+    GDP: 7.19
+  - CityName: "\u6E56\u5317,\u8346\u5DDE\u5E02,"
+    Population: 513.7
+    GDP: 4.41
+  - CityName: "\u6E56\u5317,\u9EC4\u77F3\u5E02,"
+    Population: 244.4
+    GDP: 6.64
+  - CityName: "\u5B89\u5FBD,\u6C60\u5DDE\u5E02,"
+    Population: 133.1
+    GDP: 7.52
+  - CityName: "\u6D59\u6C5F,\u821F\u5C71\u5E02,"
+    Population: 116.5
+    GDP: 13.01
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u963F\u91CC\u5730\u533A,"
+    Population: 12.3
+    GDP: 6.31
+  - CityName: "\u56DB\u5DDD,\u8D44\u9633\u5E02,"
+    Population: 230.9
+    GDP: 3.48
+  - CityName: "\u6E56\u5317,\u9EC4\u5188\u5E02,"
+    Population: 578.8
+    GDP: 3.69
+  - CityName: "\u5B89\u5FBD,\u5B89\u5E86\u5E02,"
+    Population: 417.1
+    GDP: 6.37
+  - CityName: "\u897F\u85CF\u81EA\u6CBB\u533A,\u90A3\u66F2\u5730\u533A,"
+    Population: 33.02
+    GDP: 3.58
+  - CityName: "\u6E56\u5317,\u5B9C\u660C\u5E02,"
+    Population: 391
+    GDP: 10.61
+  - CityName: "\u5B89\u5FBD,\u5BA3\u57CE\u5E02,"
+    Population: 248.7
+    GDP: 7.35
+  - CityName: "\u56DB\u5DDD,\u5E7F\u5B89\u5E02,"
+    Population: 325.6
+    GDP: 4.01
+  - CityName: "\u6E56\u5317,\u6B66\u6C49\u5E02,"
+    Population: 1364.9
+    GDP: 13.53
+  - CityName: "\u6E56\u5317,\u9102\u5DDE\u5E02,"
+    Population: 107
+    GDP: 9.4
+  - CityName: "\u56DB\u5DDD,\u6210\u90FD\u5E02,"
+    Population: 2119.2
+    GDP: 9.46
+  - CityName: "\u6E56\u5317,\u6F5C\u6C5F\u5E02,"
+    Population: 88.7
+    GDP: 9.6
+  - CityName: "\u6E56\u5317,\u4ED9\u6843\u5E02,"
+    Population: 113.5
+    GDP: 1.17
+  - CityName: "\u56DB\u5DDD,\u9042\u5B81\u5E02,"
+    Population: 278.2
+    GDP: 4.95
+  - CityName: "\u6D59\u6C5F,\u5609\u5174\u5E02,"
+    Population: 551.6
+    GDP: 11.63
+  - CityName: "\u56DB\u5DDD,\u8FBE\u5DDE\u5E02,"
+    Population: 538.7
+    GDP: 3.92
+  - CityName: "\u6E56\u5317,\u8346\u95E8\u5E02,"
+    Population: 254.7
+    GDP: 7.02
+  - CityName: "\u6E56\u5317,\u5929\u95E8\u5E02,"
+    Population: 115.9
+    GDP: 0.86
+  - CityName: "\u6E56\u5317,\u5B5D\u611F\u5E02,"
+    Population: 419.1
+    GDP: 6.06
+  - CityName: "\u6D59\u6C5F,\u6E56\u5DDE\u5E02,"
+    Population: 340.7
+    GDP: 10.75
+  - CityName: "\u56DB\u5DDD,\u5357\u5145\u5E02,"
+    Population: 556.2
+    GDP: 4.25
+  - CityName: "\u4E0A\u6D77,\u4E0A\u6D77,"
+    Population: 2489.4
+    GDP: 17.36
+  - CityName: "\u56DB\u5DDD,\u5FB7\u9633\u5E02,"
+    Population: 345.9
+    GDP: 6.94
+  - CityName: "\u56DB\u5DDD,\u963F\u575D\u85CF\u65CF\u7F8C\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 94.6
+    GDP: 4.12
+  - CityName: "\u5B89\u5FBD,\u829C\u6E56\u5E02,"
+    Population: 367.2
+    GDP: 10.3
+  - CityName: "\u56DB\u5DDD,\u7EF5\u9633\u5E02,"
+    Population: 488.3
+    GDP: 6.19
+  - CityName: "\u5B89\u5FBD,\u94DC\u9675\u5E02,"
+    Population: 130.6
+    GDP: 8.91
+  - CityName: "\u6C5F\u82CF,\u82CF\u5DDE\u5E02,"
+    Population: 1284.8
+    GDP: 17.75
+  - CityName: "\u5B89\u5FBD,\u5DE2\u6E56\u5E02,"
+    Population: 72.7
+    GDP: 7.93
+  - CityName: "\u5B89\u5FBD,\u516D\u5B89\u5E02,"
+    Population: 440.5
+    GDP: 4.37
+  - CityName: "\u6C5F\u82CF,\u5E38\u5DDE\u5E02,"
+    Population: 535
+    GDP: 16.6
+  - CityName: "\u6C5F\u82CF,\u65E0\u9521\u5E02,"
+    Population: 748
+    GDP: 18.74
+  - CityName: "\u56DB\u5DDD,\u5DF4\u4E2D\u5E02,"
+    Population: 267.6
+    GDP: 2.8
+  - CityName: "\u6E56\u5317,\u795E\u519C\u67B6\u6797\u533A,"
+    Population: 6.66
+    GDP: 4
+  - CityName: "\u6E56\u5317,\u8944\u6A0A\u5E02,"
+    Population: 527.1
+    GDP: 1.23
+  - CityName: "\u5B89\u5FBD,\u9A6C\u978D\u5C71\u5E02,"
+    Population: 215.7
+    GDP: 11.3
+  - CityName: "\u6C5F\u82CF,\u5357\u4EAC\u5E02,"
+    Population: 942.3
+    GDP: 17.45
+  - CityName: "\u6E56\u5317,\u968F\u5DDE\u5E02,"
+    Population: 201.6
+    GDP: 6.11
+  - CityName: "\u6CB3\u5357,\u4FE1\u9633\u5E02,"
+    Population: 618.6
+    GDP: 4.93
+  - CityName: "\u6E56\u5317,\u5341\u5830\u5E02,"
+    Population: 315.8
+    GDP: 5.83
+  - CityName: "\u9752\u6D77,\u7389\u6811\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 42.51
+    GDP: 1.41
+  - CityName: "\u56DB\u5DDD,\u5E7F\u5143\u5E02,"
+    Population: 228.3
+    GDP: 4.86
+  - CityName: "\u5B89\u5FBD,\u5408\u80A5\u5E02,"
+    Population: 946.5
+    GDP: 12.12
+  - CityName: "\u6C5F\u82CF,\u9547\u6C5F\u5E02,"
+    Population: 321.7
+    GDP: 14.82
+  - CityName: "\u6C5F\u82CF,\u5357\u901A\u5E02,"
+    Population: 773.3
+    GDP: 14.26
+  - CityName: "\u9655\u897F,\u5B89\u5EB7\u5E02,"
+    Population: 247.8
+    GDP: 4.34
+  - CityName: "\u5B89\u5FBD,\u6EC1\u5DDE\u5E02,"
+    Population: 399
+    GDP: 8.43
+  - CityName: "\u6C5F\u82CF,\u6CF0\u5DDE\u5E02,"
+    Population: 452.2
+    GDP: 13.33
+  - CityName: "\u9655\u897F,\u6C49\u4E2D\u5E02,"
+    Population: 318.9
+    GDP: 5.53
+  - CityName: "\u6CB3\u5357,\u5357\u9633\u5E02,"
+    Population: 962.9
+    GDP: 4.49
+  - CityName: "\u6CB3\u5357,\u9A7B\u9A6C\u5E97\u5E02,"
+    Population: 692.2
+    GDP: 4.43
+  - CityName: "\u6C5F\u82CF,\u626C\u5DDE\u5E02,"
+    Population: 457.7
+    GDP: 13.28
+  - CityName: "\u9752\u6D77,\u679C\u6D1B\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 21.55
+    GDP: 2.38
+  - CityName: "\u5B89\u5FBD,\u961C\u9633\u5E02,"
+    Population: 817.1
+    GDP: 3.75
+  - CityName: "\u5B89\u5FBD,\u6DEE\u5357\u5E02,"
+    Population: 304
+    GDP: 4.8
+  - CityName: "\u6C5F\u82CF,\u76D0\u57CE\u5E02,"
+    Population: 671.3
+    GDP: 9.86
+  - CityName: "\u7518\u8083,\u9647\u5357\u5E02,"
+    Population: 238.7
+    GDP: 1.87
+  - CityName: "\u5B89\u5FBD,\u868C\u57E0\u5E02,"
+    Population: 331.7
+    GDP: 6.01
+  - CityName: "\u6C5F\u82CF,\u6DEE\u5B89\u5E02,"
+    Population: 456.2
+    GDP: 9.98
+  - CityName: "\u5B89\u5FBD,\u4EB3\u5DDE\u5E02,"
+    Population: 498.6
+    GDP: 3.95
+  - CityName: "\u6CB3\u5357,\u5468\u53E3\u5E02,"
+    Population: 885.3
+    GDP: 3.91
+  - CityName: "\u7518\u8083,\u7518\u5357\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 69.18
+    GDP: 3.32
+  - CityName: "\u9655\u897F,\u5546\u6D1B\u5E02,"
+    Population: 202.7
+    GDP: 3.54
+  - CityName: "\u6CB3\u5357,\u5E73\u9876\u5C71\u5E02,"
+    Population: 496.8
+    GDP: 5.41
+  - CityName: "\u6C5F\u82CF,\u5BBF\u8FC1\u5E02,"
+    Population: 499.9
+    GDP: 7.45
+  - CityName: "\u5B89\u5FBD,\u6DEE\u5317\u5E02,"
+    Population: 197.4
+    GDP: 6.2
+  - CityName: "\u5B89\u5FBD,\u5BBF\u5DDE\u5E02,"
+    Population: 532.5
+    GDP: 4.07
+  - CityName: "\u6CB3\u5357,\u6F2F\u6CB3\u5E02,"
+    Population: 237.2
+    GDP: 7.26
+  - CityName: "\u9655\u897F,\u5B9D\u9E21\u5E02,"
+    Population: 328.2
+    GDP: 7.72
+  - CityName: "\u6CB3\u5357,\u4E09\u95E8\u5CE1\u5E02,"
+    Population: 203.8
+    GDP: 7.77
+  - CityName: "\u6CB3\u5357,\u6D1B\u9633\u5E02,"
+    Population: 706.9
+    GDP: 7.71
+  - CityName: "\u9655\u897F,\u897F\u5B89\u5E02,"
+    Population: 1316.3
+    GDP: 8.37
+  - CityName: "\u6CB3\u5357,\u8BB8\u660C\u5E02,"
+    Population: 438.2
+    GDP: 8.34
+  - CityName: "\u6CB3\u5357,\u5546\u4E18\u5E02,"
+    Population: 772.3
+    GDP: 3.97
+  - CityName: "\u6C5F\u82CF,\u5F90\u5DDE\u5E02,"
+    Population: 902.8
+    GDP: 8.96
+  - CityName: "\u6C5F\u82CF,\u8FDE\u4E91\u6E2F\u5E02,"
+    Population: 460.2
+    GDP: 7.13
+  - CityName: "\u9752\u6D77,\u9EC4\u5357\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 27.62
+    GDP: 3.96
+  - CityName: "\u7518\u8083,\u5B9A\u897F\u5E02,"
+    Population: 250.8
+    GDP: 1.99
+  - CityName: "\u7518\u8083,\u5929\u6C34\u5E02,"
+    Population: 295.6
+    GDP: 2.53
+  - CityName: "\u9655\u897F,\u54B8\u9633\u5E02,"
+    Population: 421.3
+    GDP: 6.1
+  - CityName: "\u9655\u897F,\u6E2D\u5357\u5E02,"
+    Population: 463.1
+    GDP: 3.92
+  - CityName: "\u6CB3\u5357,\u5F00\u5C01\u5E02,"
+    Population: 478.3
+    GDP: 4.92
+  - CityName: "\u6CB3\u5357,\u90D1\u5DDE\u5E02,"
+    Population: 1274.2
+    GDP: 9.61
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u548C\u7530\u5730\u533A,"
+    Population: 250.47
+    GDP: 1.82
+  - CityName: "\u5C71\u4E1C,\u4E34\u6C82\u5E02,"
+    Population: 1102.6
+    GDP: 4.39
+  - CityName: "\u5C71\u4E1C,\u6D4E\u5B81\u5E02,"
+    Population: 833.7
+    GDP: 6.07
+  - CityName: "\u5C71\u4E1C,\u67A3\u5E84\u5E02,"
+    Population: 385.3
+    GDP: 5.06
+  - CityName: "\u5C71\u897F,\u8FD0\u57CE\u53BF,"
+    Population: 473.3
+    GDP: 4.32
+  - CityName: "\u5C71\u4E1C,\u83CF\u6CFD\u5E02,"
+    Population: 873.2
+    GDP: 3.97
+  - CityName: "\u9752\u6D77,\u6D77\u5357\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 44.69
+    GDP: 4.06
+  - CityName: "\u6CB3\u5357,\u7126\u4F5C\u5E02,"
+    Population: 352.3
+    GDP: 6.06
+  - CityName: "\u7518\u8083,\u5E73\u51C9\u5E02,"
+    Population: 182.5
+    GDP: 3.02
+  - CityName: "\u6CB3\u5357,\u6D4E\u6E90\u5E02,"
+    Population: 72.72
+    GDP: 9.67
+  - CityName: "\u6CB3\u5357,\u65B0\u4E61\u5E02,"
+    Population: 617.1
+    GDP: 5.2
+  - CityName: "\u7518\u8083,\u4E34\u590F\u56DE\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 210.97
+    GDP: 1.57
+  - CityName: "\u9655\u897F,\u94DC\u5DDD\u5E02,"
+    Population: 71
+    GDP: 5.3
+  - CityName: "\u5C71\u4E1C,\u65E5\u7167\u5E02,"
+    Population: 297.2
+    GDP: 7.44
+  - CityName: "\u9752\u6D77,\u6D77\u897F\u8499\u53E4\u65CF\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 46.82
+    GDP: 8.67
+  - CityName: "\u5B81\u590F\u56DE\u65CF\u81EA\u6CBB\u533A,\u56FA\u539F\u5E02,"
+    Population: 114.8
+    GDP: 3.27
+  - CityName: "\u7518\u8083,\u5E86\u9633\u5E02,"
+    Population: 215.9
+    GDP: 4.08
+  - CityName: "\u5C71\u897F,\u664B\u57CE\u5E02,"
+    Population: 218.9
+    GDP: 8.73
+  - CityName: "\u6CB3\u5357,\u5B89\u9633\u5E02,"
+    Population: 542.3
+    GDP: 4.47
+  - CityName: "\u6CB3\u5357,\u6FEE\u9633\u5E02,"
+    Population: 374.4
+    GDP: 4.39
+  - CityName: "\u9655\u897F,\u5EF6\u5B89\u5E02,"
+    Population: 226.9
+    GDP: 8.81
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u5580\u4EC0\u5730\u533A,"
+    Population: 449.63
+    GDP: 2.73
+  - CityName: "\u7518\u8083,\u767D\u94F6\u5E02,"
+    Population: 150.3
+    GDP: 3.79
+  - CityName: "\u6CB3\u5357,\u9E64\u58C1\u5E02,"
+    Population: 157.2
+    GDP: 6.27
+  - CityName: "\u9752\u6D77,\u6D77\u4E1C\u5730\u533A,"
+    Population: 135.84
+    GDP: 2.97
+  - CityName: "\u7518\u8083,\u5170\u5DDE\u5E02,"
+    Population: 438.4
+    GDP: 7.38
+  - CityName: "\u5C71\u897F,\u4E34\u6C7E\u5E02,"
+    Population: 391.2
+    GDP: 4.84
+  - CityName: "\u5C71\u4E1C,\u9752\u5C9B\u5E02,"
+    Population: 1025.7
+    GDP: 12.38
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u5DF4\u97F3\u90ED\u6123\u8499\u53E4\u81EA\u6CBB\u5DDE,"
+    Population: 161.39
+    GDP: 7.36
+  - CityName: "\u5C71\u4E1C,\u6CF0\u5B89\u5E02,"
+    Population: 547.8
+    GDP: 5.04
+  - CityName: "\u5C71\u4E1C,\u6F4D\u574A\u5E02,"
+    Population: 940
+    GDP: 7.46
+  - CityName: "\u5C71\u897F,\u957F\u6CBB\u5E02,"
+    Population: 315.2
+    GDP: 7.3
+  - CityName: "\u5C71\u4E1C,\u804A\u57CE\u5E02,"
+    Population: 592.8
+    GDP: 3.89
+  - CityName: "\u5C71\u4E1C,\u6DC4\u535A\u5E02,"
+    Population: 470.9
+    GDP: 8.92
+  - CityName: "\u6CB3\u5317,\u90AF\u90F8\u5E02,"
+    Population: 936.7
+    GDP: 4.38
+  - CityName: "\u5C71\u4E1C,\u6D4E\u5357\u5E02,"
+    Population: 933.6
+    GDP: 11.02
+  - CityName: "\u5C71\u4E1C,\u83B1\u829C\u5E02,"
+    Population: 126.95
+    GDP: 2.31
+  - CityName: "\u5B81\u590F\u56DE\u65CF\u81EA\u6CBB\u533A,\u4E2D\u536B\u5E02,"
+    Population: 107.5
+    GDP: 4.71
+  - CityName: "\u5C71\u4E1C,\u70DF\u53F0\u5E02,"
+    Population: 710.4
+    GDP: 11.02
+  - CityName: "\u9752\u6D77,\u897F\u5B81\u5E02,"
+    Population: 247.6
+    GDP: 5.44
+  - CityName: "\u5C71\u4E1C,\u5FB7\u5DDE\u5E02,"
+    Population: 560
+    GDP: 5.47
+  - CityName: "\u5B81\u590F\u56DE\u65CF\u81EA\u6CBB\u533A,\u5434\u5FE0\u5E02,"
+    Population: 139.2
+    GDP: 5.49
+  - CityName: "\u5C71\u897F,\u664B\u4E2D\u5E02,"
+    Population: 339
+    GDP: 5.45
+  - CityName: "\u5C71\u4E1C,\u5A01\u6D77\u5E02,"
+    Population: 291.5
+    GDP: 10.41
+  - CityName: "\u9752\u6D77,\u6D77\u5317\u85CF\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 28.3
+    GDP: 3.71
+  - CityName: "\u7518\u8083,\u6B66\u5A01\u5E02,"
+    Population: 144.3
+    GDP: 4.14
+  - CityName: "\u5C71\u897F,\u5415\u6881\u5E02,"
+    Population: 337.5
+    GDP: 4.52
+  - CityName: "\u6CB3\u5317,\u90A2\u53F0\u5E02,"
+    Population: 708.8
+    GDP: 3.09
+  - CityName: "\u9655\u897F,\u6986\u6797\u5E02,"
+    Population: 362.2
+    GDP: 14.99
+  - CityName: "\u5C71\u4E1C,\u4E1C\u8425\u5E02,"
+    Population: 219.5
+    GDP: 15.69
+  - CityName: "\u5C71\u4E1C,\u6EE8\u5DDE,"
+    Population: 393
+    GDP: 6.39
+  - CityName: "\u6CB3\u5317,\u8861\u6C34\u5E02,"
+    Population: 418.7
+    GDP: 4.06
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u963F\u62C9\u5584\u76DF,"
+    Population: 26.5
+    GDP: 13.77
+  - CityName: "\u6CB3\u5317,\u77F3\u5BB6\u5E84\u5E02,"
+    Population: 1120.5
+    GDP: 5.3
+  - CityName: "\u7518\u8083,\u5F20\u6396\u5E02,"
+    Population: 112.2
+    GDP: 4.67
+  - CityName: "\u5B81\u590F\u56DE\u65CF\u81EA\u6CBB\u533A,\u94F6\u5DDD\u5E02,"
+    Population: 288.2
+    GDP: 7.88
+  - CityName: "\u5C71\u897F,\u592A\u539F\u5E02,"
+    Population: 539.1
+    GDP: 9.56
+  - CityName: "\u6CB3\u5317,\u6CA7\u5DDE\u5E02,"
+    Population: 730.4
+    GDP: 5.07
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u9102\u5C14\u591A\u65AF\u5E02,"
+    Population: 216.8
+    GDP: 21.81
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u514B\u5B5C\u52D2\u82CF\u67EF\u5C14\u514B\u5B5C\u81EA\u6CBB\u5DDE,"
+    Population: 62.22
+    GDP: 2.73
+  - CityName: "\u5C71\u897F,\u9633\u6CC9\u5E02,"
+    Population: 131.1
+    GDP: 6.97
+  - CityName: "\u7518\u8083,\u91D1\u660C\u5E02,"
+    Population: 43.5
+    GDP: 9.82
+  - CityName: "\u5C71\u897F,\u5FFB\u5DDE\u5E02,"
+    Population: 266.3
+    GDP: 5.03
+  - CityName: "\u6CB3\u5317,\u4FDD\u5B9A\u5E02,"
+    Population: 919.5
+    GDP: 4.04
+  - CityName: "\u7518\u8083,\u9152\u6CC9\u5E02,"
+    Population: 105.3
+    GDP: 7.24
+  - CityName: "\u5B81\u590F\u56DE\u65CF\u81EA\u6CBB\u533A,\u77F3\u5634\u5C71\u5E02,"
+    Population: 75.3
+    GDP: 8.19
+  - CityName: "\u6CB3\u5317,\u5ECA\u574A\u5E02,"
+    Population: 553.8
+    GDP: 6.45
+  - CityName: "\u5929\u6D25,\u5929\u6D25,"
+    Population: 1373
+    GDP: 11.37
+  - CityName: "\u8FBD\u5B81,\u5927\u8FDE\u5E02,"
+    Population: 745.4
+    GDP: 9.47
+  - CityName: "\u6CB3\u5317,\u5510\u5C71\u5E02,"
+    Population: 769.7
+    GDP: 10.68
+  - CityName: "\u5C71\u897F,\u5927\u540C\u5E02,"
+    Population: 309.9
+    GDP: 5.44
+  - CityName: "\u5C71\u897F,\u6714\u5DDE\u5E02,"
+    Population: 159
+    GDP: 8.93
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u4E4C\u6D77\u5E02,"
+    Population: 55.8
+    GDP: 12.89
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u963F\u514B\u82CF\u5730\u533A,"
+    Population: 271.44
+    GDP: 5.66
+  - CityName: "\u5317\u4EAC,\u5317\u4EAC,"
+    Population: 2188.6
+    GDP: 18.4
+  - CityName: "\u6CB3\u5317,\u79E6\u7687\u5C9B\u5E02,"
+    Population: 313.4
+    GDP: 5.88
+  - CityName: "\u6CB3\u5317,\u5F20\u5BB6\u53E3\u5E02,"
+    Population: 409.9
+    GDP: 4.2
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u547C\u548C\u6D69\u7279\u5E02,"
+    Population: 349.6
+    GDP: 8.98
+  - CityName: "\u7518\u8083,\u5609\u5CEA\u5173\u5E02,"
+    Population: 31.5
+    GDP: 10.38
+  - CityName: "\u8FBD\u5B81,\u4E39\u4E1C\u5E02,"
+    Population: 218.4
+    GDP: 3.54
+  - CityName: "\u8FBD\u5B81,\u846B\u82A6\u5C9B\u5E02,"
+    Population: 243.1
+    GDP: 3.48
+  - CityName: "\u8FBD\u5B81,\u94C1\u5CAD\u5E02,"
+    Population: 238.3
+    GDP: 2.76
+  - CityName: "\u8FBD\u5B81,\u978D\u5C71\u5E02,"
+    Population: 332.1
+    GDP: 5.2
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u5DF4\u5F66\u6DD6\u5C14\u5E02,"
+    Population: 152.8
+    GDP: 6.41
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u4E4C\u5170\u5BDF\u5E03\u5E02,"
+    Population: 166
+    GDP: 5.39
+  - CityName: "\u6CB3\u5317,\u627F\u5FB7\u5E02,"
+    Population: 333.6
+    GDP: 4.61
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u5305\u5934\u5E02,"
+    Population: 271.8
+    GDP: 12.13
+  - CityName: "\u8FBD\u5B81,\u671D\u9633\u5E02,"
+    Population: 284
+    GDP: 3.31
+  - CityName: "\u8FBD\u5B81,\u76D8\u9526\u5E02,"
+    Population: 131.2
+    GDP: 9.94
+  - CityName: "\u8FBD\u5B81,\u8FBD\u9633\u5E02,"
+    Population: 157.7
+    GDP: 5.41
+  - CityName: "\u8FBD\u5B81,\u9526\u5DDE\u5E02,"
+    Population: 269.7
+    GDP: 4.21
+  - CityName: "\u8FBD\u5B81,\u672C\u6EAA\u5E02,"
+    Population: 132.1
+    GDP: 6.02
+  - CityName: "\u5409\u6797,\u901A\u5316\u5E02,"
+    Population: 152.6
+    GDP: 3.71
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u54C8\u5BC6\u5730\u533A,"
+    Population: 67.33
+    GDP: 6.86
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u5410\u9C81\u756A\u5730\u533A,"
+    Population: 69.39
+    GDP: 4.29
+  - CityName: "\u8FBD\u5B81,\u6C88\u9633\u5E02,"
+    Population: 911.8
+    GDP: 7.97
+  - CityName: "\u8FBD\u5B81,\u629A\u987A\u5E02,"
+    Population: 185.7
+    GDP: 4.73
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u8D64\u5CF0\u5E02,"
+    Population: 401.9
+    GDP: 4.91
+  - CityName: "\u5409\u6797,\u767D\u5C71\u5E02,"
+    Population: 95.2
+    GDP: 4.4
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u9521\u6797\u90ED\u52D2\u76DF,"
+    Population: 111.6
+    GDP: 9.12
+  - CityName: "\u8FBD\u5B81,\u961C\u65B0\u5E02,"
+    Population: 164.5
+    GDP: 3.34
+  - CityName: "\u5409\u6797,\u5EF6\u8FB9\u671D\u9C9C\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 194.17
+    GDP: 3.38
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u4F0A\u7281\u54C8\u8428\u514B\u81EA\u6CBB\u5DDE,"
+    Population: 284.83
+    GDP: 8.23
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u901A\u8FBD\u5E02,"
+    Population: 285.3
+    GDP: 4.93
+  - CityName: "\u5409\u6797,\u8FBD\u6E90\u5E02,"
+    Population: 114.8
+    GDP: 4.7
+  - CityName: "\u5409\u6797,\u5409\u6797\u5E02,"
+    Population: 401.8
+    GDP: 5.55
+  - CityName: "\u5409\u6797,\u56DB\u5E73\u5E02,"
+    Population: 213.1
+    GDP: 2.46
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u4E4C\u9C81\u6728\u9F50\u5E02,"
+    Population: 407
+    GDP: 9.3
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u660C\u5409\u56DE\u65CF\u81EA\u6CBB\u5DDE,"
+    Population: 161.35
+    GDP: 7.12
+  - CityName: "\u5409\u6797,\u957F\u6625\u5E02,"
+    Population: 853.4
+    GDP: 7.76
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u5854\u57CE\u5730\u533A,"
+    Population: 111
+    GDP: 6.59
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u7261\u4E39\u6C5F\u5E02,"
+    Population: 244.2
+    GDP: 3.59
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u535A\u5C14\u5854\u62C9\u8499\u53E4\u81EA\u6CBB\u5DDE,"
+    Population: 48.81
+    GDP: 7.91
+  - CityName: "\u5409\u6797,\u677E\u539F\u5E02,"
+    Population: 273.3
+    GDP: 2.75
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u54C8\u5C14\u6EE8\u5E02,"
+    Population: 988.5
+    GDP: 5.16
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u77F3\u6CB3\u5B50\u5E02,"
+    Population: 65.9
+    GDP: 11.8
+  - CityName: "\u5409\u6797,\u767D\u57CE\u5E02,"
+    Population: 186.2
+    GDP: 2.72
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u5174\u5B89\u76DF,"
+    Population: 140.5
+    GDP: 4.27
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u9E21\u897F\u5E02,"
+    Population: 164.7
+    GDP: 4.08
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u514B\u62C9\u739B\u4F9D\u5E02,"
+    Population: 31.4
+    GDP: 18.09
+  - CityName: "\u65B0\u7586\u7EF4\u543E\u5C14\u81EA\u6CBB\u533A,\u963F\u52D2\u6CF0\u5730\u533A,"
+    Population: 66.85
+    GDP: 5.54
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u5927\u5E86\u5E02,"
+    Population: 269
+    GDP: 9.48
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u7EE5\u5316\u5E02,"
+    Population: 513.4
+    GDP: 3.03
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u4E03\u53F0\u6CB3\u5E02,"
+    Population: 76.1
+    GDP: 3.41
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u53CC\u9E2D\u5C71\u5E02,"
+    Population: 137
+    GDP: 4.33
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u4F73\u6728\u65AF\u5E02,"
+    Population: 227.9
+    GDP: 3.73
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u9F50\u9F50\u54C8\u5C14\u5E02,"
+    Population: 516.5
+    GDP: 3.06
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u4F0A\u6625\u5E02,"
+    Population: 108.4
+    GDP: 3.7
+  - CityName: "\u5185\u8499\u53E4\u81EA\u6CBB\u533A,\u547C\u4F26\u8D1D\u5C14\u5E02,"
+    Population: 221.4
+    GDP: 6.09
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u9E64\u5C97\u5E02,"
+    Population: 97
+    GDP: 3.78
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u9ED1\u6CB3\u5E02,"
+    Population: 153.8
+    GDP: 4.71
+  - CityName: "\u9ED1\u9F8D\u6C5F\u7701,\u5927\u5174\u5B89\u5CAD\u5730\u533A,"
+    Population: 39.69
+    GDP: 4.21
