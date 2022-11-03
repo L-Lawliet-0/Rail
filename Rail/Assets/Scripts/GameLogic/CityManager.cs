@@ -98,6 +98,15 @@ public class CityManager : MonoBehaviour
 
             TravelNeeds.Add(need);
         }
+
+        float totalTravelCount = 0;
+        foreach (List<(int, float)> list in TravelNeeds)
+        {
+            foreach ((int, float) tuple in list)
+                totalTravelCount += tuple.Item2;
+        }
+
+        Debug.LogError("This many people will travel this day: " + totalTravelCount);
     }
 
     public void OnGridClick(Vector3 worldPos)
@@ -109,9 +118,15 @@ public class CityManager : MonoBehaviour
         {
             if (CityDatas[i].CityName.Equals(grid.name))
             {
-                for (int j = 0; j < 5; j++)
+                float total = 0;
+                for (int j = 0; j < TravelNeeds[i].Count; j++)
                 {
-                    TravelPanel.GetChild(j).GetComponent<Text>().text = CityDatas[TravelNeeds[i][j].Item1].CityName + " : " + TravelNeeds[i][j].Item2;
+                    total += TravelNeeds[i][j].Item2;
+                }
+                TravelPanel.GetChild(0).GetComponent<Text>().text = total.ToString();
+                for (int j = 1; j < 5; j++)
+                {
+                    TravelPanel.GetChild(j).GetComponent<Text>().text = CityDatas[TravelNeeds[i][TravelNeeds[i].Count - j].Item1].CityName + " : " + TravelNeeds[i][TravelNeeds[i].Count - j].Item2;
                 }
                 break;
             }
