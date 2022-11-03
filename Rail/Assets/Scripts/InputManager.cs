@@ -120,13 +120,17 @@ public class InputManager : MonoBehaviour
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 worldPos.z = 0;
                 GameMain.Instance.OnGridRightClick(worldPos);
+                CityManager.Instance.OnGridClick(worldPos);
                 EnterSelectionMode();
             }
         }
         else
         {
             if (Input.GetMouseButtonUp(0) && PressedTime < .15f)
+            {
                 ExitSelectionMode();
+                CityManager.Instance.Clear();
+            }
         }
     }
 
