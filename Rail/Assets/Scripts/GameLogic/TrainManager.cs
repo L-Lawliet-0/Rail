@@ -11,8 +11,19 @@ public class TrainManager : MonoBehaviour
         public int CurrentIndex;
         public float Progress;
         public float TrainSpeed; // speed of this fucking train
+        public int Capacity;
 
         public Transform TrainSprite;
+
+        public List<TravelData> Passengers;
+
+        public int CurrentCapacity()
+        {
+            int cnt = 0;
+            foreach (TravelData td in Passengers)
+                cnt += td.Population;
+            return cnt;
+        }
     }
 
     public GameObject TrainPrefab;
@@ -63,7 +74,6 @@ public class TrainManager : MonoBehaviour
                 }
             }
 
-            Debug.LogError(currentPath.Count);
             float wholeDistance = 10f * (currentPath.Count - 1);
 
             float offset = travelDistance / wholeDistance;
@@ -81,6 +91,10 @@ public class TrainManager : MonoBehaviour
                     if (td.Paths[0] != td.Paths[td.Paths.Count - 1])
                         td.Paths.Reverse();
                 }
+
+                // this is where a train arrived at a station
+                // drop and pick up passengers
+                CityManager.Instance.TrainArrivedAtStation(td);
 
                 goto TOP;
             }
@@ -269,6 +283,8 @@ public class TrainManager : MonoBehaviour
             td.Progress = 0;
             td.CurrentIndex = 0;
             td.TrainSprite = Instantiate(TrainPrefab).transform;
+            td.Passengers = new List<TravelData>();
+            td.Capacity = 500; // testing
 
             AllTrains.Add(td);
         }
