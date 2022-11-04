@@ -60,10 +60,11 @@ public class CityManager : MonoBehaviour
     // calculate and log travel need info
     // 
     //
-    private List<List<(int, float)>> TravelNeeds;
+    private List<List<TravelData>> TravelNeeds;
     public void CalculateTravelNeed()
     {
-        TravelNeeds = new List<List<(int, float)>>();
+        TravelNeeds = new List<List<TravelData>>();
+        List<float> TotalMults = new List<float>();
         for (int i = 0; i < CityDatas.Count; i++)
         {
             // randomlize the travel cities
@@ -72,7 +73,7 @@ public class CityManager : MonoBehaviour
             float travelPopulation = Proportions * CityDatas[i].ResidentPopulation;
             //Debug.LogError(travelPopulation.ToString());
 
-            List<(int, float)> need = new List<(int, float)>();
+            List<TravelData> need = new List<TravelData>();
             for (int j = 0; j < CityDatas.Count; j++)
             {
                 if (i != j)
@@ -84,26 +85,50 @@ public class CityManager : MonoBehaviour
                     float mult = targetGDP / distance;
                     totalMult += mult;
 
-                    need.Add((j, mult));
+                    TravelData td = new TravelData() { HomeCity = i, TargetCity = j, Mult = mult };
+
+                    need.Add(td);
+                }
+                else
+                {
+                    TravelData td = new TravelData() { HomeCity = i, TargetCity = i, Mult = 0 };
+
+                    need.Add(td);
                 }
             }
-
+            
             for (int j = 0; j < need.Count; j++)
             {
-                (int, float) t = need[j];
-                need[j] = (t.Item1, (t.Item2 / totalMult) * travelPopulation);
+                // resident travel need
+                need[j].Population = Mathf.FloorToInt(need[j].Mult / totalMult * travelPopulation);
             }
 
             need.Sort(new Tsorter());
 
             TravelNeeds.Add(need);
+            TotalMults.Add(totalMult);
+        }
+
+        // visitor needs
+        for (int i = 0; i < CityDatas.Count; i++)
+        {
+            List<int> keys = new List<int>(CityDatas[i].VisitorPopulation.Keys);
+            foreach (int key in keys)
+            {
+                TravelData returns = new TravelData();
+                returns.HomeCity = key;
+                returns.TargetCity = key;
+                returns.Population = Mathf.FloorToInt(CityDatas[i].VisitorPopulation[key] * .2f * .8f);
+
+
+            }
         }
 
         float totalTravelCount = 0;
-        foreach (List<(int, float)> list in TravelNeeds)
+        foreach (List<TravelData> list in TravelNeeds)
         {
-            foreach ((int, float) tuple in list)
-                totalTravelCount += tuple.Item2;
+            foreach (TravelData tuple in list)
+                totalTravelCount += tuple.Population;
         }
 
         Debug.LogError("This many people will travel this day: " + totalTravelCount);
@@ -121,12 +146,12 @@ public class CityManager : MonoBehaviour
                 float total = 0;
                 for (int j = 0; j < TravelNeeds[i].Count; j++)
                 {
-                    total += TravelNeeds[i][j].Item2;
+                    total += TravelNeeds[i][j].Population;
                 }
                 TravelPanel.GetChild(0).GetComponent<Text>().text = total.ToString();
                 for (int j = 1; j < 5; j++)
                 {
-                    TravelPanel.GetChild(j).GetComponent<Text>().text = CityDatas[TravelNeeds[i][TravelNeeds[i].Count - j].Item1].CityName + " : " + TravelNeeds[i][TravelNeeds[i].Count - j].Item2;
+                    TravelPanel.GetChild(j).GetComponent<Text>().text = CityDatas[TravelNeeds[i][TravelNeeds[i].Count - j].TargetCity].CityName + " : " + TravelNeeds[i][TravelNeeds[i].Count - j].Population;
                 }
                 break;
             }
@@ -140,11 +165,11 @@ public class CityManager : MonoBehaviour
         TravelPanel.gameObject.SetActive(false);
     }
 
-    public class Tsorter : IComparer<(int, float)>
+    public class Tsorter : IComparer<TravelData>
     {
-        public int Compare((int, float) x, (int, float) y)
+        public int Compare(TravelData x, TravelData y)
         {
-            return x.Item2.CompareTo(y.Item2);
+            return x.Population.CompareTo(y.Population);
         }
     }
 }
