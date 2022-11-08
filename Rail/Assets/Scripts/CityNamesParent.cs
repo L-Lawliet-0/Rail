@@ -66,4 +66,15 @@ public class CityNamesParent : MonoBehaviour
 
         return parent;
     }
+
+    public Vector3 FindMatchCityPosition(string trimmedCityName)
+    {
+        for (int i = 0; i < transform.GetChild(1).childCount; i++)
+        {
+            if (transform.GetChild(1).GetChild(i).name.Equals(trimmedCityName))
+                return transform.GetChild(1).GetChild(i).position;
+        }
+
+        return Vector3.zero;
+    }
 }

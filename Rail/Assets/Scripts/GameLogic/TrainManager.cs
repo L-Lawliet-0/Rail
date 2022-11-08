@@ -55,7 +55,7 @@ public class TrainManager : MonoBehaviour
     {
         foreach (TrainData td in AllTrains)
         {
-            float travelDistance = td.TrainSpeed * Time.deltaTime * 1440; // the distance this train travel in last frame
+            float travelDistance = td.TrainSpeed * Time.deltaTime * TimeManager.RealTimeToGameTime; // the distance this train travel in last frame
 
             TOP:
             // get the current road we're travelling
@@ -314,4 +314,71 @@ public class TrainManager : MonoBehaviour
             Destroy(pair.Value);
         RoadIndexs.Clear();
     }
+
+    public bool TrainPassBy(int currentGrid, int targetCity, int timeInterval)
+    {
+        foreach (TrainData td in AllTrains)
+        {
+            bool containCity = false;
+            foreach (int index in td.Paths)
+            {
+                if (CityManager.Instance.GridToCity[index] == targetCity)
+                {
+                    containCity = true;
+                    break;
+                }
+            }
+
+            if (td.Paths.Contains(currentGrid) && containCity)
+            {
+                
+
+                // check if this train can be arrived within time interval
+                float timeUsed = 0;
+
+                int currentIndex = td.CurrentIndex;
+                List<int> paths = new List<int>(td.Paths);
+
+
+            TOP:
+                // get the current road we're travelling
+                List<int> connections = GridConnectedRoads[paths[currentIndex]];
+                List<int> currentPath = new List<int>();
+                foreach (int i in connections)
+                {
+                    List<int> road = RoadManager.Instance.AllRoads[i];
+                    if (road[0] == paths[currentIndex + 1] || road[road.Count - 1] == paths[currentIndex + 1])
+                    {
+                        currentPath = road;
+
+                        if (currentPath[0] != td.Paths[td.CurrentIndex])
+                            currentPath.Reverse();
+                        break;
+                    }
+                }
+
+                float distance = (currentPath.Count - 1) * 10;
+                timeUsed += distance / td.TrainSpeed;
+
+                currentIndex++;
+                if (currentIndex >= paths.Count - 1)
+                {
+                    currentIndex = 0;
+                    if (paths[0] != paths[paths.Count - 1])
+                        paths.Reverse();
+                }
+
+                if (CityManager.Instance.GridToCity[paths[currentIndex]] == targetCity)
+                {
+                    if (timeUsed <= timeInterval)
+                        return true;
+                }
+                else
+                    goto TOP;
+            }
+        }
+        
+        return false;
+    }
+
 }

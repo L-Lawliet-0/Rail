@@ -32,7 +32,24 @@ public class GridData : MonoBehaviour
     [System.Serializable]
     public class StationSave
     {
+        public List<TravelData> StationQueue;
+        public int Capacity;
 
+        public StationSave()
+        {
+            StationQueue = new List<TravelData>();
+            Capacity = 10000; // for testing
+        }
+
+        public int CurrentCount()
+        {
+            int cnt = 0;
+            foreach (TravelData td in StationQueue)
+            {
+                cnt += td.Population;
+            }
+            return cnt;
+        }
     }
 
 
