@@ -42,10 +42,17 @@ public class HudManager : MonoBehaviour
         GridInfo.transform.parent.gameObject.SetActive(true);
 
         List<RectTransform> activeButtons = new List<RectTransform>();
+
+        BuildStation.GetChild(0).GetComponent<Text>().text = "Build Station";
+        BuildCross.GetChild(0).GetComponent<Text>().text = "Build Cross";
+
         if (grid.StationData == null && grid.CrossData == null)
         {
             activeButtons.Add(BuildStation);
             activeButtons.Add(BuildCross);
+
+            BuildStation.GetChild(0).GetComponent<Text>().text += " (" + EconManager.Instance.GetStationCrossCost(grid, false) + ")";
+            BuildCross.GetChild(0).GetComponent<Text>().text += " (" + EconManager.Instance.GetStationCrossCost(grid, true) + ")";
         }
 
         if (grid.StationData != null || grid.CrossData != null)
@@ -63,10 +70,17 @@ public class HudManager : MonoBehaviour
         GridInfo.transform.parent.gameObject.SetActive(true);
         List<RectTransform> activeButtons = new List<RectTransform>();
 
+        ConfirmRoad.GetChild(0).GetComponent<Text>().text = "Confirm Road";
         activeButtons.Add(ConfirmRoad);
         activeButtons.Add(CancelRoad);
 
         ShowButtons(activeButtons);
+    }
+
+    public void UpdateRoadCost(int cost)
+    {
+        Text text = ConfirmRoad.GetChild(0).GetComponent<Text>();
+        text.text = text.text.Split('(')[0] + " (" + cost + ")";
     }
 
     public void TrainMode(GridData.GridSave grid)

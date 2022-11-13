@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TimeManager : MonoBehaviour
 {
@@ -12,9 +13,28 @@ public class TimeManager : MonoBehaviour
     public float DayCounter = 0;
     public float HourCounter = 0;
 
+    public int MonthCount;
+    public int DayCount;
+    public Text DayText;
+
+    public int MonthlyGoal;
+
+    public Text GoalTrackText;
+    public int GoalTrack { get { return goalTrack; } set { UpdateGoalTrack(value); } }
+    private void UpdateGoalTrack(int value)
+    {
+        goalTrack = value;
+        GoalTrackText.text = goalTrack + " / " + MonthlyGoal + " people transported";
+    }
+    private int goalTrack;
+
     private void Awake()
     {
         m_Instance = this;
+        DayCount = 1;
+        MonthCount = 1;
+        UpdateGoal();
+        GoalTrack = 0;
     }
 
     private void Update()
@@ -24,6 +44,8 @@ public class TimeManager : MonoBehaviour
             // advance an hour
             DayCounter += 3601;
             HourCounter += 3601;
+
+            CityManager.Instance.FlushNeedsToStation();
         }
 
         DayCounter += Time.deltaTime * RealTimeToGameTime;
@@ -33,7 +55,17 @@ public class TimeManager : MonoBehaviour
             DayCounter -= DaySecs;
             // a day is passed
             // recalculate city travel needs;
-            CityManager.Instance.CalculateTravelNeed();
+            //CityManager.Instance.CalculateTravelNeed();
+
+            DayCount++;
+            if (DayCount > 30)
+            {
+                DayCount = 1;
+                MonthCount++;
+                // refresh goal
+                UpdateGoal();
+            }
+            DayText.text = "Day " + DayCount + " / " + 30;
         }
 
         HourCounter += Time.deltaTime * RealTimeToGameTime;
@@ -43,7 +75,14 @@ public class TimeManager : MonoBehaviour
             HourCounter -= HourSecs;
             // an hour has passed
             // flush travel needs to station
-            CityManager.Instance.FlushNeedsToStation();
+            //CityManager.Instance.FlushNeedsToStation();
         }
+    }
+
+    public Text GoalText;
+    public void UpdateGoal()
+    {
+        MonthlyGoal = 5000 + 1000 * MonthCount;
+        GoalText.text = "You need to transport " + MonthlyGoal + " people this month";
     }
 }

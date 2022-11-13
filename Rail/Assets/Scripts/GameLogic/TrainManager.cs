@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class TrainManager : MonoBehaviour
 {
+    public static int TrainNameIndex = 500;
     [System.Serializable]
     public class TrainData
     {
@@ -16,6 +17,12 @@ public class TrainManager : MonoBehaviour
         public Transform TrainSprite;
 
         public List<TravelData> Passengers;
+
+        public string TrainName;
+        public TrainData()
+        {
+            TrainName = "G" + TrainNameIndex++;
+        }
 
         public int CurrentCapacity()
         {
@@ -53,6 +60,7 @@ public class TrainManager : MonoBehaviour
 
     private void Update()
     {
+        bool updateCapacity = false;
         foreach (TrainData td in AllTrains)
         {
             float travelDistance = td.TrainSpeed * Time.deltaTime * TimeManager.RealTimeToGameTime; // the distance this train travel in last frame
@@ -95,6 +103,7 @@ public class TrainManager : MonoBehaviour
                 // this is where a train arrived at a station
                 // drop and pick up passengers
                 CityManager.Instance.TrainArrivedAtStation(td);
+                updateCapacity = true;
 
                 goto TOP;
             }
@@ -144,6 +153,8 @@ public class TrainManager : MonoBehaviour
             
 
         }
+
+        CityNamesParent.Instance.UpdateTrainObjects(updateCapacity);
     }
 
     // initalize gridconnectedroads based on existing roads
@@ -287,6 +298,8 @@ public class TrainManager : MonoBehaviour
             td.Capacity = 500; // testing
 
             AllTrains.Add(td);
+
+            CityNamesParent.Instance.CreateTrainCounter(td);
         }
 
         // reset all path color to black
@@ -370,7 +383,7 @@ public class TrainManager : MonoBehaviour
 
                 if (CityManager.Instance.GridToCity[paths[currentIndex]] == targetCity)
                 {
-                    if (timeUsed <= timeInterval)
+                    //if (timeUsed <= timeInterval)
                         return true;
                 }
                 else

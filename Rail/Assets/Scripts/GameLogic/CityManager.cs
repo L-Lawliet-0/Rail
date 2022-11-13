@@ -174,82 +174,127 @@ public class CityManager : MonoBehaviour
         if (grid.name.Equals("sea"))
             return;
 
-        int arriveCnt = 0;
-        for (int i = 0; i < TravelNeeds.Count; i++)
+        if (grid.StationData == null)
         {
-            for (int j = 0; j < TravelNeeds[i].Count; j++)
+            for (int i = 0; i < TravelNeeds.Count; i++)
             {
-                if (TravelNeeds[i][j].TargetCity == GridToCity[grid.Index])
+                if (CityDatas[i].CityName.Equals(grid.name))
                 {
-                    // the target city is this grid
-                    arriveCnt += TravelNeeds[i][j].Population;
-                }
-            }
-        }
+                    VisualizeTravelData(TravelNeeds[i]);
 
-        for (int i = 0; i < TravelNeeds.Count; i++)
-        {
-            if (CityDatas[i].CityName.Equals(grid.name))
-            {
-                float total = 0;
-                for (int j = 0; j < TravelNeeds[i].Count; j++)
-                {
-                    total += TravelNeeds[i][j].Population;
-                }
-                TravelPanel.GetChild(0).GetComponent<Text>().text = CityDatas[i].ResidentPopulation + " Resident" + CityDatas[i].VisitorCount + " Visitors";
-                for (int j = 1; j < 11; j++)
-                {
-                    TravelPanel.GetChild(j).GetComponent<Text>().text = CityDatas[TravelNeeds[i][j - 1].TargetCity].CityName + " : " + TravelNeeds[i][j - 1].Population;
-                }
-
-                // testing, draw arrow for the top 7 travel city
-                for (int j = 0; j < 7; j++)
-                {
-                    string cityName = CityDatas[TravelNeeds[i][j].TargetCity].CityName;
-
-                    Vector3 targetPos = CityNamesParent.Instance.FindMatchCityPosition(cityName.Split(',')[1]);
-                    if (targetPos.x != 0)
+                    // testing, draw arrow for the top 7 travel city
+                    for (int j = 0; j < 7; j++)
                     {
-                        Vector3 startPos = grid.PosV3;
-                        Vector3 direction = (targetPos - startPos).normalized;
-
-                        int cnt = (int)(targetPos - startPos).magnitude / 30;
-
-                        for (int c = 0; c < cnt; c++)
+                        string cityName = CityDatas[TravelNeeds[i][j].TargetCity].CityName;
+                        Vector3 targetPos = CityNamesParent.Instance.FindMatchCityPosition(cityName.Split(',')[1]);
+                        if (targetPos.x != 0)
                         {
-                            Vector3 spawnPos = startPos + direction * 30f * (c + 1);
-                            GameObject spawn = Instantiate(TravelArrowPrefab, TravelNeedsParent);
-                            spawn.transform.position = spawnPos;
-                            spawn.transform.up = direction;
-                        }
-
-                        // one person indicate one hundred person
-                        float population = TravelNeeds[i][j].Population / 100f;
-                        float decimial = population - Mathf.FloorToInt(population);
-                        int peopleCnt = Mathf.FloorToInt(population);
-
-                        Vector3 peopleStartPos = targetPos - Vector3.right * 6 * peopleCnt / 2;
-                        for (int c = 0; c < peopleCnt; c++)
-                        {
-                            GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
-                            obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * c * 6;
-
-                        }
-
-                        if (decimial > 0)
-                        {
-                            GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
-                            obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * 6 * peopleCnt;
-                            obj.GetComponent<SpriteRenderer>().size = new Vector2(4.44f * decimial, 12);
+                            Vector3 startPos = grid.PosV3;
+                            //Vector3 startPos = CityNamesParent.Instance.FindMatchCityPosition(CityDatas[i].CityName.Split(',')[1]);
+                            float population = TravelNeeds[i][j].Population;
+                            DrawArrowBetweenPoints(startPos, targetPos, population);
                         }
                     }
+                    break;
                 }
-
-                break;
             }
         }
+        else
+        {
+            // adjust this station queue
+            List<TravelData> temp = new List<TravelData>();
+            for (int i = 0; i < grid.StationData.StationQueue.Count; i++)
+            {
+                TravelData td = grid.StationData.StationQueue[i];
+                bool added = false;
+                for (int j = 0; j < temp.Count; j++)
+                {
+                    if (temp[j].TargetCity == td.TargetCity)
+                    {
+                        temp[j].Population += td.Population;
+                        added = true;
+                        break;
+                    }
+                }
+                if (!added)
+                {
+                    TravelData dup = new TravelData()
+                    {
+                        TargetCity = td.TargetCity,
+                        Population = td.Population
+                    };
+                    temp.Add(dup);
+                }
+            }
 
+            VisualizeTravelData(temp);
+
+            for (int i = 0; i < temp.Count; i++)
+            {
+                string cityName = CityDatas[temp[i].TargetCity].CityName;
+                Vector3 targetPos = CityNamesParent.Instance.FindMatchCityPosition(cityName.Split(',')[1]);
+                if (targetPos.x != 0)
+                {
+                    Vector3 startPos = grid.PosV3;
+                    float population = grid.StationData.StationQueue[i].Population;
+                    DrawArrowBetweenPoints(startPos, targetPos, population);
+                }
+            }
+        }
         TravelPanel.gameObject.SetActive(true);
+    }
+
+    public void VisualizeTravelData(List<TravelData> datas)
+    {
+        // visualize this data set
+        RectTransform content = TravelPanel.GetComponent<ScrollRect>().content; // get the content
+
+        // destroy any previous data
+        for (int i = content.transform.childCount - 1; i >= 1; i--)
+            Destroy(content.transform.GetChild(i).gameObject);
+
+        content.sizeDelta = new Vector2(content.sizeDelta.x, datas.Count * 64);
+
+        content.localPosition = Vector3.zero;
+
+        // generate current data
+        for (int i = 0; i < datas.Count; i++)
+        {
+            // duplicate the first gameobject
+            GameObject obj = Instantiate(content.GetChild(0).gameObject);
+            RectTransform rect = obj.GetComponent<RectTransform>();
+            rect.SetParent(content.transform);
+            rect.localPosition = Vector3.right * 128 + Vector3.down * i * 64 + Vector3.down * 32;
+
+            // name of the city
+            rect.GetChild(0).GetComponent<Text>().text = CityDatas[datas[i].TargetCity].CityName.Split(',')[1];
+            rect.GetChild(0).gameObject.SetActive(true);
+
+            // calculate the population
+            float population = datas[i].Population / 100f;
+            float decimial = population - Mathf.FloorToInt(population);
+            int peopleCnt = Mathf.FloorToInt(population);
+
+            for (int c = 0; c < peopleCnt; c++)
+            {
+                GameObject people = Instantiate(content.GetChild(0).GetChild(1).gameObject);
+                RectTransform rectTran = people.GetComponent<RectTransform>();
+                rectTran.SetParent(rect);
+                rectTran.localPosition = Vector3.right * c * 22 - 53 * Vector3.right;
+                people.SetActive(true);
+            }
+
+            if (decimial != 0)
+            {
+                GameObject people = Instantiate(content.GetChild(0).GetChild(1).gameObject);
+                RectTransform rectTran = people.GetComponent<RectTransform>();
+                rectTran.SetParent(rect);
+                rectTran.localPosition = Vector3.right * peopleCnt * 22 - 53 * Vector3.right;
+                people.SetActive(true);
+                people.GetComponent<Image>().fillAmount = decimial;
+            }
+
+        }
     }
 
     public void Clear()
@@ -257,6 +302,38 @@ public class CityManager : MonoBehaviour
         TravelPanel.gameObject.SetActive(false);
         for (int i = TravelNeedsParent.childCount - 1; i >= 0; i--)
             Destroy(TravelNeedsParent.GetChild(i).gameObject);
+    }
+
+    private void DrawArrowBetweenPoints(Vector3 start, Vector3 end, float population)
+    {
+        int cnt = (int)(end - start).magnitude / 30;
+        Vector3 direction = (end - start).normalized;
+
+        for (int c = 0; c < cnt; c++)
+        {
+            Vector3 spawnPos = start + direction * 30f * (c + 1);
+            GameObject spawn = Instantiate(TravelArrowPrefab, TravelNeedsParent);
+            spawn.transform.position = spawnPos;
+            spawn.transform.up = direction;
+        }
+
+        // one person indicate one hundred person
+        population /= 100f;
+        float decimial = population - Mathf.FloorToInt(population);
+        int peopleCnt = Mathf.FloorToInt(population);
+        Vector3 peopleStartPos = end - Vector3.right * 6 * peopleCnt / 2;
+        for (int c = 0; c < peopleCnt; c++)
+        {
+            GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
+            obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * c * 6;
+        }
+
+        if (decimial > 0)
+        {
+            GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
+            obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * 6 * peopleCnt;
+            obj.GetComponent<SpriteRenderer>().size = new Vector2(4.44f * decimial, 12);
+        }
     }
 
     public class Tsorter : IComparer<TravelData>
@@ -299,6 +376,10 @@ public class CityManager : MonoBehaviour
             if (trainData.Passengers[i].TargetCity == cityIndex)
             {
                 AdjustPopulation(cityIndex, trainData.Passengers[i].HomeCity, trainData.Passengers[i].Population);
+
+                // update transportation goal
+                TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
+
                 Debug.LogError("unboarding !!!" + trainData.Passengers[i].Population);
                 trainData.Passengers.RemoveAt(i);
             }
@@ -364,7 +445,7 @@ public class CityManager : MonoBehaviour
                     {
                         TravelData td = TravelNeeds[cityIndex][j];
 
-                        if (TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3))
+                        if (TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3) && td.Population > 0)
                         {
                             // check if this can be fulfilled
                             if (capacity >= td.Population)

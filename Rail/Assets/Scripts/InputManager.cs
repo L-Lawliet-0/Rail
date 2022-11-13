@@ -32,7 +32,10 @@ public class InputManager : MonoBehaviour
     void Update()
     {
         if (EventSystem.current.IsPointerOverGameObject())
+        {
+            PressedTime = 1;
             return;
+        }
 
         if (RoadMode)
         {
@@ -129,7 +132,6 @@ public class InputManager : MonoBehaviour
             if (Input.GetMouseButtonUp(0) && PressedTime < .15f)
             {
                 ExitSelectionMode();
-                CityManager.Instance.Clear();
             }
         }
     }
@@ -148,6 +150,7 @@ public class InputManager : MonoBehaviour
         HudManager.Instance.SetEmpty();
 
         Marker.SetActive(false);
+        CityManager.Instance.Clear();
     }
 
     public void EnterRoadMode(GridData.GridSave startGrid)

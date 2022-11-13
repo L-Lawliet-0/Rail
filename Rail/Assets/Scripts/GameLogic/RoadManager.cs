@@ -85,6 +85,7 @@ public class RoadManager : MonoBehaviour
         CurrentTrack.AddRange(tempTracks);
 
         VisualizeGrids(CurrentTrack, true);
+        HudManager.Instance.UpdateRoadCost(EconManager.Instance.GetPathCost(CurrentTrack));
 
         return true;
     }
@@ -312,6 +313,8 @@ public class RoadManager : MonoBehaviour
                 if (!parent.transform.GetChild(i).GetComponent<LineRenderer>())
                     Destroy(parent.transform.GetChild(i).gameObject);
             }
+
+            EconManager.Instance.MoneyCount -= EconManager.Instance.GetPathCost(CurrentTrack);
         }
         else
         {

@@ -69,6 +69,8 @@ public class GameMain : MonoBehaviour
             else
                 HighLightGrid.CrossData = new GridData.CrossingSave();
 
+            EconManager.Instance.MoneyCount -= EconManager.Instance.GetStationCrossCost(HighLightGrid, !station);
+
             HighLightGrid = null;
             DestroyHex();
 

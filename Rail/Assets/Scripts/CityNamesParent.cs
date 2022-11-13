@@ -13,6 +13,8 @@ public class CityNamesParent : MonoBehaviour
     private void Awake()
     {
         m_Instance = this;
+        TrainDatas = new List<TrainManager.TrainData>();
+        TrainObjs = new List<RectTransform>();
     }
 
     public void ActivateNames(int index, float sizeMult = 1f)
@@ -76,5 +78,57 @@ public class CityNamesParent : MonoBehaviour
         }
 
         return Vector3.zero;
+    }
+
+    public List<TrainManager.TrainData> TrainDatas;
+    public List<RectTransform> TrainObjs;
+    public GameObject TrainObjPrefab;
+    public void CreateTrainCounter(TrainManager.TrainData data)
+    {
+        TrainDatas.Add(data);
+        // crate and add object
+        GameObject obj = Instantiate(TrainObjPrefab);
+        RectTransform rect = obj.GetComponent<RectTransform>();
+        rect.SetParent(transform);
+        TrainObjs.Add(rect);
+    }
+
+    public void UpdateTrainObjects(bool UpdateCapacity = false)
+    {
+        for (int i = 0; i < TrainObjs.Count; i++)
+        {
+            TrainObjs[i].position = TrainDatas[i].TrainSprite.position + Vector3.up * 5;
+
+            if (UpdateCapacity)
+            {
+                for (int d = TrainObjs[i].childCount - 1; d >= 1; d--)
+                    Destroy(TrainObjs[i].GetChild(d).gameObject);
+
+                float population = TrainDatas[i].CurrentCapacity() / 100f;
+                float decimial = population - Mathf.FloorToInt(population);
+                int peopleCnt = Mathf.FloorToInt(population);
+
+                Vector3 startPos = Vector3.left * 2.3f * peopleCnt / 2f;
+
+                for (int c = 0; c < peopleCnt; c++)
+                {
+                    GameObject people = Instantiate(TrainObjs[i].GetChild(0).gameObject);
+                    RectTransform rectTran = people.GetComponent<RectTransform>();
+                    rectTran.SetParent(TrainObjs[i]);
+                    rectTran.localPosition = startPos + Vector3.right * 2.3f * c;
+                    people.SetActive(true);
+                }
+
+                if (decimial != 0)
+                {
+                    GameObject people = Instantiate(TrainObjs[i].GetChild(0).gameObject);
+                    RectTransform rectTran = people.GetComponent<RectTransform>();
+                    rectTran.SetParent(TrainObjs[i]);
+                    rectTran.localPosition = startPos + Vector3.right * peopleCnt * 2.3f;
+                    people.SetActive(true);
+                    people.GetComponent<Image>().fillAmount = decimial;
+                };
+            }
+        }
     }
 }
