@@ -15,6 +15,7 @@ public class TimeManager : MonoBehaviour
 
     public int MonthCount;
     public int DayCount;
+    public int HourCount;
     public Text DayText;
 
     public int MonthlyGoal;
@@ -32,6 +33,7 @@ public class TimeManager : MonoBehaviour
     {
         m_Instance = this;
         DayCount = 1;
+        HourCount = 0;
         MonthCount = 1;
         UpdateGoal();
         GoalTrack = 0;
@@ -65,7 +67,7 @@ public class TimeManager : MonoBehaviour
                 // refresh goal
                 UpdateGoal();
             }
-            DayText.text = "Day " + DayCount + " / " + 30;
+            DayText.text = "Day " + DayCount + " Hour " + HourCount;
         }
 
         HourCounter += Time.deltaTime * RealTimeToGameTime;
@@ -76,6 +78,11 @@ public class TimeManager : MonoBehaviour
             // an hour has passed
             // flush travel needs to station
             //CityManager.Instance.FlushNeedsToStation();
+            HourCount++;
+            if (HourCount > 23)
+                HourCount = 0;
+
+            DayText.text = "Day " + DayCount + " Hour " + HourCount;
         }
     }
 
