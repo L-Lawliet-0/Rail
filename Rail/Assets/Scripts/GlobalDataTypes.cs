@@ -9,6 +9,29 @@ public class GlobalDataTypes : MonoBehaviour
 
     public Material TestHexMaterial;
 
+    public static float GDPtoMult(float gdp)
+    {
+        return 1;
+    }
+
+    public const int MaxLevel = 4;
+
+    public const int CrossBuildPrice = 100;
+    public const int CrossToStationPrice = 100;
+
+    public static int[] StationPrices = { 150, 300, 450, 600, 750 }; // 5
+    public static int[] UpgradePrices = { 200, 200, 200, 200}; // 4
+    public static int[] StationCapacity = { 1000, 2000, 3000, 4000, 5000 };
+
+    public static int[] TrackPrices = { 10, 15, 20, 25, 30};
+    public static int[] TrackUpgradePrices = { 10, 10, 10, 10};
+
+    public static int[] TrainPrices = { 50, 75, 100, 125, 150 };
+    public static int[] TrainUpgradePrices = { 50, 50, 50, 50 };
+    public static int[] TrainCapacity = { 500, 750, 1000, 1250, 1500 };
+
+    public static int[] Speeds = { 100, 150, 200, 250, 300 };
+
     private void Awake()
     {
         m_Instance = this;

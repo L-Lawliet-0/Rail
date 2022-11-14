@@ -30,6 +30,7 @@ public class HudManager : MonoBehaviour
     {
         GridInfo.transform.parent.gameObject.SetActive(false);
         ButtonsParent.gameObject.SetActive(false);
+        LevelPromote.gameObject.SetActive(false);
     }
 
     /// <summary>
@@ -38,7 +39,7 @@ public class HudManager : MonoBehaviour
     /// <param name="grid"></param>
     public void RightClickHud(GridData.GridSave grid)
     {
-        GridInfo.text = grid.name;
+        GridInfo.text = grid.name.Replace(',', ' ');
         GridInfo.transform.parent.gameObject.SetActive(true);
 
         List<RectTransform> activeButtons = new List<RectTransform>();
@@ -66,7 +67,7 @@ public class HudManager : MonoBehaviour
 
     public void TrackMode(GridData.GridSave grid)
     {
-        GridInfo.text = grid.name;
+        GridInfo.text = grid.name.Replace(',', ' ');
         GridInfo.transform.parent.gameObject.SetActive(true);
         List<RectTransform> activeButtons = new List<RectTransform>();
 
@@ -85,7 +86,7 @@ public class HudManager : MonoBehaviour
 
     public void TrainMode(GridData.GridSave grid)
     {
-        GridInfo.text = grid.name;
+        GridInfo.text = grid.name.Replace(',', ' ');
         GridInfo.transform.parent.gameObject.SetActive(true);
         List<RectTransform> activeButtons = new List<RectTransform>();
 
@@ -110,5 +111,26 @@ public class HudManager : MonoBehaviour
         }
         
         ButtonsParent.gameObject.SetActive(true);
+    }
+
+    public Transform LevelPromote;
+
+    public void StationBuild()
+    {
+        SetEmpty();
+
+        LevelPromote.gameObject.SetActive(true);
+        LevelPromote.GetChild(0).GetComponent<Text>().text = "Select the level of station you want to build";
+
+        // update the buttons
+        for (int i = 1; i < 6; i++)
+        {
+            Button btn = LevelPromote.GetChild(i).GetComponent<Button>();
+            btn.onClick.RemoveAllListeners();
+            int level = i - 1;
+            btn.onClick.AddListener( () => { GameMain.Instance.TryBuildStation(level); });
+
+            btn.transform.GetChild(0).GetComponent<Text>().text = "Level " + level + " (" + GlobalDataTypes.StationPrices[level] + ")";
+        }
     }
 }
