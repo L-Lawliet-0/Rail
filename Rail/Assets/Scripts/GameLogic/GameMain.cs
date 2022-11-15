@@ -17,7 +17,7 @@ public class GameMain : MonoBehaviour
     private GameObject HighLightHex;
     public GridData.GridSave HighLightGrid;
 
-    public void OnGridRightClick(Vector3 worldPos)
+    public void OnGridRightClick(Vector3 worldPos, GameObject road = null, GameObject train = null)
     {
         // reieve a right click action
         GridData.GridSave grid = GridData.Instance.GetNearbyGrid(worldPos);
@@ -33,7 +33,26 @@ public class GameMain : MonoBehaviour
         HighLightHex = hex;
         HighLightGrid = grid;
 
-        HudManager.Instance.RightClickHud(grid);
+        // high light this visualization if grid is not station or cross
+        if (train)
+        {
+            int index = TrainManager.Instance.FindIndex(train);
+            TrainManager.Instance.AllTrains[index].Selected = true;
+        }
+
+        if (road && !train)
+        {
+            int index = RoadManager.Instance.ObjectToIndex(road);
+            if (grid.StationData == null && grid.CrossData == null && RoadManager.Instance.RoadLevels[index] < GlobalDataTypes.MaxLevel)
+            {
+                RoadManager.Instance.HighLightCache();
+            }
+            else
+                road = null;
+        }
+        else
+            road = null;
+        HudManager.Instance.RightClickHud(grid, road, train);
     }
 
     public Sprite StationIcon, CrossIcon;
@@ -66,7 +85,7 @@ public class GameMain : MonoBehaviour
 
             HighLightGrid.CrossData = new GridData.CrossingSave();
 
-            EconManager.Instance.MoneyCount -= GlobalDataTypes.CrossBuildPrice;
+            EconManager.Instance.MoneyCount -= EconManager.GetCrossCost(HighLightGrid);
 
             HighLightGrid = null;
             DestroyHex();
@@ -91,17 +110,41 @@ public class GameMain : MonoBehaviour
             sr.sprite = StationIcon;
 
             IconManager.Instance.AddOrUpdateIcon(HighLightGrid.Index, obj);
+            IconManager.Instance.ChangeIconColor(HighLightGrid.Index, GlobalDataTypes.RarityColors[level]);
 
-            HighLightGrid.StationData = new GridData.StationSave();
-            HighLightGrid.StationData.Capacity = GlobalDataTypes.StationCapacity[level];
+            HighLightGrid.StationData = new GridData.StationSave(level);
 
-            EconManager.Instance.MoneyCount -= GlobalDataTypes.StationPrices[level];
+            EconManager.Instance.MoneyCount -= EconManager.GetStationCost(HighLightGrid, level);
 
             HighLightGrid = null;
             DestroyHex();
 
             InputManager.Instance.ExitSelectionMode();
         }
+    }
+
+    public void UpgradeCrossToStation(GridData.GridSave grid)
+    {
+        // remove money
+        EconManager.Instance.MoneyCount -= EconManager.GetCrossUpgradeCost(grid);
+
+        // add station data to it
+        grid.CrossData = null;
+        grid.StationData = new GridData.StationSave(0);
+
+        IconManager.Instance.SwapIconTexture(grid.Index, StationIcon);
+
+        InputManager.Instance.ExitSelectionMode();
+    }
+
+    public void UpgradeStation(GridData.GridSave grid)
+    {
+        EconManager.Instance.MoneyCount -= EconManager.GetStationUpgradeCost(grid, grid.StationData.Level);
+        grid.StationData.Upgrade();
+
+        IconManager.Instance.ChangeIconColor(grid.Index, GlobalDataTypes.RarityColors[grid.StationData.Level]);
+
+        InputManager.Instance.ExitSelectionMode();
     }
 
     public void DestroyHex()
@@ -127,5 +170,12 @@ public class GameMain : MonoBehaviour
             InputManager.Instance.EnterTrainMode(HighLightGrid);
             HudManager.Instance.TrainMode(HighLightGrid);
         }
+    }
+
+    // change the way the train move around
+    public void RepathTrain()
+    {
+        TrainManager.Instance.RepathMode = true;
+        InputManager.Instance.EnterTrainMode(HighLightGrid);
     }
 }

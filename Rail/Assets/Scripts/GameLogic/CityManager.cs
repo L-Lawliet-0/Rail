@@ -372,13 +372,26 @@ public class CityManager : MonoBehaviour
         // unload travller
         for (int i = trainData.Passengers.Count - 1; i >= 0; i--)
         {
+            // check if this train path still contains the destination
+            bool canReach = false;
+            foreach (int index in trainData.Paths)
+            {
+                GridData.GridSave grid = GridData.Instance.GridDatas[index];
+                if (!grid.name.Equals("sea") && GridToCity[grid.Index] == trainData.Passengers[i].TargetCity && grid.StationData != null)
+                {
+                    canReach = true;
+                    break;
+                }
+            }
+
             // unload passenger
-            if (trainData.Passengers[i].TargetCity == cityIndex)
+            if (!canReach || trainData.Passengers[i].TargetCity == cityIndex)
             {
                 AdjustPopulation(cityIndex, trainData.Passengers[i].HomeCity, trainData.Passengers[i].Population);
 
                 // update transportation goal
-                TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
+                if (canReach)
+                    TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
 
                 Debug.LogError("unboarding !!!" + trainData.Passengers[i].Population);
                 trainData.Passengers.RemoveAt(i);
@@ -436,8 +449,22 @@ public class CityManager : MonoBehaviour
             // we only check grid that has a station built on it
             if (!grid.name.Equals("sea") && grid.StationData != null)
             {
-                int capacity = grid.StationData.Capacity - grid.StationData.CurrentCount();
                 int cityIndex = GridToCity[grid.Index];
+
+                // check existing queue, force them to leave if their needs can't be sat
+                for (int j = grid.StationData.StationQueue.Count - 1; j >= 0; j--)
+                {
+                    TravelData td = grid.StationData.StationQueue[j];
+                    if (!TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3))
+                    {
+                        // force them to leave station
+                        AdjustPopulation(cityIndex, td.HomeCity, td.Population);
+                        grid.StationData.StationQueue.RemoveAt(j);
+                    }
+                }
+
+                int capacity = grid.StationData.Capacity - grid.StationData.CurrentCount();
+                
 
                 if (capacity > 0)
                 {
@@ -517,7 +544,7 @@ public class CityManager : MonoBehaviour
             int gridIndex = train.Paths[i];
             if (!GridData.Instance.GridDatas[gridIndex].name.Equals("sea"))
             {
-                if (GridToCity[gridIndex] == cityIndex)
+                if (GridToCity[gridIndex] == cityIndex && GridData.Instance.GridDatas[gridIndex].StationData != null)
                     return true;
             }
         }

@@ -9,10 +9,16 @@ public class TrainManager : MonoBehaviour
     public class TrainData
     {
         public List<int> Paths; // the path the train has to follow
+
+        public List<int> newPaths;
+        public bool changePath;
+
         public int CurrentIndex;
         public float Progress;
         public float TrainSpeed; // speed of this fucking train
         public int Capacity;
+        public int Level;
+        public bool Selected;
 
         public Transform TrainSprite;
 
@@ -34,7 +40,7 @@ public class TrainManager : MonoBehaviour
     }
 
     public GameObject TrainPrefab;
-    private List<TrainData> AllTrains;
+    public List<TrainData> AllTrains;
 
     private static TrainManager m_Instance;
     public static TrainManager Instance { get { return m_Instance; } }
@@ -51,6 +57,7 @@ public class TrainManager : MonoBehaviour
         m_Instance = this;
         AllTrains = new List<TrainData>();
         RoadIndexs = new Dictionary<GridData.GridSave, GameObject>();
+        TrainCache = -1;
     }
 
     private void Start()
@@ -63,24 +70,33 @@ public class TrainManager : MonoBehaviour
         bool updateCapacity = false;
         foreach (TrainData td in AllTrains)
         {
-            float travelDistance = td.TrainSpeed * Time.deltaTime * TimeManager.RealTimeToGameTime; // the distance this train travel in last frame
+            if (td.Selected)
+                continue;
 
             TOP:
             // get the current road we're travelling
             List<int> connections = GridConnectedRoads[td.Paths[td.CurrentIndex]];
             List<int> currentPath = new List<int>();
+            int roadIndex = -1;
             foreach (int i in connections)
             {
                 List<int> road = RoadManager.Instance.AllRoads[i];
                 if (road[0] == td.Paths[td.CurrentIndex + 1] || road[road.Count - 1] == td.Paths[td.CurrentIndex + 1])
                 {
                     currentPath = road;
-
+                    roadIndex = i;
                     if (currentPath[0] != td.Paths[td.CurrentIndex])
                         currentPath.Reverse();
                     break;
                 }
             }
+
+            float roadSpeed = GlobalDataTypes.Speeds[RoadManager.Instance.RoadLevels[roadIndex]];
+            float trainSpeed = GlobalDataTypes.Speeds[td.Level];
+
+            float speed = Mathf.Min(roadSpeed, trainSpeed) / 3600f;
+
+            float travelDistance = speed * Time.deltaTime * TimeManager.RealTimeToGameTime; // the distance this train travel in last frame
 
             float wholeDistance = 10f * (currentPath.Count - 1);
 
@@ -98,6 +114,14 @@ public class TrainManager : MonoBehaviour
                     td.CurrentIndex = 0;
                     if (td.Paths[0] != td.Paths[td.Paths.Count - 1])
                         td.Paths.Reverse();
+                }
+
+                if (td.changePath)
+                {
+                    td.Paths = td.newPaths;
+                    td.changePath = false;
+                    td.CurrentIndex = 0;
+                    td.Progress = 0;
                 }
 
                 // this is where a train arrived at a station
@@ -192,6 +216,14 @@ public class TrainManager : MonoBehaviour
         RoadIndexs.Clear();
     }
 
+    public void Repath()
+    {
+        RepathMode = true;
+        TrainData td = AllTrains[TrainCache];
+        NextPoint(GridData.Instance.GridDatas[td.Paths[td.CurrentIndex + 1]]);
+        HudManager.Instance.TrainMode(GridData.Instance.GridDatas[td.Paths[td.CurrentIndex + 1]]);
+    }
+
     /// <summary>
     /// highlight a grid and highlight all other connected grids
     /// </summary>
@@ -280,42 +312,20 @@ public class TrainManager : MonoBehaviour
         return false;
     }
 
-    public void FinishTrain(bool confirm)
+    public void SelectTrainLevel()
     {
-        if (confirm)
-        {
-            TrainData td = new TrainData();
+        if (RepathMode)
+            FinishTrain(0);
+        else
+            HudManager.Instance.TrainBuild();
+    }
 
-            List<int> paths = new List<int>();
-            foreach (GridData.GridSave g in CurrentPath)
-                paths.Add(g.Index);
-            td.Paths = paths;
-            td.TrainSpeed = 200f / 3600f; // km per sec
-            td.Progress = 0;
-            td.CurrentIndex = 0;
-            td.TrainSprite = Instantiate(TrainPrefab).transform;
-            td.Passengers = new List<TravelData>();
-            td.Capacity = 500; // testing
-
-            AllTrains.Add(td);
-
-            CityNamesParent.Instance.CreateTrainCounter(td);
-        }
-
-        // reset all path color to black
+    public void CancelTrain()
+    {
         for (int i = 0; i < RoadManager.Instance.AllRoads.Count; i++)
         {
-            RoadManager.Instance.SetRoadColor(i, Color.black);
+            RoadManager.Instance.SetRoadColor(i, GlobalDataTypes.TrackRarityColors[RoadManager.Instance.RoadLevels[i]]);
         }
-
-        /*
-        if (CurrentPath.Count > 0)
-        {
-            List<int> oldConnection = GridConnectedRoads[CurrentPath[CurrentPath.Count - 1].Index];
-            foreach (int i in oldConnection)
-                RoadManager.Instance.SetRoadColor(i, Color.black);
-        }
-        */
 
         CurrentPath.Clear();
         CurrentChoices.Clear();
@@ -326,6 +336,76 @@ public class TrainManager : MonoBehaviour
         foreach (KeyValuePair<GridData.GridSave, GameObject> pair in RoadIndexs)
             Destroy(pair.Value);
         RoadIndexs.Clear();
+
+        RepathMode = false;
+    }
+    public bool RepathMode;
+    public void FinishTrain(int level)
+    {
+        List<int> paths = new List<int>();
+        foreach (GridData.GridSave g in CurrentPath)
+            paths.Add(g.Index);
+        if (!RepathMode)
+        {
+            TrainData td = new TrainData();
+           
+            td.Paths = paths;
+            td.TrainSpeed = 200f / 3600f; // km per sec
+            td.Progress = 0;
+            td.CurrentIndex = 0;
+            td.TrainSprite = Instantiate(TrainPrefab).transform;
+            td.TrainSprite.GetComponent<SpriteRenderer>().color = GlobalDataTypes.RarityColors[level];
+            td.Passengers = new List<TravelData>();
+
+            td.Level = level;
+            td.Capacity = GlobalDataTypes.TrainCapacity[level]; // testing
+
+            AllTrains.Add(td);
+
+            CityNamesParent.Instance.CreateTrainCounter(td);
+        }
+        else
+        {
+            TrainData td = AllTrains[TrainCache];
+
+            td.changePath = true;
+            td.newPaths = paths;
+        }
+
+        CancelTrain();
+    }
+
+    public int TrainCache;
+    public int FindIndex(GameObject obj)
+    {
+        for (int i = 0; i < AllTrains.Count; i++)
+        {
+            if (obj == AllTrains[i].TrainSprite.gameObject)
+            {
+                TrainCache = i;
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void ClearCache()
+    {
+        if (TrainCache != -1)
+        {
+            AllTrains[TrainCache].Selected = false;
+            TrainCache = -1;
+        }
+    }
+
+    public void UpgradeTrain()
+    {
+        EconManager.Instance.MoneyCount -= GlobalDataTypes.TrainUpgradePrices[AllTrains[TrainCache].Level];
+        AllTrains[TrainCache].Level++;
+        AllTrains[TrainCache].Capacity = GlobalDataTypes.TrainCapacity[AllTrains[TrainCache].Level];
+        AllTrains[TrainCache].TrainSprite.GetComponent<SpriteRenderer>().color = GlobalDataTypes.RarityColors[AllTrains[TrainCache].Level];
+
+        InputManager.Instance.ExitSelectionMode();
     }
 
     public bool TrainPassBy(int currentGrid, int targetCity, int timeInterval)
@@ -335,7 +415,7 @@ public class TrainManager : MonoBehaviour
             bool containCity = false;
             foreach (int index in td.Paths)
             {
-                if (CityManager.Instance.GridToCity[index] == targetCity)
+                if (CityManager.Instance.GridToCity[index] == targetCity && GridData.Instance.GridDatas[index].StationData != null)
                 {
                     containCity = true;
                     break;

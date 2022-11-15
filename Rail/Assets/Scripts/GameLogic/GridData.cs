@@ -34,11 +34,19 @@ public class GridData : MonoBehaviour
     {
         public List<TravelData> StationQueue;
         public int Capacity;
+        public int Level;
 
-        public StationSave()
+        public StationSave(int level)
         {
             StationQueue = new List<TravelData>();
-            Capacity = 10000; // for testing
+            Level = level;
+            Capacity = GlobalDataTypes.StationCapacity[level];
+        }
+
+        public void Upgrade()
+        {
+            Level++;
+            Capacity = GlobalDataTypes.StationCapacity[Level];
         }
 
         public int CurrentCount()

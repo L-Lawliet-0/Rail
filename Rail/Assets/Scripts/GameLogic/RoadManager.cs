@@ -13,22 +13,30 @@ public class RoadManager : MonoBehaviour
         m_Instance = this;
 
         AllRoads = new List<List<int>>();
+        AllVisuals = new List<GameObject>();
+        RoadLevels = new List<int>();
 
         CurrentTrack = new List<GridData.GridSave>();
         VisualGrids = new List<GameObject>();
         ControlPoints = new List<GridData.GridSave>();
+
+        RoadCache = -1;
+
+        CacheHighLight = new GameObject().transform;
+        CacheHighLight.transform.position = Vector3.zero;
     }
 
     public GridData.GridSave StartGrid; // the start grid of this draw
     public GridData.GridSave CurrentGrid;
 
-    private List<GridData.GridSave> CurrentTrack;
+    public List<GridData.GridSave> CurrentTrack;
     private List<GameObject> VisualGrids;
     private List<GridData.GridSave> ControlPoints; // the points that used to control the flow of the track
     private int ControlPointIndex;
 
     public List<List<int>> AllRoads; // this is the data we need
     public List<GameObject> AllVisuals; // the visualization of the track, indexed
+    public List<int> RoadLevels;
 
     public void InitData(GridData.GridSave grid)
     {
@@ -85,7 +93,7 @@ public class RoadManager : MonoBehaviour
         CurrentTrack.AddRange(tempTracks);
 
         VisualizeGrids(CurrentTrack, true);
-        HudManager.Instance.UpdateRoadCost(EconManager.Instance.GetPathCost(CurrentTrack));
+        HudManager.Instance.UpdateRoadCost(EconManager.GetPathCost(CurrentTrack));
 
         return true;
     }
@@ -272,10 +280,13 @@ public class RoadManager : MonoBehaviour
         }
     }
 
-    public void FinishRoad(bool confirm)
+    public void SelectRoadLevel()
     {
-        if (confirm)
-        {
+        HudManager.Instance.RoadBuild();
+    }
+
+    public void FinishRoad(int level = 0)
+    {
             // add or edit existing road
             List<int> newPath = new List<int>();
             foreach (GridData.GridSave grid in CurrentTrack)
@@ -296,7 +307,9 @@ public class RoadManager : MonoBehaviour
                     Destroy(old);
                     AllVisuals[i] = parent;
                     AllRoads[i] = newPath;
+                    RoadLevels[i] = level;
                     replace = true;
+                    SetRoadColor(i, GlobalDataTypes.TrackRarityColors[level]);
                     break;
                 }
             }
@@ -305,23 +318,51 @@ public class RoadManager : MonoBehaviour
             {
                 AllRoads.Add(newPath);
                 AllVisuals.Add(parent.gameObject);
+                RoadLevels.Add(level);
+
+                SetRoadColor(AllRoads.Count - 1, GlobalDataTypes.TrackRarityColors[level]);
             }
             TrainManager.Instance.AddOrUpdateConnection(newPath[0], newPath[newPath.Count - 1], AllRoads.Count - 1);
             
             for (int i = parent.transform.childCount - 1; i >= 0; i --)
             {
-                if (!parent.transform.GetChild(i).GetComponent<LineRenderer>())
+                LineRenderer lr = parent.transform.GetChild(i).GetComponent<LineRenderer>();
+                if (!lr)
                     Destroy(parent.transform.GetChild(i).gameObject);
+                else
+                {
+                    // add a mesh collider
+                    lr.useWorldSpace = false;
+                    MeshCollider mc = lr.gameObject.AddComponent<MeshCollider>();
+                    Mesh mesh = new Mesh();
+                    lr.BakeMesh(mesh, Camera.main, false);
+                    Vector3[] vertices = mesh.vertices;
+                    for (int k = 0; k < vertices.Length; k++)
+                        vertices[k] -= lr.transform.position;
+                    mesh.vertices = vertices;
+                    mc.sharedMesh = mesh;
+                    lr.useWorldSpace = true;
+
+                    lr.gameObject.layer = LayerMask.NameToLayer("Road");
+                }
             }
 
-            EconManager.Instance.MoneyCount -= EconManager.Instance.GetPathCost(CurrentTrack);
-        }
-        else
-        {
-            // destory visual clues if not in edit mode
-            for (int i = VisualGrids.Count - 1; i >= 0; i--)
-                Destroy(VisualGrids[i]);
-        }
+            EconManager.Instance.MoneyCount -= EconManager.GetPathCost(CurrentTrack, level);
+
+        
+        
+
+        VisualGrids.Clear();
+        CurrentTrack.Clear();
+
+        InputManager.Instance.ExitRoadMode();
+    }
+
+    public void CancelRoad()
+    {
+        // destory visual clues if not in edit mode
+        for (int i = VisualGrids.Count - 1; i >= 0; i--)
+            Destroy(VisualGrids[i]);
 
         VisualGrids.Clear();
         CurrentTrack.Clear();
@@ -375,5 +416,71 @@ public class RoadManager : MonoBehaviour
             obj.GetComponent<LineRenderer>().endWidth = LineSize;
         }
 
+    }
+
+    public int CacheLevel { get { return RoadLevels[RoadCache]; } }
+
+    public int RoadCache;
+    public int ObjectToIndex(GameObject obj)
+    {
+        for (int i = 0; i < AllVisuals.Count; i ++)
+        {
+            if (obj == AllVisuals[i])
+            {
+                RoadCache = i;
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
+    public void UpgradeRoad()
+    {
+        List<GridData.GridSave> grids = new List<GridData.GridSave>();
+        foreach (int index in AllRoads[RoadCache])
+        {
+            grids.Add(GridData.Instance.GridDatas[index]);
+        }
+
+        EconManager.Instance.MoneyCount -= EconManager.GetPathUpgradeCost(grids, RoadLevels[RoadCache]);
+        RoadLevels[RoadCache]++;
+
+        SetRoadColor(RoadCache, GlobalDataTypes.TrackRarityColors[RoadLevels[RoadCache]]);
+
+        RoadCache = -1;
+        InputManager.Instance.ExitSelectionMode();
+    }
+
+    public void ClearCache()
+    {
+        if (RoadCache != -1)
+        {
+            SetRoadColor(RoadCache, GlobalDataTypes.TrackRarityColors[RoadLevels[RoadCache]]);
+            RoadCache = -1;
+        }
+
+        for (int i = CacheHighLight.childCount - 1; i >= 0; i--)
+            Destroy(CacheHighLight.GetChild(i).gameObject);
+    }
+
+    private Transform CacheHighLight;
+
+    public void HighLightCache()
+    {
+        for (int i = 0; i < AllRoads[RoadCache].Count; i++)
+        {
+            GridData.GridSave g = GridData.Instance.GridDatas[AllRoads[RoadCache][i]];
+
+            GameObject hex = new GameObject();
+            hex.transform.position = g.PosV3;
+            MeshFilter mf = hex.AddComponent<MeshFilter>();
+            mf.mesh = GlobalDataTypes.GetHexagonMesh();
+            MeshRenderer mr = hex.AddComponent<MeshRenderer>();
+            mr.material = GlobalDataTypes.Instance.TestHexMaterial;
+            mr.material.SetColor("_BaseColor", Color.blue);
+
+            hex.transform.parent = CacheHighLight;
+        }
     }
 }

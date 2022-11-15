@@ -119,10 +119,29 @@ public class InputManager : MonoBehaviour
         {
             if (!RoadMode && !TrainMode && Input.GetMouseButtonUp(0) && PressedTime < .15f)
             {
+                // check if it hits road as well
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+                GameObject hitRoad = null;
+                GameObject hitTrain = null;
+
+                if (Physics.Raycast(ray, out hit, 11, 1 << LayerMask.NameToLayer("Train")))
+                {
+                    Debug.LogError("hit train!");
+                    hitTrain = hit.collider.gameObject;
+                }
+
+                if (Physics.Raycast(ray, out hit, 11, 1 << LayerMask.NameToLayer("Road")))
+                {
+                    Debug.LogError("Hit road!");
+                    hitRoad = hit.collider.transform.parent.gameObject; // the visualization object
+                    // highlight the road as well
+                }
+
                 // right click, log pressed grid
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 worldPos.z = 0;
-                GameMain.Instance.OnGridRightClick(worldPos);
+                GameMain.Instance.OnGridRightClick(worldPos, hitRoad, hitTrain);
                 CityManager.Instance.OnGridClick(worldPos);
                 EnterSelectionMode();
             }
@@ -151,6 +170,9 @@ public class InputManager : MonoBehaviour
 
         Marker.SetActive(false);
         CityManager.Instance.Clear();
+
+        RoadManager.Instance.ClearCache();
+        TrainManager.Instance.ClearCache();
     }
 
     public void EnterRoadMode(GridData.GridSave startGrid)
@@ -177,6 +199,15 @@ public class InputManager : MonoBehaviour
 
         TrainManager.Instance.Init();
         TrainManager.Instance.NextPoint(startGrid);
+    }
+
+    public void EnterRepathMode()
+    {
+        SelectionMode = false;
+        TrainMode = true;
+
+        TrainManager.Instance.Init();
+        TrainManager.Instance.Repath();
     }
 
     public void ExitTrainMode()

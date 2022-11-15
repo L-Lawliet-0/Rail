@@ -26,11 +26,23 @@ public class IconManager : MonoBehaviour
             StationIcons.Add(key, newObj);
     }
 
+    public void SwapIconTexture(int key, Sprite sprite)
+    {
+        if (StationIcons.ContainsKey(key))
+            StationIcons[key].GetComponent<SpriteRenderer>().sprite = sprite;
+    }
+
+    public void ChangeIconColor(int key, Color color)
+    {
+        if (StationIcons.ContainsKey(key))
+            StationIcons[key].GetComponent<SpriteRenderer>().color = color;
+    }
+
     public void UpdateSize(float mult)
     {
         foreach (KeyValuePair<int, GameObject> pair in StationIcons)
         {
-            pair.Value.transform.localScale = Vector3.one * 2 + Vector3.one * 30f * mult;
+            pair.Value.transform.localScale = Vector3.one * 1 + Vector3.one * 15f * mult;
         }
     }
 }

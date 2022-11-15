@@ -20,7 +20,7 @@ public class GlobalDataTypes : MonoBehaviour
     public const int CrossToStationPrice = 100;
 
     public static int[] StationPrices = { 150, 300, 450, 600, 750 }; // 5
-    public static int[] UpgradePrices = { 200, 200, 200, 200}; // 4
+    public static int[] StationUpgradePrices = { 200, 200, 200, 200}; // 4
     public static int[] StationCapacity = { 1000, 2000, 3000, 4000, 5000 };
 
     public static int[] TrackPrices = { 10, 15, 20, 25, 30};
@@ -31,6 +31,9 @@ public class GlobalDataTypes : MonoBehaviour
     public static int[] TrainCapacity = { 500, 750, 1000, 1250, 1500 };
 
     public static int[] Speeds = { 100, 150, 200, 250, 300 };
+
+    public static Color[] RarityColors = { Color.white, new Color(30 / 255f, 255 / 255f, 0), new Color(0, 112 / 255f, 221 / 255f), new Color(163 / 255f, 53 / 255f, 238 / 255f), new Color(255 / 255f, 128 / 255f, 0) };
+    public static Color[] TrackRarityColors = { Color.black, new Color(30 / 255f, 255 / 255f, 0), new Color(0, 112 / 255f, 221 / 255f), new Color(163 / 255f, 53 / 255f, 238 / 255f), new Color(255 / 255f, 128 / 255f, 0) };
 
     private void Awake()
     {
