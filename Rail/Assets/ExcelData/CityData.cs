@@ -33,4 +33,5 @@ public class TravelData
     public int TargetCity;
     public int Population;
     public float Mult;
+    public int TicketPriceDue = 0;
 }

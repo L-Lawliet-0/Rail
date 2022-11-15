@@ -35,6 +35,9 @@ public class GlobalDataTypes : MonoBehaviour
     public static Color[] RarityColors = { Color.white, new Color(30 / 255f, 255 / 255f, 0), new Color(0, 112 / 255f, 221 / 255f), new Color(163 / 255f, 53 / 255f, 238 / 255f), new Color(255 / 255f, 128 / 255f, 0) };
     public static Color[] TrackRarityColors = { Color.black, new Color(30 / 255f, 255 / 255f, 0), new Color(0, 112 / 255f, 221 / 255f), new Color(163 / 255f, 53 / 255f, 238 / 255f), new Color(255 / 255f, 128 / 255f, 0) };
 
+    public static float MinTrainPrice = .1f;
+    public static float MaxTrainPrice = .5f;
+
     private void Awake()
     {
         m_Instance = this;

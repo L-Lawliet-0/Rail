@@ -16,6 +16,8 @@ public class HudManager : MonoBehaviour
         {
             BuildStation, BuildCross, BuildTrack, PlaceTrain, ConfirmRoad, CancelRoad, ConfirmTrain, CancelTrain, UpgradeBtn, RepathBtn, PriceAdjustor
         };
+        PriceAdjustor.GetComponentInChildren<Slider>().minValue = GlobalDataTypes.MinTrainPrice;
+        PriceAdjustor.GetComponentInChildren<Slider>().maxValue = GlobalDataTypes.MaxTrainPrice;
     }
 
     public RectTransform ButtonsParent;
@@ -66,6 +68,7 @@ public class HudManager : MonoBehaviour
                     activeButtons.Add(UpgradeBtn);
                 }
                 activeButtons.Add(RepathBtn);
+                PriceAdjustor.GetComponentInChildren<Slider>().value = TrainManager.Instance.AllTrains[TrainManager.Instance.TrainCache].TrainPrice;
                 activeButtons.Add(PriceAdjustor);
             }
             else if (road)

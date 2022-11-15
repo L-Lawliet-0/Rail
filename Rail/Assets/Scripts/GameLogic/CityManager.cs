@@ -391,7 +391,10 @@ public class CityManager : MonoBehaviour
 
                 // update transportation goal
                 if (canReach)
+                {
                     TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
+                    EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
+                }
 
                 Debug.LogError("unboarding !!!" + trainData.Passengers[i].Population);
                 trainData.Passengers.RemoveAt(i);

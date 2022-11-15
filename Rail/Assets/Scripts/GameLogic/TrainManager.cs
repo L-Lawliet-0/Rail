@@ -19,6 +19,7 @@ public class TrainManager : MonoBehaviour
         public int Capacity;
         public int Level;
         public bool Selected;
+        public float TrainPrice; // per km
 
         public Transform TrainSprite;
 
@@ -122,6 +123,11 @@ public class TrainManager : MonoBehaviour
                     td.changePath = false;
                     td.CurrentIndex = 0;
                     td.Progress = 0;
+                }
+
+                for (int i = 0; i < td.Passengers.Count; i++)
+                {
+                    td.Passengers[i].TicketPriceDue += Mathf.FloorToInt((currentPath.Count - 1) * 10 * td.TrainPrice * td.Passengers[i].Population);
                 }
 
                 // this is where a train arrived at a station
@@ -360,6 +366,8 @@ public class TrainManager : MonoBehaviour
             td.Level = level;
             td.Capacity = GlobalDataTypes.TrainCapacity[level]; // testing
 
+            td.TrainPrice = .3f;
+
             AllTrains.Add(td);
 
             CityNamesParent.Instance.CreateTrainCounter(td);
@@ -474,4 +482,12 @@ public class TrainManager : MonoBehaviour
         return false;
     }
 
+    public void AdjustTrainPrice(float value)
+    {
+        if (TrainCache != -1)
+        {
+            AllTrains[TrainCache].TrainPrice = value;
+            HudManager.Instance.PriceAdjustor.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = value + " per km";
+        }
+    }
 }
