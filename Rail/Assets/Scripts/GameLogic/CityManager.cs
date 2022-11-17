@@ -17,11 +17,16 @@ public class CityManager : MonoBehaviour
 
     public Dictionary<int, int> GridToCity;
 
+    public float MinGDP, MaxGDP;
+
     private void Awake()
     {
         m_Instance = this;
 
         CityDatas = new List<CityData>();
+
+        MinGDP = float.MaxValue;
+        MaxGDP = float.MinValue;
         foreach (CityData cd in InitialCityData.Sheet1)
         {
             CityData city = new CityData();
@@ -30,6 +35,9 @@ public class CityManager : MonoBehaviour
             city.ResidentPopulation = (int)(cd.Population * 10000);
             city.VisitorPopulation = new Dictionary<int, int>();
             CityDatas.Add(city);
+
+            MinGDP = Mathf.Min(cd.GDP, MinGDP);
+            MaxGDP = Mathf.Max(cd.GDP, MaxGDP);
         }
 
         
@@ -168,13 +176,13 @@ public class CityManager : MonoBehaviour
     public Transform TravelNeedsParent;
     public GameObject TravelArrowPrefab;
     public GameObject HumanCntPrefab;
-    public void OnGridClick(Vector3 worldPos)
+    public void OnGridClick(Vector3 worldPos, bool isTrain = false)
     {
         GridData.GridSave grid = GridData.Instance.GetNearbyGrid(worldPos);
         if (grid.name.Equals("sea"))
             return;
 
-        if (grid.StationData == null)
+        if (grid.StationData == null && !isTrain)
         {
             for (int i = 0; i < TravelNeeds.Count; i++)
             {
@@ -203,9 +211,19 @@ public class CityManager : MonoBehaviour
         {
             // adjust this station queue
             List<TravelData> temp = new List<TravelData>();
-            for (int i = 0; i < grid.StationData.StationQueue.Count; i++)
+
+            List<TravelData> target;
+            if (isTrain)
             {
-                TravelData td = grid.StationData.StationQueue[i];
+                TrainManager.TrainData train = TrainManager.Instance.AllTrains[TrainManager.Instance.TrainCache];
+                target = train.Passengers;
+            }
+            else
+                target = grid.StationData.StationQueue;
+
+            for (int i = 0; i < target.Count; i++)
+            {
+                TravelData td = target[i];
                 bool added = false;
                 for (int j = 0; j < temp.Count; j++)
                 {
@@ -236,7 +254,7 @@ public class CityManager : MonoBehaviour
                 if (targetPos.x != 0)
                 {
                     Vector3 startPos = grid.PosV3;
-                    float population = grid.StationData.StationQueue[i].Population;
+                    float population = temp[i].Population;
                     DrawArrowBetweenPoints(startPos, targetPos, population);
                 }
             }
@@ -411,33 +429,63 @@ public class CityManager : MonoBehaviour
         for (int i = arriveStation.StationData.StationQueue.Count - 1; i >= 0; i --)
         {
             TravelData td = arriveStation.StationData.StationQueue[i];
+
+            // do these people want to take the train
+            // probability of them taking the train
+            // higher gdp means higher income means more likely the take the high price train
+
             if (PathContainsStation(trainData, td.TargetCity))
             {
-                if (load >= td.Population)
+                float gdp = CityDatas[td.HomeCity].GDP; // between 0 ~ 30 // about
+                float price = trainData.TrainPrice;  // between .1f and .5f, or min and max
+
+                float percent = GDPtoTravelPercent(gdp, price);
+
+                int population = Mathf.FloorToInt(percent * td.Population);
+
+                if (population > 0)
                 {
-                    load -= td.Population;
+                    if (load >= population)
+                    {
+                        load -= population;
 
-                    td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = td.Population };
-                    arriveStation.StationData.StationQueue.RemoveAt(i);
+                        td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = population };
 
-                    trainData.Passengers.Add(td);
+                        arriveStation.StationData.StationQueue[i].Population -= population;
 
-                    if (load == 0)
+                        if (arriveStation.StationData.StationQueue[i].Population <= 0)
+                            arriveStation.StationData.StationQueue.RemoveAt(i);
+
+                        trainData.Passengers.Add(td);
+
+                        if (load == 0)
+                            break;
+                    }
+                    else
+                    {
+                        td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = load };
+                        arriveStation.StationData.StationQueue[i].Population -= load;
+
+                        trainData.Passengers.Add(td);
+
                         break;
-
-                }
-                else
-                {
-                    td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = load };
-                    arriveStation.StationData.StationQueue[i].Population -= load;
-
-                    trainData.Passengers.Add(td);
-
-                    break;
+                    }
                 }
             }
         }
         
+    }
+
+    public float GDPtoTravelPercent(float gdp, float price)
+    {
+        float percent = (.6f - price) * 2; // 20 ~ 100% .3f => 60%
+        // convert gdp level to percent
+        // 0 ~ 1
+        float gdpMult = (gdp - MinGDP) / (MaxGDP - MinGDP);
+        percent += gdpMult;
+        percent = Mathf.Clamp(percent, 0, 1);
+
+        return percent;
     }
 
     /// <summary>

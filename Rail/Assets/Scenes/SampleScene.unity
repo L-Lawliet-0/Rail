@@ -21937,6 +21937,8 @@ MonoBehaviour:
   InitialCityData: {fileID: 11400000, guid: 8dd98ad1d56884a639ac218f9ea74119, type: 2}
   CityDatas: []
   TravelPanel: {fileID: 1962524371}
+  MinGDP: 0
+  MaxGDP: 0
   TravelNeedsParent: {fileID: 1738721723}
   TravelArrowPrefab: {fileID: 6141464086798611865, guid: 90ffcb7a407555644bb1c82fe516dbd7, type: 3}
   HumanCntPrefab: {fileID: 7972528936808765596, guid: ddb6e6a07a243ef4198357ef17b0a78e, type: 3}

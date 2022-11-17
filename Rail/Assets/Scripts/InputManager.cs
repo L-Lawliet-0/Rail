@@ -142,7 +142,7 @@ public class InputManager : MonoBehaviour
                 Vector3 worldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
                 worldPos.z = 0;
                 GameMain.Instance.OnGridRightClick(worldPos, hitRoad, hitTrain);
-                CityManager.Instance.OnGridClick(worldPos);
+                CityManager.Instance.OnGridClick(worldPos, hitTrain != null);
                 EnterSelectionMode();
             }
         }

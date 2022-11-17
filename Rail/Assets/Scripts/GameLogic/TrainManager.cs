@@ -469,9 +469,9 @@ public class TrainManager : MonoBehaviour
                         paths.Reverse();
                 }
 
-                if (CityManager.Instance.GridToCity[paths[currentIndex]] == targetCity)
+                if (paths[currentIndex] == currentGrid)
                 {
-                    //if (timeUsed <= timeInterval)
+                    if (timeUsed <= timeInterval)
                         return true;
                 }
                 else

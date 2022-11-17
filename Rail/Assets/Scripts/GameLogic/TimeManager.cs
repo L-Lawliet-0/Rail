@@ -47,7 +47,7 @@ public class TimeManager : MonoBehaviour
             DayCounter += 3601;
             HourCounter += 3601;
 
-            CityManager.Instance.FlushNeedsToStation();
+            //CityManager.Instance.FlushNeedsToStation();
         }
 
         DayCounter += Time.deltaTime * RealTimeToGameTime;

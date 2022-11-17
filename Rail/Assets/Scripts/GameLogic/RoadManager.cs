@@ -282,7 +282,10 @@ public class RoadManager : MonoBehaviour
 
     public void SelectRoadLevel()
     {
-        HudManager.Instance.RoadBuild();
+        if (CurrentTrack.Count > 1)
+            HudManager.Instance.RoadBuild();
+        else
+            CancelRoad();
     }
 
     public void FinishRoad(int level = 0)
