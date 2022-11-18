@@ -416,8 +416,62 @@ public class TrainManager : MonoBehaviour
         InputManager.Instance.ExitSelectionMode();
     }
 
+    public bool FindRoute(int startGrid, int targetGrid, List<int> routes)
+    {
+        if (routes.Count > 3)
+            return false; // dont over search
+
+        List<TrainData> trains = new List<TrainData>();
+        foreach (TrainData td in AllTrains)
+        {
+            foreach (int index in td.Paths)
+            {
+                if (index == targetGrid && GridData.Instance.GridDatas[index].StationData != null)
+                {
+                    trains.Add(td);
+                    break;
+                }
+            }
+        }
+
+        if (trains.Count == 0)
+            return false;
+
+        routes.Add(targetGrid);
+        
+        foreach (TrainData td in trains)
+        {
+            if (td.Paths.Contains(startGrid))
+            {
+                routes.Add(startGrid);
+                return true;
+            }
+
+            foreach (int index in td.Paths)
+            {
+                if (!routes.Contains(index) && FindRoute(startGrid, index, routes)) 
+                {
+                    return true;
+                }
+            }
+        }
+
+        routes.Remove(targetGrid);
+        return false;
+    }
+
     public bool TrainPassBy(int currentGrid, int targetCity, int timeInterval)
     {
+        // get a list of station in target city
+        List<int> stations = CityManager.Instance.CityStations[targetCity];
+
+        List<int> routes = new List<int>();
+
+        foreach (int station in stations)
+        {
+            bool find = FindRoute(currentGrid, station, routes);
+        }
+
         foreach (TrainData td in AllTrains)
         {
             bool containCity = false;

@@ -19,6 +19,8 @@ public class CityManager : MonoBehaviour
 
     public float MinGDP, MaxGDP;
 
+    public Dictionary<int, List<int>> CityStations;
+
     private void Awake()
     {
         m_Instance = this;
@@ -40,7 +42,7 @@ public class CityManager : MonoBehaviour
             MaxGDP = Mathf.Max(cd.GDP, MaxGDP);
         }
 
-        
+        CityStations = new Dictionary<int, List<int>>();
     }
 
     private void Start()
@@ -601,5 +603,19 @@ public class CityManager : MonoBehaviour
         }
 
         return false;
+    }
+
+    public void AddStationToCity(int gridIndex)
+    {
+        int city = GridToCity[gridIndex];
+
+        if (CityStations.ContainsKey(city))
+            CityStations[city].Add(gridIndex);
+        else
+        {
+            List<int> list = new List<int>();
+            list.Add(gridIndex);
+            CityStations.Add(city, list);
+        }
     }
 }

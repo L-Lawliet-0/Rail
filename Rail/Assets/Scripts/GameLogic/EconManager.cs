@@ -19,7 +19,7 @@ public class EconManager : MonoBehaviour
     private void Awake()
     {
         m_Instance = this;
-        MoneyCount = 100000000;
+        MoneyCount = GlobalDataTypes.StartBudget;
     }
 
     private void UpdateMoney(int value)

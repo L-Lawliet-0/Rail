@@ -14,6 +14,8 @@ public class GlobalDataTypes : MonoBehaviour
         return 1;
     }
 
+    public const int StartBudget = 1000000;
+
     public const int MaxLevel = 4;
 
     public const int CrossBuildPrice = 100;

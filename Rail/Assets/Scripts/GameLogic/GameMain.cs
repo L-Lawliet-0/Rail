@@ -116,6 +116,8 @@ public class GameMain : MonoBehaviour
 
             EconManager.Instance.MoneyCount -= EconManager.GetStationCost(HighLightGrid, level);
 
+            CityManager.Instance.AddStationToCity(HighLightGrid.Index);
+
             HighLightGrid = null;
             DestroyHex();
 
@@ -131,6 +133,8 @@ public class GameMain : MonoBehaviour
         // add station data to it
         grid.CrossData = null;
         grid.StationData = new GridData.StationSave(0);
+
+        CityManager.Instance.AddStationToCity(grid.Index);
 
         IconManager.Instance.SwapIconTexture(grid.Index, StationIcon);
 
