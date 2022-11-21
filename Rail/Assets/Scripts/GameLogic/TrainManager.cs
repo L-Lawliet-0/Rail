@@ -460,24 +460,14 @@ public class TrainManager : MonoBehaviour
         return false;
     }
 
-    public bool TrainPassBy(int currentGrid, int targetCity, int timeInterval)
+    public bool TrainPassByCheck(int currentGrid, int targetGrid, int timeInterval)
     {
-        // get a list of station in target city
-        List<int> stations = CityManager.Instance.CityStations[targetCity];
-
-        List<int> routes = new List<int>();
-
-        foreach (int station in stations)
-        {
-            bool find = FindRoute(currentGrid, station, routes);
-        }
-
         foreach (TrainData td in AllTrains)
         {
             bool containCity = false;
             foreach (int index in td.Paths)
             {
-                if (CityManager.Instance.GridToCity[index] == targetCity && GridData.Instance.GridDatas[index].StationData != null)
+                if (index == targetGrid && GridData.Instance.GridDatas[index].StationData != null)
                 {
                     containCity = true;
                     break;
@@ -486,7 +476,7 @@ public class TrainManager : MonoBehaviour
 
             if (td.Paths.Contains(currentGrid) && containCity)
             {
-                
+
 
                 // check if this train can be arrived within time interval
                 float timeUsed = 0;
@@ -532,8 +522,38 @@ public class TrainManager : MonoBehaviour
                     goto TOP;
             }
         }
-        
+
         return false;
+    }
+
+    public bool TrainPassBy(int currentGrid, int targetCity, int timeInterval, out List<int> routes)
+    {
+        // get a list of station in target city
+        routes = new List<int>();
+        if (CityManager.Instance.CityStations.ContainsKey(targetCity))
+        {
+            List<int> stations = CityManager.Instance.CityStations[targetCity];
+
+            
+
+            foreach (int station in stations)
+            {
+                bool find = FindRoute(currentGrid, station, routes);
+                if (find )//&& routes.Count > 2)
+                {
+                    routes.Reverse();
+                    routes.RemoveAt(0); // remove the starting grid
+                    targetCity = routes[0];
+                    break;
+                }
+                routes.Clear();
+            }
+        }
+
+        if (routes.Count == 0)
+            return false;
+
+        return TrainPassByCheck(currentGrid, targetCity, timeInterval);
     }
 
     public void AdjustTrainPrice(float value)

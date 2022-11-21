@@ -394,30 +394,48 @@ public class CityManager : MonoBehaviour
         {
             // check if this train path still contains the destination
             bool canReach = false;
+            canReach = trainData.Paths.Contains(trainData.Passengers[i].TravelPath[0]);
+            /*
             foreach (int index in trainData.Paths)
             {
                 GridData.GridSave grid = GridData.Instance.GridDatas[index];
-                if (!grid.name.Equals("sea") && GridToCity[grid.Index] == trainData.Passengers[i].TargetCity && grid.StationData != null)
+                if (!grid.name.Equals("sea") && grid.Index == trainData.Passengers[i].TargetCity && grid.StationData != null)
                 {
                     canReach = true;
                     break;
                 }
             }
+            */
 
             // unload passenger
-            if (!canReach || trainData.Passengers[i].TargetCity == cityIndex)
+            if (!canReach || trainData.Passengers[i].TargetCity == cityIndex || trainData.Passengers[i].TravelPath[0] == arriveStation.Index)
             {
-                AdjustPopulation(cityIndex, trainData.Passengers[i].HomeCity, trainData.Passengers[i].Population);
-
-                // update transportation goal
-                if (canReach)
+                if (!canReach || trainData.Passengers[i].TravelPath.Count <= 1)
                 {
-                    TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
-                    EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
-                }
 
-                Debug.LogError("unboarding !!!" + trainData.Passengers[i].Population);
-                trainData.Passengers.RemoveAt(i);
+                    AdjustPopulation(cityIndex, trainData.Passengers[i].HomeCity, trainData.Passengers[i].Population);
+
+                    // update transportation goal
+                    if (canReach)
+                    {
+                        TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
+                        EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
+                    }
+
+                    Debug.LogError("unboarding !!!" + trainData.Passengers[i].Population);
+                    trainData.Passengers.RemoveAt(i);
+                }
+                else
+                {
+                    // flush this data into station
+                    EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
+
+                    trainData.Passengers[i].TicketPriceDue = 0;
+                    trainData.Passengers[i].TravelPath.RemoveAt(0);
+                    arriveStation.StationData.StationQueue.Add(trainData.Passengers[i]);
+
+                    trainData.Passengers.RemoveAt(i);
+                }
             }
         }
 
@@ -436,8 +454,10 @@ public class CityManager : MonoBehaviour
             // probability of them taking the train
             // higher gdp means higher income means more likely the take the high price train
 
-            if (PathContainsStation(trainData, td.TargetCity))
+            if (PathContainsStation(trainData, td.TravelPath[0]))
             {
+                Debug.LogError("boarding called!!!");
+
                 float gdp = CityDatas[td.HomeCity].GDP; // between 0 ~ 30 // about
                 float price = trainData.TrainPrice;  // between .1f and .5f, or min and max
 
@@ -451,7 +471,8 @@ public class CityManager : MonoBehaviour
                     {
                         load -= population;
 
-                        td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = population };
+                        td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = population, TravelPath = td.TravelPath };
+                        
 
                         arriveStation.StationData.StationQueue[i].Population -= population;
 
@@ -465,7 +486,7 @@ public class CityManager : MonoBehaviour
                     }
                     else
                     {
-                        td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = load };
+                        td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = load, TravelPath = td.TravelPath };
                         arriveStation.StationData.StationQueue[i].Population -= load;
 
                         trainData.Passengers.Add(td);
@@ -508,7 +529,7 @@ public class CityManager : MonoBehaviour
                 for (int j = grid.StationData.StationQueue.Count - 1; j >= 0; j--)
                 {
                     TravelData td = grid.StationData.StationQueue[j];
-                    if (!TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3))
+                    if (!TrainManager.Instance.TrainPassByCheck(grid.Index, td.TravelPath[0], 60 * 60 * 3))
                     {
                         // force them to leave station
                         AdjustPopulation(cityIndex, td.HomeCity, td.Population);
@@ -524,8 +545,9 @@ public class CityManager : MonoBehaviour
                     for (int j = TravelNeeds[cityIndex].Count - 1; j >= 0; j--)
                     {
                         TravelData td = TravelNeeds[cityIndex][j];
+                        List<int> routes = new List<int>();
 
-                        if (TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3) && td.Population > 0)
+                        if (td.Population > 0 && TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3, out routes))
                         {
                             // check if this can be fulfilled
                             if (capacity >= td.Population)
@@ -534,7 +556,8 @@ public class CityManager : MonoBehaviour
                                 {
                                     HomeCity = td.HomeCity,
                                     TargetCity = td.TargetCity,
-                                    Population = td.Population
+                                    Population = td.Population,
+                                    TravelPath = routes
                                 };
 
                                 grid.StationData.StationQueue.Add(newTD);
@@ -552,7 +575,8 @@ public class CityManager : MonoBehaviour
                                 {
                                     HomeCity = td.HomeCity,
                                     TargetCity = td.TargetCity,
-                                    Population = capacity
+                                    Population = capacity,
+                                    TravelPath = routes
                                 };
 
                                 grid.StationData.StationQueue.Add(newTD);
@@ -590,19 +614,9 @@ public class CityManager : MonoBehaviour
         }
     }
 
-    public bool PathContainsStation(TrainManager.TrainData train, int cityIndex)
+    public bool PathContainsStation(TrainManager.TrainData train, int gridIndex)
     {
-        for (int i = 0; i < train.Paths.Count; i++)
-        {
-            int gridIndex = train.Paths[i];
-            if (!GridData.Instance.GridDatas[gridIndex].name.Equals("sea"))
-            {
-                if (GridToCity[gridIndex] == cityIndex && GridData.Instance.GridDatas[gridIndex].StationData != null)
-                    return true;
-            }
-        }
-
-        return false;
+        return GridData.Instance.GridDatas[gridIndex].StationData != null && train.Paths.Contains(gridIndex);
     }
 
     public void AddStationToCity(int gridIndex)
