@@ -14,6 +14,12 @@ public class EconManager : MonoBehaviour
     
 
     public Text MoneyTxt;
+    public Text DailyCost;
+
+    private int DailySpend;
+
+    private bool MarkDirty;
+
 
 
     private void Awake()
@@ -101,7 +107,50 @@ public class EconManager : MonoBehaviour
 
         cost = Mathf.FloorToInt(GlobalDataTypes.GDPtoMult(gdp) * basePrice);
 
+        Instance.MarkDirty = true;
+
         return cost;
     }
 
+    public int CalculateDailySpend()
+    {
+        // daily spend = station + track + train
+
+        int spend = 0;
+
+        // station
+        foreach (KeyValuePair<int, List<int>> pair in CityManager.Instance.CityStations)
+        {
+            foreach (int index in pair.Value)
+            {
+                GridData.GridSave grid = GridData.Instance.GridDatas[index];
+                spend += CostHelper(grid, GlobalDataTypes.StationDailySpend[grid.StationData.Level]);
+            }
+        }
+
+        // trains
+        foreach (TrainManager.TrainData train in TrainManager.Instance.AllTrains)
+        {
+            spend += GlobalDataTypes.TrainDailySpend[train.Level];
+        }
+
+        // tracks
+        for (int i = 0; i < RoadManager.Instance.AllRoads.Count; i++)
+        {
+            spend += GetPathCost(RoadManager.Instance.AllRoads[i], RoadManager.Instance.RoadLevels[i]);
+        }
+
+        return spend;
+    }
+
+    private void Update()
+    {
+        if (MarkDirty)
+        {
+            DailySpend = CalculateDailySpend();
+            DailyCost.text = "Daily Spend : " + DailySpend;
+
+            MarkDirty = false;
+        }
+    }
 }

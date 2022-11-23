@@ -18,19 +18,24 @@ public class GlobalDataTypes : MonoBehaviour
 
     public const int MaxLevel = 4;
 
+    // the unit will be in 00000 shi wan, but will be calculated in thousand
+    // spend is in acutal cost
     public const int CrossBuildPrice = 100;
     public const int CrossToStationPrice = 100;
 
-    public static int[] StationPrices = { 150, 300, 450, 600, 750 }; // 5
-    public static int[] StationUpgradePrices = { 200, 200, 200, 200}; // 4
+    public static int[] StationPrices = { 300, 350, 400, 450, 500 }; // 5
+    public static int[] StationUpgradePrices = { 60, 60, 60, 60}; // 4
     public static int[] StationCapacity = { 1000, 2000, 3000, 4000, 5000 };
+    public static int[] StationDailySpend = { 10000, 10500, 11000, 11500, 12000 };
 
-    public static int[] TrackPrices = { 10, 15, 20, 25, 30};
-    public static int[] TrackUpgradePrices = { 10, 10, 10, 10};
+    public static int[] TrackPrices = { 30, 35, 40, 45, 50};
+    public static int[] TrackUpgradePrices = { 6, 6, 6, 6};
+    public static int[] TrackDailySpend = { 3, 4, 5, 6, 7 };
 
     public static int[] TrainPrices = { 50, 75, 100, 125, 150 };
     public static int[] TrainUpgradePrices = { 50, 50, 50, 50 };
     public static int[] TrainCapacity = { 500, 750, 1000, 1250, 1500 };
+    public static int[] TrainDailySpend = { 10, 20, 30, 40, 50 };
 
     public static int[] Speeds = { 100, 150, 200, 250, 300 };
 

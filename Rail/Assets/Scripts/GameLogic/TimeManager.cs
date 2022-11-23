@@ -7,7 +7,7 @@ public class TimeManager : MonoBehaviour
 {
     private static TimeManager m_Instance;
     public static TimeManager Instance { get { return m_Instance; } }
-    public const float RealTimeToGameTime = 300;//1440f;
+    public const float RealTimeToGameTime = 1440f;
     public const int DaySecs = 24 * 60 * 60;
     public const int HourSecs = 60 * 60;
     public float DayCounter = 0;
