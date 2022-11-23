@@ -97,7 +97,7 @@ public class TrainManager : MonoBehaviour
 
             float speed = Mathf.Min(roadSpeed, trainSpeed) / 3600f;
 
-            float travelDistance = speed * Time.deltaTime * TimeManager.RealTimeToGameTime; // the distance this train travel in last frame
+            float travelDistance = speed * Time.deltaTime * TimeManager.RealTimeToGameTime * .5f; // the distance this train travel in last frame, divided by two because night yield less traffic
 
             float wholeDistance = 10f * (currentPath.Count - 1);
 
