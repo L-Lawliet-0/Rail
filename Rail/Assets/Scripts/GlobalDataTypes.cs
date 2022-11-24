@@ -9,9 +9,16 @@ public class GlobalDataTypes : MonoBehaviour
 
     public Material TestHexMaterial;
 
+    // use min and map gdp, return a resonable multiplier
+    // mult lowest is 1, the max 
     public static float GDPtoMult(float gdp)
     {
-        return 1;
+        // distribution from 1 to 5
+        // lowest being 1 and highest being
+        // clamp gdp
+        float t = (gdp - CityManager.Instance.MinGDP) / (CityManager.SEAGDP - CityManager.Instance.MinGDP);
+        Debug.LogError("t : " + t);
+        return Mathf.Lerp(1f, 10f, t);
     }
 
     public const int StartBudget = 1000000;
@@ -47,6 +54,7 @@ public class GlobalDataTypes : MonoBehaviour
 
     private void Awake()
     {
+        SetDifficulty();
         m_Instance = this;
     }
 
@@ -66,6 +74,34 @@ public class GlobalDataTypes : MonoBehaviour
         return p1 + Mathf.Pow(1 - t, 2) * (p0 - p1) + Mathf.Pow(t, 2) * (p2 - p1);
     }
 
+
+    public void SetDifficulty()
+    {
+        int expectedSingleTrainIncome = Mathf.FloorToInt(.3f * 1200 * 500 * .6f); // ticket price * distance * capacity * full ratio
+        int recoveryTime = 30; // the days it take for a train line to get back its investment
+        int expectedLine = 1; // how many lines do you want the player to build in a monthly period
+
+        int investment = expectedSingleTrainIncome * recoveryTime * expectedLine; // this is the investment needed for such a standard train line
+
+        // distribute the investment in to track, station and train prices
+        float stationRatios = .35f;
+        float trackRatios = .3f;
+        float trainRatios = .35f;
+
+        int stationInvest = Mathf.FloorToInt(investment * stationRatios);
+        int trackInvest = Mathf.FloorToInt(investment * trackRatios);
+        int trainInvest = Mathf.FloorToInt(investment * trainRatios);
+
+        int stationCount = 5;
+        int trackCount = 100; // in 10 km of unit
+        int trainCount = 1;
+
+        int stationCost = stationInvest / stationCount;
+        int trackCost = trackInvest / trackCount;
+        int trainCost = trainInvest / trainCount;
+
+        Debug.LogError("Calculated answer : " + stationCost + " : " + trackCost + " : " + trainCost);
+    }
 
     // return the six neightbors of this grid
     public static int[] FindNeighbors(GridData.GridSave grid)

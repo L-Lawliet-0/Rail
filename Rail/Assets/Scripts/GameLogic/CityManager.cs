@@ -18,6 +18,7 @@ public class CityManager : MonoBehaviour
     public Dictionary<int, int> GridToCity;
 
     public float MinGDP, MaxGDP;
+    public const float SEAGDP = 50000;
 
     public Dictionary<int, List<int>> CityStations;
 
@@ -36,13 +37,23 @@ public class CityManager : MonoBehaviour
             city.GDP = cd.GDP;
             city.ResidentPopulation = (int)(cd.Population * 10000);
             city.VisitorPopulation = new Dictionary<int, int>();
+            city.Population = cd.Population;
             CityDatas.Add(city);
 
-            MinGDP = Mathf.Min(cd.GDP, MinGDP);
-            MaxGDP = Mathf.Max(cd.GDP, MaxGDP);
+            MinGDP = Mathf.Min(cd.GDP * cd.Population, MinGDP);
+            MaxGDP = Mathf.Max(cd.GDP * cd.Population, MaxGDP);
         }
 
         CityStations = new Dictionary<int, List<int>>();
+
+    }
+
+    private class GDPsort : IComparer<CityData>
+    {
+        public int Compare(CityData x, CityData y)
+        {
+            return (x.GDP * x.Population).CompareTo(y.GDP * y.Population);
+        }
     }
 
     private void Start()
@@ -458,7 +469,7 @@ public class CityManager : MonoBehaviour
             {
                 Debug.LogError("boarding called!!!");
 
-                float gdp = CityDatas[td.HomeCity].GDP; // between 0 ~ 30 // about
+                float gdp = CityDatas[td.HomeCity].GDP * CityDatas[td.HomeCity].Population; // between 0 ~ 30 // about
                 float price = trainData.TrainPrice;  // between .1f and .5f, or min and max
 
                 float percent = GDPtoTravelPercent(gdp, price);

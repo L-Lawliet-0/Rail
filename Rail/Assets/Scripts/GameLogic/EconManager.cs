@@ -101,10 +101,12 @@ public class EconManager : MonoBehaviour
         int cost = 0;
         float gdp;
         if (grid.name.Equals("sea"))
-            gdp = 50;
+            gdp = CityManager.SEAGDP;
         else
-            gdp = CityManager.Instance.CityDatas[CityManager.Instance.GridToCity[grid.Index]].GDP;
+            gdp = CityManager.Instance.CityDatas[CityManager.Instance.GridToCity[grid.Index]].GDP * CityManager.Instance.CityDatas[CityManager.Instance.GridToCity[grid.Index]].Population;
 
+
+        Debug.LogError("gdp : " + gdp);
         cost = Mathf.FloorToInt(GlobalDataTypes.GDPtoMult(gdp) * basePrice);
 
         Instance.MarkDirty = true;
