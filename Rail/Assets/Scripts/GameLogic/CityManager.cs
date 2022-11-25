@@ -398,6 +398,9 @@ public class CityManager : MonoBehaviour
         // the city we are in
         int cityIndex = GridToCity[arriveStation.Index];
 
+        int totalMoney = 0;
+        int totalUnboard = 0;
+
         Debug.LogError("The train is arriving at " + CityDatas[cityIndex].CityName);
 
         // unload travller
@@ -431,15 +434,20 @@ public class CityManager : MonoBehaviour
                     {
                         TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
                         EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
+
+                        totalMoney += trainData.Passengers[i].TicketPriceDue;
                     }
 
-                    Debug.LogError("unboarding !!!" + trainData.Passengers[i].Population);
+                    totalUnboard += trainData.Passengers[i].Population;
                     trainData.Passengers.RemoveAt(i);
                 }
                 else
                 {
                     // flush this data into station
                     EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
+
+                    totalMoney += trainData.Passengers[i].TicketPriceDue;
+                    totalUnboard += trainData.Passengers[i].Population;
 
                     trainData.Passengers[i].TicketPriceDue = 0;
                     trainData.Passengers[i].TravelPath.RemoveAt(0);
@@ -450,6 +458,13 @@ public class CityManager : MonoBehaviour
             }
         }
 
+        if (totalUnboard != 0)
+            LogPanel.Instance.AppendMessage(trainData.TrainName + " Unboard --- " + totalUnboard + " at station " + CityDatas[cityIndex].CityName.Split(',')[1]);
+
+        if (totalMoney != 0)
+            LogPanel.Instance.AppendMessage(trainData.TrainName + " Income +++ " + totalMoney + CityDatas[cityIndex].CityName.Split(',')[1]);
+        
+
         // load travller
         // calculator remaining seat
         int load = trainData.Capacity - trainData.CurrentCapacity();
@@ -457,6 +472,7 @@ public class CityManager : MonoBehaviour
         if (load <= 0)
             return;
 
+        int totalBoard = 0;
         for (int i = arriveStation.StationData.StationQueue.Count - 1; i >= 0; i --)
         {
             TravelData td = arriveStation.StationData.StationQueue[i];
@@ -486,6 +502,7 @@ public class CityManager : MonoBehaviour
                         
 
                         arriveStation.StationData.StationQueue[i].Population -= population;
+                        totalBoard += population;
 
                         if (arriveStation.StationData.StationQueue[i].Population <= 0)
                             arriveStation.StationData.StationQueue.RemoveAt(i);
@@ -499,6 +516,7 @@ public class CityManager : MonoBehaviour
                     {
                         td = new TravelData() { HomeCity = td.HomeCity, TargetCity = td.TargetCity, Population = load, TravelPath = td.TravelPath };
                         arriveStation.StationData.StationQueue[i].Population -= load;
+                        totalBoard += load;
 
                         trainData.Passengers.Add(td);
 
@@ -507,6 +525,9 @@ public class CityManager : MonoBehaviour
                 }
             }
         }
+
+        if (totalBoard != 0)
+            LogPanel.Instance.AppendMessage(trainData.TrainName + " board +++ " + totalBoard + CityDatas[cityIndex].CityName.Split(',')[1]);
         
     }
 

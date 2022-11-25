@@ -25,7 +25,11 @@ public class EconManager : MonoBehaviour
     private void Awake()
     {
         m_Instance = this;
-        MoneyCount = GlobalDataTypes.StartBudget;
+    }
+
+    private void Start()
+    {
+        MoneyCount = GlobalDataTypes.Instance.StartBudget;
     }
 
     private void UpdateMoney(int value)

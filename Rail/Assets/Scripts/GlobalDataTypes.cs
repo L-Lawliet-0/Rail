@@ -21,14 +21,14 @@ public class GlobalDataTypes : MonoBehaviour
         return Mathf.Lerp(1f, 10f, t);
     }
 
-    public const int StartBudget = 1000000;
+    public int StartBudget = 1000000;
 
     public const int MaxLevel = 4;
 
     // the unit will be in 00000 shi wan, but will be calculated in thousand
     // spend is in acutal cost
-    public const int CrossBuildPrice = 100;
-    public const int CrossToStationPrice = 100;
+    public static int CrossBuildPrice = 100;
+    public static int CrossToStationPrice = 100;
 
     public static int[] StationPrices = { 300, 350, 400, 450, 500 }; // 5
     public static int[] StationUpgradePrices = { 60, 60, 60, 60}; // 4
@@ -77,30 +77,78 @@ public class GlobalDataTypes : MonoBehaviour
 
     public void SetDifficulty()
     {
-        int expectedSingleTrainIncome = Mathf.FloorToInt(.3f * 1200 * 500 * .6f); // ticket price * distance * capacity * full ratio
+        // needed parameters
+        int totalStation = 500;
+        int totalTrain = 1000;
+        int totalTrackLength = 14000; // price is per 10 km
         int recoveryTime = 30; // the days it take for a train line to get back its investment
-        int expectedLine = 1; // how many lines do you want the player to build in a monthly period
-
-        int investment = expectedSingleTrainIncome * recoveryTime * expectedLine; // this is the investment needed for such a standard train line
-
-        // distribute the investment in to track, station and train prices
+        int expectedLine = 12; // how many lines do you want the player to build in a monthly period
         float stationRatios = .35f;
         float trackRatios = .3f;
         float trainRatios = .35f;
+        float expectPrice = .3f;
+        float expectDistance = 100 * 24 / 2;
+        float expectCapacity = 500;
+        float fullRatio = .6f;
+
+        // upgrade parameters
+        float stationLevelMult = .1f;
+        float stationUpgradeMult = .15f;
+        float stationDailyMult = .005f;
+
+        float trackLevelMult = .1f;
+        float trackUpgradeMult = .15f;
+        float trackDailyMult = .005f;
+
+        float trainLevelMult = .1f;
+        float trainUpgradeMult = .15f;
+        float trainDailyMult = .005f;
+
+        float crossUpgradeMult = 1f;
+        float crossMult = .05f;
+        // end !!!
+        // end !!
+        // end !
+
+        int expectedSingleTrainIncome = Mathf.FloorToInt(expectPrice * expectDistance * expectCapacity * fullRatio); // ticket price * distance * capacity * full ratio
+        int investment = expectedSingleTrainIncome * recoveryTime; // this is the investment needed for such a standard train line
+
+        // distribute the investment in to track, station and train prices
 
         int stationInvest = Mathf.FloorToInt(investment * stationRatios);
         int trackInvest = Mathf.FloorToInt(investment * trackRatios);
         int trainInvest = Mathf.FloorToInt(investment * trainRatios);
 
-        int stationCount = 5;
-        int trackCount = 100; // in 10 km of unit
-        int trainCount = 1;
+        float stationCount = (float)totalStation / totalTrain;
+        float trackCount = (float)totalTrackLength / totalTrain; // in 10 km of unit
+        float trainCount = (float)totalTrain / totalTrain;
 
-        int stationCost = stationInvest / stationCount;
-        int trackCost = trackInvest / trackCount;
-        int trainCost = trainInvest / trainCount;
+        int stationCost = Mathf.FloorToInt(stationInvest / stationCount);
+        int trackCost = Mathf.FloorToInt(trackInvest / trackCount);
+        int trainCost = Mathf.FloorToInt(trainInvest / trainCount);
 
         Debug.LogError("Calculated answer : " + stationCost + " : " + trackCost + " : " + trainCost);
+
+        CrossBuildPrice = Mathf.FloorToInt(stationCost * crossMult);
+        CrossToStationPrice = Mathf.FloorToInt(stationCost * crossUpgradeMult);
+
+        for (int i = 0; i < 5; i++)
+        {
+            StationPrices[i] = Mathf.FloorToInt(stationCost * (1 + stationLevelMult * i));
+            TrackPrices[i] = Mathf.FloorToInt(trackCost * (1 + trackLevelMult * i));
+            TrainPrices[i] = Mathf.FloorToInt(trainCost * (1 + trainLevelMult * i));
+            StationDailySpend[i] = Mathf.FloorToInt(stationCost * stationDailyMult);
+            TrackDailySpend[i] = Mathf.FloorToInt(trackCost * trackDailyMult);
+            TrainDailySpend[i] = Mathf.FloorToInt(trainCost * trainDailyMult);
+            if (i < 4)
+            {
+                StationUpgradePrices[i] = Mathf.FloorToInt(stationCost * stationUpgradeMult);
+                TrackUpgradePrices[i] = Mathf.FloorToInt(trackCost * trackUpgradeMult);
+                TrainUpgradePrices[i] = Mathf.FloorToInt(trainCost * trainUpgradeMult);
+            }
+        }
+
+        StartBudget = expectedLine * investment;
     }
 
     // return the six neightbors of this grid
