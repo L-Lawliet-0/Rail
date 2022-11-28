@@ -290,8 +290,20 @@ public class RoadManager : MonoBehaviour
 
     public void FinishRoad(int level = 0)
     {
-            // add or edit existing road
-            List<int> newPath = new List<int>();
+        // add or edit existing road
+
+        int cost = EconManager.GetPathCost(CurrentTrack, level);
+        if (EconManager.Instance.MoneyCount < cost)
+        {
+            VisualGrids.Clear();
+            CurrentTrack.Clear();
+            LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
+            InputManager.Instance.ExitRoadMode();
+            return;
+        }
+        EconManager.Instance.MoneyCount -= cost;
+
+        List<int> newPath = new List<int>();
             foreach (GridData.GridSave grid in CurrentTrack)
                 newPath.Add(grid.Index);
 
@@ -349,8 +361,6 @@ public class RoadManager : MonoBehaviour
                     lr.gameObject.layer = LayerMask.NameToLayer("Road");
                 }
             }
-
-            EconManager.Instance.MoneyCount -= EconManager.GetPathCost(CurrentTrack, level);
 
         
         
@@ -446,7 +456,16 @@ public class RoadManager : MonoBehaviour
             grids.Add(GridData.Instance.GridDatas[index]);
         }
 
-        EconManager.Instance.MoneyCount -= EconManager.GetPathUpgradeCost(grids, RoadLevels[RoadCache]);
+        int cost = EconManager.GetPathUpgradeCost(grids, RoadLevels[RoadCache]);
+        if (EconManager.Instance.MoneyCount < cost)
+        {
+            LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
+            SetRoadColor(RoadCache, GlobalDataTypes.TrackRarityColors[RoadLevels[RoadCache]]);
+            RoadCache = -1;
+            InputManager.Instance.ExitSelectionMode();
+            return;
+        }
+        EconManager.Instance.MoneyCount -= cost;
         RoadLevels[RoadCache]++;
 
         SetRoadColor(RoadCache, GlobalDataTypes.TrackRarityColors[RoadLevels[RoadCache]]);

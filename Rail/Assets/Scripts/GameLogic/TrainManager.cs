@@ -353,6 +353,16 @@ public class TrainManager : MonoBehaviour
             paths.Add(g.Index);
         if (!RepathMode)
         {
+            int cost = GlobalDataTypes.TrainPrices[level];
+            if (EconManager.Instance.MoneyCount < cost)
+            {
+                LogPanel.Instance.AppendMessage("Not enough money!!!");
+                CancelTrain();
+                return;
+            }
+
+            EconManager.Instance.MoneyCount -= cost;
+
             TrainData td = new TrainData();
            
             td.Paths = paths;
@@ -408,7 +418,15 @@ public class TrainManager : MonoBehaviour
 
     public void UpgradeTrain()
     {
-        EconManager.Instance.MoneyCount -= GlobalDataTypes.TrainUpgradePrices[AllTrains[TrainCache].Level];
+        int cost = GlobalDataTypes.TrainUpgradePrices[AllTrains[TrainCache].Level];
+        if (EconManager.Instance.MoneyCount < cost)
+        {
+            LogPanel.Instance.AppendMessage("Not enough money!!!");
+            InputManager.Instance.ExitSelectionMode();
+            return;
+        }
+        EconManager.Instance.MoneyCount -= cost;
+
         AllTrains[TrainCache].Level++;
         AllTrains[TrainCache].Capacity = GlobalDataTypes.TrainCapacity[AllTrains[TrainCache].Level];
         AllTrains[TrainCache].TrainSprite.GetComponent<SpriteRenderer>().color = GlobalDataTypes.RarityColors[AllTrains[TrainCache].Level];

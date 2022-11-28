@@ -35,6 +35,10 @@ public class TimeManager : MonoBehaviour
         DayCount = 1;
         HourCount = 0;
         MonthCount = 1;
+    }
+
+    private void Start()
+    {
         UpdateGoal();
         GoalTrack = 0;
     }
@@ -89,7 +93,10 @@ public class TimeManager : MonoBehaviour
     public Text GoalText;
     public void UpdateGoal()
     {
-        MonthlyGoal = 5000 + 1000 * MonthCount;
+        if (MonthCount == 1)
+            MonthlyGoal = GlobalDataTypes.Instance.ExpectedFirstMonthTraffic;
+        else
+            MonthlyGoal = GlobalDataTypes.Instance.ExpectedTraffic * MonthCount;
         GoalText.text = "You need to transport " + MonthlyGoal + " people this month";
     }
 }

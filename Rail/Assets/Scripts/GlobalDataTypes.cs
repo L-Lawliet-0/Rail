@@ -106,6 +106,12 @@ public class GlobalDataTypes : MonoBehaviour
 
         float crossUpgradeMult = 1f;
         float crossMult = .05f;
+
+        // goal parameter
+        float expectedRatio = .6f;
+        float averageStayLength = 4; // in hour
+        float budgetMult = 5;
+
         // end !!!
         // end !!
         // end !
@@ -148,8 +154,14 @@ public class GlobalDataTypes : MonoBehaviour
             }
         }
 
-        StartBudget = expectedLine * investment;
+        StartBudget = Mathf.FloorToInt(expectedLine * investment * budgetMult - expectedLine * trainInvest * (budgetMult - 1));
+        //StartBudget = 0; // this is a fucking test
+
+        ExpectedTraffic = Mathf.FloorToInt(expectedRatio * expectCapacity * 24 / averageStayLength * expectedLine * 30);
+        ExpectedFirstMonthTraffic = Mathf.FloorToInt(ExpectedTraffic * .5f); // give some building time for the first month
     }
+
+    public int ExpectedTraffic, ExpectedFirstMonthTraffic;
 
     // return the six neightbors of this grid
     public static int[] FindNeighbors(GridData.GridSave grid)

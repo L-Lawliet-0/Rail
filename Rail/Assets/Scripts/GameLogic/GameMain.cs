@@ -76,6 +76,18 @@ public class GameMain : MonoBehaviour
                 return;
             }
 
+            int cost = EconManager.GetCrossCost(HighLightGrid);
+            if (EconManager.Instance.MoneyCount < cost)
+            {
+                LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
+                HighLightGrid = null;
+                DestroyHex();
+
+                InputManager.Instance.ExitSelectionMode();
+                return;
+            }
+            EconManager.Instance.MoneyCount -= cost;
+
             GameObject obj = new GameObject();
             obj.transform.position = HighLightGrid.PosV3;
             SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
@@ -84,8 +96,6 @@ public class GameMain : MonoBehaviour
             IconManager.Instance.AddOrUpdateIcon(HighLightGrid.Index, obj);
 
             HighLightGrid.CrossData = new GridData.CrossingSave();
-
-            EconManager.Instance.MoneyCount -= EconManager.GetCrossCost(HighLightGrid);
 
             HighLightGrid = null;
             DestroyHex();
@@ -104,6 +114,18 @@ public class GameMain : MonoBehaviour
                 return;
             }
 
+            int cost = EconManager.GetStationCost(HighLightGrid, level);
+            if (EconManager.Instance.MoneyCount < cost)
+            {
+                LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
+                HighLightGrid = null;
+                DestroyHex();
+
+                InputManager.Instance.ExitSelectionMode();
+                return;
+            }
+            EconManager.Instance.MoneyCount -= cost;
+
             GameObject obj = new GameObject();
             obj.transform.position = HighLightGrid.PosV3;
             SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
@@ -113,8 +135,6 @@ public class GameMain : MonoBehaviour
             IconManager.Instance.ChangeIconColor(HighLightGrid.Index, GlobalDataTypes.RarityColors[level]);
 
             HighLightGrid.StationData = new GridData.StationSave(level);
-
-            EconManager.Instance.MoneyCount -= EconManager.GetStationCost(HighLightGrid, level);
 
             CityManager.Instance.AddStationToCity(HighLightGrid.Index);
 
@@ -128,7 +148,14 @@ public class GameMain : MonoBehaviour
     public void UpgradeCrossToStation(GridData.GridSave grid)
     {
         // remove money
-        EconManager.Instance.MoneyCount -= EconManager.GetCrossUpgradeCost(grid);
+        int cost = EconManager.GetCrossUpgradeCost(grid);
+        if (EconManager.Instance.MoneyCount < cost)
+        {
+            LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
+            InputManager.Instance.ExitSelectionMode();
+            return;
+        }
+        EconManager.Instance.MoneyCount -= cost;
 
         // add station data to it
         grid.CrossData = null;
@@ -143,7 +170,15 @@ public class GameMain : MonoBehaviour
 
     public void UpgradeStation(GridData.GridSave grid)
     {
-        EconManager.Instance.MoneyCount -= EconManager.GetStationUpgradeCost(grid, grid.StationData.Level);
+        int cost = EconManager.GetStationUpgradeCost(grid, grid.StationData.Level);
+        if (EconManager.Instance.MoneyCount < cost)
+        {
+            LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
+            InputManager.Instance.ExitSelectionMode();
+            return;
+        }
+        EconManager.Instance.MoneyCount -= cost;
+
         grid.StationData.Upgrade();
 
         IconManager.Instance.ChangeIconColor(grid.Index, GlobalDataTypes.RarityColors[grid.StationData.Level]);
