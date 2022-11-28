@@ -480,6 +480,7 @@ public class TrainManager : MonoBehaviour
 
                 // check if this train can be arrived within time interval
                 float timeUsed = 0;
+                bool firstTrack = true;
 
                 int currentIndex = td.CurrentIndex;
                 List<int> paths = new List<int>(td.Paths);
@@ -504,6 +505,12 @@ public class TrainManager : MonoBehaviour
 
                 float distance = (currentPath.Count - 1) * 10;
                 timeUsed += distance / td.TrainSpeed;
+
+                if (firstTrack)
+                {
+                    firstTrack = false;
+                    timeUsed *= (1 - td.Progress);
+                }
 
                 currentIndex++;
                 if (currentIndex >= paths.Count - 1)
