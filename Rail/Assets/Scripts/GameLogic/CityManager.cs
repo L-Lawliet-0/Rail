@@ -433,6 +433,7 @@ public class CityManager : MonoBehaviour
                     if (canReach)
                     {
                         TimeManager.Instance.GoalTrack += trainData.Passengers[i].Population;
+                        TimeManager.Instance.LastDayTrafficCount += trainData.Passengers[i].Population;
                         EconManager.Instance.MoneyCount += trainData.Passengers[i].TicketPriceDue;
 
                         totalMoney += trainData.Passengers[i].TicketPriceDue;

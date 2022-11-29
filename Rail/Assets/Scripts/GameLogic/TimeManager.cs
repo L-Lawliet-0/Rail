@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class TimeManager : MonoBehaviour
 {
@@ -28,6 +29,9 @@ public class TimeManager : MonoBehaviour
         GoalTrackText.text = goalTrack + " / " + MonthlyGoal + " people transported";
     }
     private int goalTrack;
+
+    public Text LastDayTraffic;
+    public int LastDayTrafficCount;
 
     private void Awake()
     {
@@ -63,6 +67,8 @@ public class TimeManager : MonoBehaviour
             // recalculate city travel needs;
             EconManager.Instance.MoneyCount -= EconManager.Instance.DailySpend;
             CityManager.Instance.CalculateTravelNeed();
+            LastDayTraffic.text = "Last Day Traffic : " + LastDayTrafficCount;
+            LastDayTrafficCount = 0;
 
             DayCount++;
             if (DayCount > 30)
