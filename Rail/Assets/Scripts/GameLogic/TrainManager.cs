@@ -362,6 +362,7 @@ public class TrainManager : MonoBehaviour
             }
 
             EconManager.Instance.MoneyCount -= cost;
+            EconManager.Instance.MarkDirty = true;
 
             TrainData td = new TrainData();
            
@@ -426,6 +427,7 @@ public class TrainManager : MonoBehaviour
             return;
         }
         EconManager.Instance.MoneyCount -= cost;
+        EconManager.Instance.MarkDirty = true;
 
         AllTrains[TrainCache].Level++;
         AllTrains[TrainCache].Capacity = GlobalDataTypes.TrainCapacity[AllTrains[TrainCache].Level];

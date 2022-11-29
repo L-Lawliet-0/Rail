@@ -16,9 +16,9 @@ public class EconManager : MonoBehaviour
     public Text MoneyTxt;
     public Text DailyCost;
 
-    private int DailySpend;
+    public int DailySpend;
 
-    private bool MarkDirty;
+    public bool MarkDirty;
 
 
 
@@ -75,6 +75,17 @@ public class EconManager : MonoBehaviour
         {
             GridData.GridSave grid = GridData.Instance.GridDatas[index];
             cost += CostHelper(grid, GlobalDataTypes.TrackPrices[level]);
+        }
+        return cost;
+    }
+
+    public static int GetPathDailyCost(List<int> path, int level = 0)
+    {
+        int cost = 0;
+        foreach (int index in path)
+        {
+            GridData.GridSave grid = GridData.Instance.GridDatas[index];
+            cost += CostHelper(grid, GlobalDataTypes.TrackDailySpend[level]);
         }
         return cost;
     }
@@ -143,7 +154,7 @@ public class EconManager : MonoBehaviour
         // tracks
         for (int i = 0; i < RoadManager.Instance.AllRoads.Count; i++)
         {
-            spend += GetPathCost(RoadManager.Instance.AllRoads[i], RoadManager.Instance.RoadLevels[i]);
+            spend += GetPathDailyCost(RoadManager.Instance.AllRoads[i], RoadManager.Instance.RoadLevels[i]);
         }
 
         return spend;

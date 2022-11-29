@@ -61,6 +61,7 @@ public class TimeManager : MonoBehaviour
             DayCounter -= DaySecs;
             // a day is passed
             // recalculate city travel needs;
+            EconManager.Instance.MoneyCount -= EconManager.Instance.DailySpend;
             CityManager.Instance.CalculateTravelNeed();
 
             DayCount++;
