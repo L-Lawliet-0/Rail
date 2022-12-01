@@ -5,6 +5,7 @@ using UnityEngine;
 public class TrainManager : MonoBehaviour
 {
     public static int TrainNameIndex = 500;
+    public const int PauseTime = 2;
     [System.Serializable]
     public class TrainData
     {
@@ -24,6 +25,12 @@ public class TrainManager : MonoBehaviour
         public Transform TrainSprite;
 
         public List<TravelData> Passengers;
+
+        public bool StationPause; // the train is in a pause in station
+        public float PauseCounter;
+
+        public int TotalBoard, TotalUnboard, TotalMoney; // station info cache
+        public bool Poped;
 
         public string TrainName;
         public TrainData()
@@ -73,6 +80,21 @@ public class TrainManager : MonoBehaviour
         {
             if (td.Selected)
                 continue;
+
+            if (td.StationPause)
+            {
+                td.PauseCounter -= Time.deltaTime;
+                if (td.PauseCounter <= 0)
+                    td.StationPause = false;
+
+                if (!td.Poped)
+                {
+                    td.Poped = true;
+                    CityNamesParent.Instance.ShowBoardInfo(td);
+                }
+
+                continue;
+            }
 
             TOP:
             // get the current road we're travelling

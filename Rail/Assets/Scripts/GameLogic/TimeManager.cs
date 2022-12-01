@@ -10,6 +10,7 @@ public class TimeManager : MonoBehaviour
     public static TimeManager Instance { get { return m_Instance; } }
     public const float RealTimeToGameTime = 720f;
     public const int DaySecs = 24 * 60 * 60;
+    public const int CycleDayCount = 7;
     public const int HourSecs = 60 * 60;
     public float DayCounter = 0;
     public float HourCounter = 0;
@@ -71,7 +72,7 @@ public class TimeManager : MonoBehaviour
             LastDayTrafficCount = 0;
 
             DayCount++;
-            if (DayCount > 30)
+            if (DayCount > CycleDayCount)
             {
                 DayCount = 1;
                 MonthCount++;
@@ -100,6 +101,12 @@ public class TimeManager : MonoBehaviour
     public Text GoalText;
     public void UpdateGoal()
     {
+        if (MonthlyGoal > 0 && GoalTrack < MonthlyGoal)
+        {
+            Debug.LogError("!!!Game End!!! Fail monthly requirement");
+        }
+
+        GoalTrack = 0;
         if (MonthCount == 1)
             MonthlyGoal = GlobalDataTypes.Instance.ExpectedFirstMonthTraffic;
         else

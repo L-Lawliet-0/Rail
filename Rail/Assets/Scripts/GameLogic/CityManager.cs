@@ -401,7 +401,11 @@ public class CityManager : MonoBehaviour
         int totalMoney = 0;
         int totalUnboard = 0;
 
-        Debug.LogError("The train is arriving at " + CityDatas[cityIndex].CityName);
+        trainData.TotalUnboard = 0;
+        trainData.TotalBoard = 0;
+        trainData.TotalMoney = 0;
+
+        trainData.Poped = false;
 
         // unload travller
         for (int i = trainData.Passengers.Count - 1; i >= 0; i--)
@@ -460,10 +464,18 @@ public class CityManager : MonoBehaviour
         }
 
         if (totalUnboard != 0)
+        {
             LogPanel.Instance.AppendMessage(trainData.TrainName + " Unboard --- " + totalUnboard + " at station " + CityDatas[cityIndex].CityName.Split(',')[1]);
+            trainData.TotalUnboard = totalUnboard;
+            trainData.StationPause = true;
+            trainData.PauseCounter = TrainManager.PauseTime;
+        }
 
         if (totalMoney != 0)
+        {
             LogPanel.Instance.AppendMessage(trainData.TrainName + " Income +++ " + totalMoney + CityDatas[cityIndex].CityName.Split(',')[1]);
+            trainData.TotalMoney = totalMoney;
+        }
         
 
         // load travller
@@ -484,7 +496,6 @@ public class CityManager : MonoBehaviour
 
             if (PathContainsStation(trainData, td.TravelPath[0]))
             {
-                Debug.LogError("boarding called!!!");
 
                 float gdp = CityDatas[td.HomeCity].GDP * CityDatas[td.HomeCity].Population; // between 0 ~ 30 // about
                 float price = trainData.TrainPrice;  // between .1f and .5f, or min and max
@@ -528,8 +539,13 @@ public class CityManager : MonoBehaviour
         }
 
         if (totalBoard != 0)
+        {
             LogPanel.Instance.AppendMessage(trainData.TrainName + " board +++ " + totalBoard + CityDatas[cityIndex].CityName.Split(',')[1]);
-        
+            trainData.TotalBoard = totalBoard;
+            trainData.StationPause = true;
+            trainData.PauseCounter = TrainManager.PauseTime;
+        }
+
     }
 
     public float GDPtoTravelPercent(float gdp, float price)
@@ -630,7 +646,6 @@ public class CityManager : MonoBehaviour
         if (cityIndex == homeCity)
         {
             CityDatas[cityIndex].ResidentPopulation += population;
-            Debug.LogError("adjust population " + population);
         }
         else
         {

@@ -121,7 +121,6 @@ public class EconManager : MonoBehaviour
             gdp = CityManager.Instance.CityDatas[CityManager.Instance.GridToCity[grid.Index]].GDP * CityManager.Instance.CityDatas[CityManager.Instance.GridToCity[grid.Index]].Population;
 
 
-        Debug.LogError("gdp : " + gdp);
         cost = Mathf.FloorToInt(GlobalDataTypes.GDPtoMult(gdp) * basePrice);
 
         Instance.MarkDirty = true;

@@ -295,10 +295,8 @@ public class RoadManager : MonoBehaviour
         int cost = EconManager.GetPathCost(CurrentTrack, level);
         if (EconManager.Instance.MoneyCount < cost)
         {
-            VisualGrids.Clear();
-            CurrentTrack.Clear();
             LogPanel.Instance.AppendMessage("Not Enough Money!!!!!");
-            InputManager.Instance.ExitRoadMode();
+            CancelRoad();
             return;
         }
         EconManager.Instance.MoneyCount -= cost;

@@ -17,7 +17,6 @@ public class GlobalDataTypes : MonoBehaviour
         // lowest being 1 and highest being
         // clamp gdp
         float t = (gdp - CityManager.Instance.MinGDP) / (CityManager.SEAGDP - CityManager.Instance.MinGDP);
-        Debug.LogError("t : " + t);
         return Mathf.Lerp(1f, 10f, t);
     }
 
@@ -81,8 +80,8 @@ public class GlobalDataTypes : MonoBehaviour
         int totalStation = 500;
         int totalTrain = 1000;
         int totalTrackLength = 14000; // price is per 10 km
-        int recoveryTime = 30; // the days it take for a train line to get back its investment
-        int expectedLine = 12; // how many lines do you want the player to build in a monthly period
+        int recoveryTime = 7; // the days it take for a train line to get back its investment
+        int expectedLine = 14; // how many lines do you want the player to build in a monthly period
         float stationRatios = .35f;
         float trackRatios = .3f;
         float trainRatios = .35f;
@@ -157,7 +156,7 @@ public class GlobalDataTypes : MonoBehaviour
         StartBudget = Mathf.FloorToInt(expectedLine * investment * budgetMult - expectedLine * trainInvest * (budgetMult - 1));
         //StartBudget = 0; // this is a fucking test
 
-        ExpectedTraffic = Mathf.FloorToInt(expectedRatio * expectCapacity * 24 / averageStayLength * expectedLine * 30);
+        ExpectedTraffic = Mathf.FloorToInt(expectedRatio * expectCapacity * 24 / averageStayLength * expectedLine * TimeManager.CycleDayCount);
         ExpectedFirstMonthTraffic = Mathf.FloorToInt(ExpectedTraffic * .5f); // give some building time for the first month
     }
 

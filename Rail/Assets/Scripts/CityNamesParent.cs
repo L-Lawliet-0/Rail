@@ -131,4 +131,39 @@ public class CityNamesParent : MonoBehaviour
             }
         }
     }
+
+    public GameObject BoardInfo;
+    public void ShowBoardInfo(TrainManager.TrainData train)
+    {
+        GameObject board = Instantiate(BoardInfo);
+        board.transform.parent = transform;
+
+        board.gameObject.SetActive(true);
+        board.transform.position = train.TrainSprite.position + Vector3.right * 140 * board.transform.localScale.x;
+        Text t_Unboard = board.transform.GetChild(1).GetComponent<Text>();
+        Text t_Board = board.transform.GetChild(2).GetComponent<Text>();
+        Text t_Money = board.transform.GetChild(4).GetComponent<Text>();
+
+        t_Unboard.text = "-" + train.TotalUnboard;
+        t_Board.text = "+" + train.TotalBoard;
+        t_Money.text = "+" + train.TotalMoney;
+
+        StartCoroutine("FadeDestroy", board.GetComponent<CanvasGroup>());
+    }
+
+    private IEnumerator FadeDestroy(CanvasGroup cg)
+    {
+        yield return new WaitForSeconds(.5f);
+
+        float counter = 2.5f;
+
+        while (counter > 0)
+        {
+            cg.alpha = counter;
+            counter -= Time.deltaTime;
+            yield return null;
+        }
+
+        Destroy(cg.gameObject);
+    }
 }
