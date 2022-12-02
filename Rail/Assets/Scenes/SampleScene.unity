@@ -7793,6 +7793,86 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 203780773}
   m_CullTransparentMesh: 1
+--- !u!1 &206402264
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 206402265}
+  - component: {fileID: 206402267}
+  - component: {fileID: 206402266}
+  m_Layer: 5
+  m_Name: Last Day Income
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &206402265
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206402264}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1788573792}
+  m_RootOrder: 12
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 160, y: -272}
+  m_SizeDelta: {x: 320, y: 32}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &206402266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206402264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 0.19607843, g: 0.19607843, b: 0.19607843, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_FontData:
+    m_Font: {fileID: 10102, guid: 0000000000000000e000000000000000, type: 0}
+    m_FontSize: 24
+    m_FontStyle: 0
+    m_BestFit: 0
+    m_MinSize: 2
+    m_MaxSize: 40
+    m_Alignment: 3
+    m_AlignByGeometry: 0
+    m_RichText: 1
+    m_HorizontalOverflow: 0
+    m_VerticalOverflow: 0
+    m_LineSpacing: 1
+  m_Text: 'Last Day Income : 0'
+--- !u!222 &206402267
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206402264}
+  m_CullTransparentMesh: 1
 --- !u!1 &206477461
 GameObject:
   m_ObjectHideFlags: 0
@@ -13473,7 +13553,7 @@ RectTransform:
   m_Children:
   - {fileID: 1690057545}
   m_Father: {fileID: 1788573792}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
@@ -14936,7 +15016,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingOrder: -2
   m_Sprite: {fileID: 21300000, guid: 7f498f8c24c214e6b93ad6e4c1e57926, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -16678,7 +16758,7 @@ RectTransform:
   - {fileID: 904319638}
   - {fileID: 2053212674}
   m_Father: {fileID: 1788573792}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -18129,6 +18209,7 @@ MonoBehaviour:
       StationQueue: []
       Capacity: 10000
       Level: 0
+    Covered: 0
   StationIcon: {fileID: 21300000, guid: bc3812324cfcec244820814319c5e8d9, type: 3}
   CrossIcon: {fileID: 21300000, guid: 6eee62c3562c09342826ee2f6d3e4a94, type: 3}
 --- !u!114 &519420036
@@ -18167,6 +18248,7 @@ MonoBehaviour:
       StationQueue: []
       Capacity: 10000
       Level: 0
+    Covered: 0
   CurrentGrid:
     posX: 0
     posY: 0
@@ -18176,6 +18258,7 @@ MonoBehaviour:
       StationQueue: []
       Capacity: 10000
       Level: 0
+    Covered: 0
   CurrentTrack: []
   AllVisuals: []
   RoadLevels: 
@@ -22111,6 +22194,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InitialCityData: {fileID: 11400000, guid: 8dd98ad1d56884a639ac218f9ea74119, type: 2}
   CityDatas: []
+  CityGridCount: 
   TravelPanel: {fileID: 1962524371}
   MinGDP: 0
   MaxGDP: 0
@@ -22139,6 +22223,8 @@ MonoBehaviour:
   GoalTrackText: {fileID: 347580281}
   LastDayTraffic: {fileID: 1957202237}
   LastDayTrafficCount: 0
+  LastDayIncome: {fileID: 206402266}
+  LastDayIncomeCount: 0
   GoalText: {fileID: 1051883262}
 --- !u!1 &621995823
 GameObject:
@@ -62200,6 +62286,7 @@ RectTransform:
   - {fileID: 347580280}
   - {fileID: 2113529007}
   - {fileID: 1957202236}
+  - {fileID: 206402265}
   - {fileID: 492019576}
   - {fileID: 391748267}
   m_Father: {fileID: 0}

@@ -34,6 +34,9 @@ public class TimeManager : MonoBehaviour
     public Text LastDayTraffic;
     public int LastDayTrafficCount;
 
+    public Text LastDayIncome;
+    public int LastDayIncomeCount;
+
     private void Awake()
     {
         m_Instance = this;
@@ -69,7 +72,9 @@ public class TimeManager : MonoBehaviour
             EconManager.Instance.MoneyCount -= EconManager.Instance.DailySpend;
             CityManager.Instance.CalculateTravelNeed();
             LastDayTraffic.text = "Last Day Traffic : " + LastDayTrafficCount;
+            LastDayIncome.text = "Last Day Income: " + LastDayIncomeCount;
             LastDayTrafficCount = 0;
+            LastDayIncomeCount = 0;
 
             DayCount++;
             if (DayCount > CycleDayCount)

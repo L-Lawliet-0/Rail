@@ -107,8 +107,8 @@ public class GlobalDataTypes : MonoBehaviour
         float crossMult = .05f;
 
         // goal parameter
-        float expectedRatio = .6f;
-        float averageStayLength = 4; // in hour
+        float expectedRatio = .5f;
+        float averageStayLength = 6; // in hour
         float budgetMult = 5;
 
         // end !!!

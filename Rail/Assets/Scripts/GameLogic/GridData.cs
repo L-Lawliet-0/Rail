@@ -20,6 +20,8 @@ public class GridData : MonoBehaviour
         public CrossingSave CrossData;
         public StationSave StationData;
 
+        public bool Covered = false;
+
         public Vector3 PosV3 { get { return new Vector3(posX, posY); } }
     }
 
@@ -35,6 +37,8 @@ public class GridData : MonoBehaviour
         public List<TravelData> StationQueue;
         public int Capacity;
         public int Level;
+
+        public Dictionary<int, float> CityCoverage;
 
         public StationSave(int level)
         {

@@ -282,10 +282,14 @@ public class RoadManager : MonoBehaviour
 
     public void SelectRoadLevel()
     {
-        if (CurrentTrack.Count > 1)
+        // has to be greater than 2
+        if (CurrentTrack.Count > 2)
             HudManager.Instance.RoadBuild();
         else
+        {
+            Debug.LogError("Road cancelled, maybe not long enough");
             CancelRoad();
+        }
     }
 
     public void FinishRoad(int level = 0)
