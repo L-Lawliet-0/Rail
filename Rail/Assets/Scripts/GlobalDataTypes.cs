@@ -93,15 +93,15 @@ public class GlobalDataTypes : MonoBehaviour
         // upgrade parameters
         float stationLevelMult = .1f;
         float stationUpgradeMult = .15f;
-        float stationDailyMult = 0.00011f;
+        float stationDailyMult = 0.00274f;
 
         float trackLevelMult = .1f;
         float trackUpgradeMult = .15f;
-        float trackDailyMult = 0.00027f;
+        float trackDailyMult = 0.00274f;
 
         float trainLevelMult = .1f;
         float trainUpgradeMult = .15f;
-        float trainDailyMult = 0.00055f;
+        float trainDailyMult = 0.00274f;
 
         float crossUpgradeMult = 1f;
         float crossMult = .05f;

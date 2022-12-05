@@ -10,6 +10,7 @@ public class TimeManager : MonoBehaviour
     public static TimeManager Instance { get { return m_Instance; } }
     public const float RealTimeToGameTime = 720f;
     public const int DaySecs = 24 * 60 * 60;
+    public const int WeekSecs = 24 * 60 * 60 * 7;
     public const int CycleDayCount = 7;
     public const int HourSecs = 60 * 60;
     public float DayCounter = 0;
@@ -19,15 +20,20 @@ public class TimeManager : MonoBehaviour
     public int DayCount;
     public int HourCount;
     public Text DayText;
+    public Text HourText;
+    public Image HourFill;
 
     public int MonthlyGoal;
 
     public Text GoalTrackText;
+    public Text GoalReqText;
+    public Image GoalFill;
     public int GoalTrack { get { return goalTrack; } set { UpdateGoalTrack(value); } }
     private void UpdateGoalTrack(int value)
     {
         goalTrack = value;
-        GoalTrackText.text = goalTrack + " / " + MonthlyGoal + " people transported";
+        GoalTrackText.text = goalTrack.ToString();
+        GoalFill.fillAmount = (float)goalTrack / (float)MonthlyGoal;
     }
     private int goalTrack;
 
@@ -84,7 +90,7 @@ public class TimeManager : MonoBehaviour
                 // refresh goal
                 UpdateGoal();
             }
-            DayText.text = "Day " + DayCount + " Hour " + HourCount;
+            DayText.text = DayToText(DayCount);
         }
 
         HourCounter += Time.deltaTime * RealTimeToGameTime;
@@ -99,11 +105,32 @@ public class TimeManager : MonoBehaviour
             if (HourCount > 23)
                 HourCount = 0;
 
-            DayText.text = "Day " + DayCount + " Hour " + HourCount;
+            HourText.text = HourCount.ToString();
         }
+
+        HourFill.fillAmount = ((DayCount - 1) * DaySecs + DayCounter) / WeekSecs;
     }
 
-    public Text GoalText;
+    public string DayToText(int day)
+    {
+        switch (day)
+        {
+            case 1:
+                return "Monday";
+            case 2:
+                return "Tuesday";
+            case 3:
+                return "Wednesday";
+            case 4:
+                return "Thursday";
+            case 5:
+                return "Friday";
+            case 6:
+                return "Saturday";
+        }
+        return "Sunday";
+    }
+
     public void UpdateGoal()
     {
         if (MonthlyGoal > 0 && GoalTrack < MonthlyGoal)
@@ -116,6 +143,6 @@ public class TimeManager : MonoBehaviour
             MonthlyGoal = GlobalDataTypes.Instance.ExpectedFirstMonthTraffic;
         else
             MonthlyGoal = GlobalDataTypes.Instance.ExpectedTraffic * MonthCount;
-        GoalText.text = "You need to transport " + MonthlyGoal + " people this month";
+        GoalReqText.text = MonthlyGoal.ToString();
     }
 }

@@ -35,7 +35,7 @@ public class EconManager : MonoBehaviour
     private void UpdateMoney(int value)
     {
         m_Money = value;
-        MoneyTxt.text = "Money: " + m_Money.ToString();
+        MoneyTxt.text = m_Money.ToString();
     }
 
     public static int GetCrossCost(GridData.GridSave targetGrid, int level = 0)
