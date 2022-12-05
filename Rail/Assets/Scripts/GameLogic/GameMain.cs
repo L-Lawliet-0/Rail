@@ -55,6 +55,10 @@ public class GameMain : MonoBehaviour
         else
             road = null;
         HudManager.Instance.RightClickHud(grid, road, train);
+
+        int roadIndex = road == null ? -1 : RoadManager.Instance.RoadCache;
+        TrainManager.TrainData trainData = train == null ? null : TrainManager.Instance.AllTrains[TrainManager.Instance.TrainCache];
+        DynamicInfo.Instance.Activate(grid, roadIndex, trainData);
     }
 
     public Sprite StationIcon, CrossIcon;
@@ -297,6 +301,7 @@ public class GameMain : MonoBehaviour
         Destroy(HighLightHex);
         HighLightHex = null;
         Destroy(CoverageObj);
+        DynamicInfo.Instance.Hide();
     }
 
     // when we build track, we enter draw mode

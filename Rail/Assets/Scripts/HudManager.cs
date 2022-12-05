@@ -123,7 +123,7 @@ public class HudManager : MonoBehaviour
     public void UpdateRoadCost(int cost)
     {
         Text text = ConfirmRoad.GetChild(0).GetComponent<Text>();
-        text.text = text.text.Split('(')[0] + " (" + cost + ")";
+        text.text = text.text.Split('(')[0] + "(" + cost + ")";
     }
 
     public void TrainMode(GridData.GridSave grid)
