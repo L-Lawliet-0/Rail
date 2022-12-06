@@ -9181,6 +9181,7 @@ GameObject:
   - component: {fileID: 240064711}
   - component: {fileID: 240064714}
   - component: {fileID: 240064713}
+  - component: {fileID: 240064715}
   m_Layer: 5
   m_Name: PriceAdjustor
   m_TagString: Untagged
@@ -9248,6 +9249,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 240064710}
   m_CullTransparentMesh: 1
+--- !u!111 &240064715
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 240064710}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &245951193
 GameObject:
   m_ObjectHideFlags: 0
@@ -19047,6 +19065,7 @@ GameObject:
   - component: {fileID: 530340992}
   - component: {fileID: 530340991}
   - component: {fileID: 530340990}
+  - component: {fileID: 530340993}
   m_Layer: 5
   m_Name: PlaceTrain
   m_TagString: Untagged
@@ -19169,6 +19188,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 530340988}
   m_CullTransparentMesh: 1
+--- !u!111 &530340993
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530340988}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &534197228
 GameObject:
   m_ObjectHideFlags: 0
@@ -21508,6 +21544,7 @@ GameObject:
   - component: {fileID: 607069054}
   - component: {fileID: 607069053}
   - component: {fileID: 607069052}
+  - component: {fileID: 607069055}
   m_Layer: 5
   m_Name: BuildTrack
   m_TagString: Untagged
@@ -21630,6 +21667,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 607069050}
   m_CullTransparentMesh: 1
+--- !u!111 &607069055
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 607069050}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &608626346
 GameObject:
   m_ObjectHideFlags: 0
@@ -26112,6 +26166,7 @@ GameObject:
   - component: {fileID: 730315202}
   - component: {fileID: 730315201}
   - component: {fileID: 730315200}
+  - component: {fileID: 730315203}
   m_Layer: 5
   m_Name: ConfirmRoad
   m_TagString: Untagged
@@ -26234,6 +26289,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 730315198}
   m_CullTransparentMesh: 1
+--- !u!111 &730315203
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 730315198}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &732268380
 GameObject:
   m_ObjectHideFlags: 0
@@ -31694,6 +31766,7 @@ GameObject:
   - component: {fileID: 883205789}
   - component: {fileID: 883205792}
   - component: {fileID: 883205791}
+  - component: {fileID: 883205793}
   m_Layer: 5
   m_Name: (Station/Train/City/Track)
   m_TagString: Untagged
@@ -31790,6 +31863,23 @@ MonoBehaviour:
   TrainSprite: {fileID: 21300000, guid: b54776557f424d24098ac495cae0ef14, type: 3}
   StationSprite: {fileID: 21300000, guid: 8a93e7b70499a5343aa5ccabc7854371, type: 3}
   TrackSprite: {fileID: 21300000, guid: f434be61ba351334181297272e079762, type: 3}
+--- !u!111 &883205793
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 883205787}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 4ae800c715ee64113aeb0614530dad5f, type: 2}
+  - {fileID: 7400000, guid: bb3fe2d25548a494eb8cf162b391970c, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &883532393
 GameObject:
   m_ObjectHideFlags: 0
@@ -47167,6 +47257,7 @@ GameObject:
   - component: {fileID: 1309672752}
   - component: {fileID: 1309672751}
   - component: {fileID: 1309672750}
+  - component: {fileID: 1309672753}
   m_Layer: 5
   m_Name: BuildStation
   m_TagString: Untagged
@@ -47289,6 +47380,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1309672748}
   m_CullTransparentMesh: 1
+--- !u!111 &1309672753
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1309672748}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1310454757
 GameObject:
   m_ObjectHideFlags: 0
@@ -48291,6 +48399,7 @@ GameObject:
   - component: {fileID: 1342775442}
   - component: {fileID: 1342775441}
   - component: {fileID: 1342775440}
+  - component: {fileID: 1342775443}
   m_Layer: 5
   m_Name: ConfirmTrain
   m_TagString: Untagged
@@ -48413,6 +48522,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1342775438}
   m_CullTransparentMesh: 1
+--- !u!111 &1342775443
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1342775438}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1345466441
 GameObject:
   m_ObjectHideFlags: 0
@@ -49002,6 +49128,7 @@ GameObject:
   - component: {fileID: 1379990698}
   - component: {fileID: 1379990697}
   - component: {fileID: 1379990696}
+  - component: {fileID: 1379990699}
   m_Layer: 5
   m_Name: UpgradeBtn
   m_TagString: Untagged
@@ -49112,6 +49239,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1379990694}
   m_CullTransparentMesh: 1
+--- !u!111 &1379990699
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1379990694}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1381433201
 GameObject:
   m_ObjectHideFlags: 0
@@ -49204,6 +49348,7 @@ GameObject:
   - component: {fileID: 1382881866}
   - component: {fileID: 1382881865}
   - component: {fileID: 1382881864}
+  - component: {fileID: 1382881867}
   m_Layer: 5
   m_Name: RepathBtn
   m_TagString: Untagged
@@ -49326,6 +49471,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1382881862}
   m_CullTransparentMesh: 1
+--- !u!111 &1382881867
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1382881862}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1390746704
 GameObject:
   m_ObjectHideFlags: 0
@@ -51311,6 +51473,7 @@ GameObject:
   - component: {fileID: 1469273350}
   - component: {fileID: 1469273352}
   - component: {fileID: 1469273351}
+  - component: {fileID: 1469273353}
   m_Layer: 5
   m_Name: Buttons
   m_TagString: Untagged
@@ -51387,6 +51550,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1469273349}
   m_CullTransparentMesh: 1
+--- !u!111 &1469273353
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1469273349}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 5eb0d41a85e9d4e59a78c253b474ab9a, type: 2}
+  - {fileID: 7400000, guid: dbca5bd3079ab4759ac81b3bbf16923d, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1469842907
 GameObject:
   m_ObjectHideFlags: 0
@@ -58679,6 +58859,7 @@ GameObject:
   - component: {fileID: 1673612521}
   - component: {fileID: 1673612520}
   - component: {fileID: 1673612519}
+  - component: {fileID: 1673612522}
   m_Layer: 5
   m_Name: CancelTrain
   m_TagString: Untagged
@@ -58801,6 +58982,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1673612517}
   m_CullTransparentMesh: 1
+--- !u!111 &1673612522
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1673612517}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1676594598
 GameObject:
   m_ObjectHideFlags: 0
@@ -63084,6 +63282,8 @@ MonoBehaviour:
   UpgradeBtn: {fileID: 1379990695}
   RepathBtn: {fileID: 1382881863}
   PriceAdjustor: {fileID: 240064711}
+  ButtonUp: {fileID: 0}
+  ButtonDown: {fileID: 0}
   LevelPromote: {fileID: 492019576}
 --- !u!1 &1805489185
 GameObject:
@@ -65773,6 +65973,7 @@ GameObject:
   - component: {fileID: 1885367320}
   - component: {fileID: 1885367319}
   - component: {fileID: 1885367318}
+  - component: {fileID: 1885367321}
   m_Layer: 5
   m_Name: CancelRoad
   m_TagString: Untagged
@@ -65895,6 +66096,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1885367316}
   m_CullTransparentMesh: 1
+--- !u!111 &1885367321
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1885367316}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1892014907
 GameObject:
   m_ObjectHideFlags: 0
@@ -68931,6 +69149,7 @@ GameObject:
   - component: {fileID: 1962524374}
   - component: {fileID: 1962524373}
   - component: {fileID: 1962524372}
+  - component: {fileID: 1962524375}
   m_Layer: 5
   m_Name: TravelNeeds
   m_TagString: Untagged
@@ -69028,6 +69247,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1962524370}
   m_CullTransparentMesh: 1
+--- !u!111 &1962524375
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1962524370}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: 4ae800c715ee64113aeb0614530dad5f, type: 2}
+  - {fileID: 7400000, guid: bb3fe2d25548a494eb8cf162b391970c, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &1968904532
 GameObject:
   m_ObjectHideFlags: 0
@@ -72871,6 +73107,7 @@ GameObject:
   - component: {fileID: 2088882396}
   - component: {fileID: 2088882395}
   - component: {fileID: 2088882394}
+  - component: {fileID: 2088882397}
   m_Layer: 5
   m_Name: BuildCorss
   m_TagString: Untagged
@@ -72993,6 +73230,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2088882392}
   m_CullTransparentMesh: 1
+--- !u!111 &2088882397
+Animation:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2088882392}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Animation: {fileID: 0}
+  m_Animations:
+  - {fileID: 7400000, guid: afada86d2178b4ed3b02fc0c91c82c82, type: 2}
+  - {fileID: 7400000, guid: 34b71048938e0445598d35777083bfde, type: 2}
+  m_WrapMode: 0
+  m_PlayAutomatically: 0
+  m_AnimatePhysics: 0
+  m_CullingType: 0
 --- !u!1 &2090084430
 GameObject:
   m_ObjectHideFlags: 0

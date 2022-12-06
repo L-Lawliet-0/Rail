@@ -18,7 +18,6 @@ public class DynamicInfo : MonoBehaviour
     {
         m_Instance = this;
         m_Canvas = GetComponent<CanvasGroup>();
-        m_Canvas.alpha = 0;
 
         Icon = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         NameText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
@@ -28,6 +27,8 @@ public class DynamicInfo : MonoBehaviour
 
         Title2 = transform.GetChild(2).GetChild(0).GetComponent<Text>();
         Content2 = transform.GetChild(2).GetChild(1).GetComponent<Text>();
+
+        Hide();
     }
 
     public void Activate(GridData.GridSave grid, int roadIndex = -1, TrainManager.TrainData train = null)
@@ -75,12 +76,14 @@ public class DynamicInfo : MonoBehaviour
             }
         }
 
-        m_Canvas.alpha = 1;
+        //m_Canvas.alpha = 1;
+        GetComponent<Animation>().Play("ShiftRight");
     }
 
     public void Hide()
     {
-        m_Canvas.alpha = 0;
+        //m_Canvas.alpha = 0;
+        GetComponent<Animation>().Play("ShiftLeft");
     }
 
 }

@@ -11,13 +11,16 @@ public class HudManager : MonoBehaviour
     private void Awake()
     {
         m_Instance = this;
-        SetEmpty();
+        
         AllButtons = new RectTransform[]
         {
             BuildStation, BuildCross, BuildTrack, PlaceTrain, ConfirmRoad, CancelRoad, ConfirmTrain, CancelTrain, UpgradeBtn, RepathBtn, PriceAdjustor
         };
         PriceAdjustor.GetComponentInChildren<Slider>().minValue = GlobalDataTypes.MinTrainPrice;
         PriceAdjustor.GetComponentInChildren<Slider>().maxValue = GlobalDataTypes.MaxTrainPrice;
+        GridInfo.transform.parent.gameObject.SetActive(false);
+        LevelPromote.gameObject.SetActive(false);
+        ButtonsParent.gameObject.SetActive(false);
     }
 
     public RectTransform ButtonsParent;
@@ -27,12 +30,84 @@ public class HudManager : MonoBehaviour
     public RectTransform BuildStation, BuildCross, BuildTrack, PlaceTrain, ConfirmRoad, CancelRoad, ConfirmTrain, CancelTrain, UpgradeBtn, RepathBtn, PriceAdjustor;
     private RectTransform[] AllButtons;
 
+    public Animation ButtonUp, ButtonDown;
+
+    public void ShowButtons(List<RectTransform> buttons)
+    {
+        ResetButtonY();
+        StopAllCoroutines();
+        foreach (RectTransform rect in AllButtons)
+            rect.gameObject.SetActive(false);
+
+        float leftBound = -160 * buttons.Count / 2;
+        ButtonsParent.sizeDelta = new Vector2(160 * buttons.Count, ButtonsParent.sizeDelta.y);
+
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].gameObject.SetActive(true);
+            buttons[i].localPosition = new Vector3(leftBound + 80 + i * 160, buttons[i].localPosition.y);
+        }
+
+        ButtonsParent.gameObject.SetActive(true);
+        ButtonsParent.GetComponent<Animation>().Play("FadeIn");
+
+        StartCoroutine("ButtonsAnimationUp", buttons);
+    }
+
     // don't show anything
     public void SetEmpty()
     {
+        StopAllCoroutines();
+        ButtonsParent.GetComponent<Animation>().Play("FadeOut");
         GridInfo.transform.parent.gameObject.SetActive(false);
-        ButtonsParent.gameObject.SetActive(false);
+        
         LevelPromote.gameObject.SetActive(false);
+        foreach (RectTransform rect in AllButtons)
+        {
+            if (rect.GetComponent<Button>())
+                rect.GetComponent<Button>().interactable = false;
+        }
+        StartCoroutine("ButtonsAnimationDown");
+    }
+
+    private IEnumerator ButtonsAnimationDown()
+    {
+        for (int i = AllButtons.Length - 1; i >= 0; i --)
+        {
+            if (AllButtons[i].gameObject.activeInHierarchy)
+            {
+                Animation anim = AllButtons[i].GetComponent<Animation>();
+                anim.Play("ButtonDown");
+                yield return new WaitForSeconds(.1f);
+            }
+        }
+        yield return new WaitForSeconds(.5f);
+        ButtonsParent.gameObject.SetActive(false);
+    }
+
+    private IEnumerator ButtonsAnimationUp(List<RectTransform> buttons)
+    {
+        foreach (RectTransform rect in buttons)
+        {
+            Animation anim = rect.GetComponent<Animation>();
+            anim.Play("ButtonUp");
+            yield return new WaitForSeconds(.1f);
+        }
+
+        foreach (RectTransform rect in buttons)
+        {
+            if (rect.GetComponent<Button>())
+                rect.GetComponent<Button>().interactable = true;
+        }
+    }
+
+    private void ResetButtonY()
+    {
+        for (int i = 0; i < AllButtons.Length; i++)
+        {
+            AllButtons[i].GetComponent<Animation>().Stop();
+            AllButtons[i].localPosition = new Vector3(AllButtons[i].localPosition.x, -128, AllButtons[i].localPosition.z);
+        }
     }
 
     /// <summary>
@@ -136,23 +211,6 @@ public class HudManager : MonoBehaviour
         activeButtons.Add(CancelTrain);
 
         ShowButtons(activeButtons);
-    }
-
-    public void ShowButtons(List<RectTransform> buttons)
-    {
-        foreach (RectTransform rect in AllButtons)
-            rect.gameObject.SetActive(false);
-
-        float leftBound = -160 * buttons.Count / 2;
-        ButtonsParent.sizeDelta = new Vector2(160 * buttons.Count, ButtonsParent.sizeDelta.y);
-
-        for (int i = 0; i < buttons.Count; i++)
-        {
-            buttons[i].gameObject.SetActive(true);
-            buttons[i].localPosition = new Vector3(leftBound + 80 + i * 160, 0);
-        }
-        
-        ButtonsParent.gameObject.SetActive(true);
     }
 
     public Transform LevelPromote;

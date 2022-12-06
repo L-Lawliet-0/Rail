@@ -277,7 +277,8 @@ public class CityManager : MonoBehaviour
                 }
             }
         }
-        TravelPanel.gameObject.SetActive(true);
+        //TravelPanel.gameObject.SetActive(true);
+        TravelPanel.GetComponent<Animation>().Play("ShiftRight");
     }
 
     public void VisualizeTravelData(List<TravelData> datas)
@@ -335,7 +336,8 @@ public class CityManager : MonoBehaviour
 
     public void Clear()
     {
-        TravelPanel.gameObject.SetActive(false);
+        //TravelPanel.gameObject.SetActive(false);
+        TravelPanel.GetComponent<Animation>().Play("ShiftLeft");
         for (int i = TravelNeedsParent.childCount - 1; i >= 0; i--)
             Destroy(TravelNeedsParent.GetChild(i).gameObject);
     }
