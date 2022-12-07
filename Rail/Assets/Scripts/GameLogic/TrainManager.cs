@@ -268,7 +268,7 @@ public class TrainManager : MonoBehaviour
         mr.material = GlobalDataTypes.Instance.TestHexMaterial;
         mr.material.SetColor("_BaseColor", Color.blue);
         CurrentHighlight.transform.localScale = Vector3.one * 1.5f;
-        mr.sortingOrder = 0;
+        mr.sortingOrder = GlobalDataTypes.HighLightTrainOrder;
 
 
         CurrentPath.Add(grid);
@@ -393,6 +393,7 @@ public class TrainManager : MonoBehaviour
             td.Progress = 0;
             td.CurrentIndex = 0;
             td.TrainSprite = Instantiate(TrainPrefab).transform;
+            td.TrainSprite.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.TrainOrder;
             td.TrainSprite.GetComponent<SpriteRenderer>().color = GlobalDataTypes.RarityColors[level];
             td.Passengers = new List<TravelData>();
 

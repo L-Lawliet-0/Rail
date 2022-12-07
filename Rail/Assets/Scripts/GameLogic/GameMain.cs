@@ -98,6 +98,7 @@ public class GameMain : MonoBehaviour
             obj.transform.position = HighLightGrid.PosV3;
             SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
             sr.sprite = CrossIcon;
+            sr.sortingOrder = GlobalDataTypes.StationOrder;
 
             IconManager.Instance.AddOrUpdateIcon(HighLightGrid.Index, obj);
 
@@ -136,6 +137,7 @@ public class GameMain : MonoBehaviour
             obj.transform.position = HighLightGrid.PosV3;
             SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
             sr.sprite = StationIcon;
+            sr.sortingOrder = GlobalDataTypes.StationOrder;
 
             IconManager.Instance.AddOrUpdateIcon(HighLightGrid.Index, obj);
             IconManager.Instance.ChangeIconColor(HighLightGrid.Index, GlobalDataTypes.RarityColors[level]);
@@ -154,11 +156,45 @@ public class GameMain : MonoBehaviour
 
     public const int Radius = 60;
     private GameObject CoverageObj;
+    public Sprite CoverageCircle;
+
+    private GameObject AllCoverage;
+    public void ShowAllCoverage(bool value)
+    {
+        if (value)
+        {
+            AllCoverage = new GameObject();
+            AllCoverage.transform.position = Vector3.zero;
+            foreach (KeyValuePair<int, List<int>> pair in CityManager.Instance.CityStations)
+            {
+                foreach (int index in pair.Value)
+                {
+                    GameObject obj = new GameObject();
+                    obj.transform.position = GridData.Instance.GridDatas[index].PosV3;
+                    SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
+                    sr.sprite = CoverageCircle;
+                    obj.transform.localScale = Vector3.one * Radius;
+                    sr.sortingOrder = -1;
+                    sr.transform.SetParent(AllCoverage.transform);
+                }
+            }
+        }
+        else
+        {
+            Destroy(AllCoverage);
+        }
+    }
 
     private void DrawCoverage(GridData.GridSave grid)
     {
         CoverageObj = new GameObject();
-        CoverageObj.transform.position = Vector3.zero;
+        CoverageObj.transform.position = grid.PosV3;
+        SpriteRenderer sr = CoverageObj.AddComponent<SpriteRenderer>();
+        sr.sprite = CoverageCircle;
+        CoverageObj.transform.localScale = Vector3.one * Radius;
+        sr.sortingOrder = -1;
+
+        return;
         int check = Radius / 10 * 2;
         int y = grid.Index / GlobalDataTypes.xCount;
         int x = grid.Index % GlobalDataTypes.xCount;

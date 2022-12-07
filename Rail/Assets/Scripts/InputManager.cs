@@ -27,6 +27,7 @@ public class InputManager : MonoBehaviour
     private void Awake()
     {
         m_Instance = this;
+        Marker.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.LocationMarkOrder;
     }
 
     void Update()
@@ -184,6 +185,7 @@ public class InputManager : MonoBehaviour
         ChosedDesination = false;
         ManipulatePoint = false;
         RoadManager.Instance.InitData(startGrid);
+        CityManager.Instance.Clear();
     }
 
     public void ExitRoadMode()
@@ -199,6 +201,7 @@ public class InputManager : MonoBehaviour
 
         TrainManager.Instance.Init();
         TrainManager.Instance.NextPoint(startGrid);
+        CityManager.Instance.Clear();
     }
 
     public void EnterRepathMode()

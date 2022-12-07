@@ -353,6 +353,7 @@ public class CityManager : MonoBehaviour
             GameObject spawn = Instantiate(TravelArrowPrefab, TravelNeedsParent);
             spawn.transform.position = spawnPos;
             spawn.transform.up = direction;
+            spawn.transform.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.PointingArrowsOrder;
         }
 
         // one person indicate one hundred person
@@ -364,6 +365,7 @@ public class CityManager : MonoBehaviour
         {
             GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
             obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * c * 6;
+            obj.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.PeopleCntOrder;
         }
 
         if (decimial > 0)
@@ -371,6 +373,7 @@ public class CityManager : MonoBehaviour
             GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
             obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * 6 * peopleCnt;
             obj.GetComponent<SpriteRenderer>().size = new Vector2(4.44f * decimial, 12);
+            obj.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.PeopleCntOrder;
         }
     }
 
@@ -513,6 +516,18 @@ public class CityManager : MonoBehaviour
 
                 int population = Mathf.FloorToInt(percent * td.Population);
 
+                int notafford = td.Population - population;
+                if (notafford > 0)
+                {
+                    td.Population -= notafford;
+                    AdjustPopulation(cityIndex, td.HomeCity, notafford);
+                    if (td.Population <= 0)
+                    {
+                        arriveStation.StationData.StationQueue.RemoveAt(i);
+                        continue;
+                    }
+                }
+
                 if (population > 0)
                 {
                     if (load >= population)
@@ -616,6 +631,11 @@ public class CityManager : MonoBehaviour
                             List<int> routes = new List<int>();
 
                             int population = Mathf.FloorToInt(td.Population * grid.StationData.CityCoverage[cityKey]);
+
+                            // if less than 5 people, we flush all of them or 5 people in side the station
+                            if (population < 5 && td.Population > 0 && grid.StationData.CityCoverage[cityKey] > 0)
+                                population = Mathf.Min(td.Population, 5);
+
                             if (population > 0 && TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3, out routes))
                             {
                                 // check if this can be fulfilled

@@ -15,6 +15,7 @@ public class CityNamesParent : MonoBehaviour
         m_Instance = this;
         TrainDatas = new List<TrainManager.TrainData>();
         TrainObjs = new List<RectTransform>();
+        GetComponent<Canvas>().sortingOrder = GlobalDataTypes.CitynamesOrder;
     }
 
     public void ActivateNames(int index, float sizeMult = 1f)
@@ -45,9 +46,12 @@ public class CityNamesParent : MonoBehaviour
 
     public void HideText(bool value)
     {
-        Text[] texts = GetComponentsInChildren<Text>(true);
-        foreach (Text text in texts)
-            text.enabled = !value;
+        for (int i = 0; i < 2; i++)
+        {
+            Text[] texts = transform.GetChild(i).GetComponentsInChildren<Text>(true);
+            foreach (Text text in texts)
+                text.enabled = !value;
+        }
     }
 
     public GameObject CreateTrainIndex(string text, Vector3 gridPos ,GameObject parent = null)

@@ -51,6 +51,10 @@ public class GlobalDataTypes : MonoBehaviour
     public static float MinTrainPrice = .1f;
     public static float MaxTrainPrice = .5f;
 
+    public const int HighLightTrackOrder = 1, HighLightTrainOrder = 1, TrackOrder = 10,
+        StationOrder = 20, TrainOrder = 30, CitynamesOrder = 40, LocationMarkOrder = 51,
+        PointingArrowsOrder = 52, PeopleCntOrder = 53;
+
     private void Awake()
     {
         SetDifficulty();
@@ -77,7 +81,7 @@ public class GlobalDataTypes : MonoBehaviour
     public void SetDifficulty()
     {
         // needed parameters
-        int totalStation = 500;
+        int totalStation = 800;
         int totalTrain = 1000;
         int totalTrackLength = 14000; // price is per 10 km
         int recoveryTime = 7; // the days it take for a train line to get back its investment

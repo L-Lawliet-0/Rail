@@ -117,6 +117,15 @@ public class GridData : MonoBehaviour
         }
 
         /*
+        int cnt = 0;
+        foreach (GridSave grid in GridDatas)
+        {
+            if (!grid.name.Equals("sea"))
+                cnt++;
+        }
+        Debug.LogError("Area : " + cnt);
+
+        /*
         HashSet<string> gridNames = new HashSet<string>();
         foreach (GridSave gs in GridDatas)
             gridNames.Add(gs.name);

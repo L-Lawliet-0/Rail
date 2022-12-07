@@ -119,6 +119,7 @@ public class RoadManager : MonoBehaviour
             MeshRenderer mr = hex.AddComponent<MeshRenderer>();
             mr.material = GlobalDataTypes.Instance.TestHexMaterial;
             mr.material.SetColor("_BaseColor", Color.blue);
+            mr.sortingOrder = GlobalDataTypes.HighLightTrackOrder;
 
             if (ControlPoints.Contains(g))
                 mr.material.SetColor("_BaseColor", Color.red);
@@ -150,6 +151,7 @@ public class RoadManager : MonoBehaviour
             lr.endWidth = LineSize;
 
             lr.SetPositions(positions);
+            lr.sortingOrder = GlobalDataTypes.TrackOrder;
 
             if (addToList)
                 VisualGrids.Add(line);
