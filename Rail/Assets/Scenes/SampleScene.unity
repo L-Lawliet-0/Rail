@@ -18205,7 +18205,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fedb28a6913e70246a8c45d1d8da5bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TrainPrefab: {fileID: 2806828491876491849, guid: 39948cb9e58e24c388b9f9bcf98c4570, type: 3}
+  TrainPrefab: {fileID: 5311718612199252323, guid: 123498b4b99884a61bea0cddc52c454a, type: 3}
   AllTrains: []
   RepathMode: 0
   TrainCache: 0

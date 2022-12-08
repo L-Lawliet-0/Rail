@@ -162,47 +162,77 @@ public class TrainManager : MonoBehaviour
 
             // update sprite position based on progress
 
-            float length = td.Progress * wholeDistance;
-            int start = Mathf.FloorToInt(length / 10f);
-            float hexOffset = length - (start * 10);
-            if ((start > 0 || hexOffset > 5) && ((start < currentPath.Count - 2) || (start < currentPath.Count - 1 && hexOffset < 5)))
+            float gap = 4.1f;
+            for (int k = 0; k < td.TrainSprite.childCount + 1; k++)
             {
-                Vector3 g0;
-                Vector3 g1;
-                Vector3 g2;
-                float t;
-                if (hexOffset > 5)
-                {
-                    g0 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
-                    g1 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
-                    g2 = GridData.Instance.GridDatas[currentPath[start + 2]].PosV3;
-                    t = (hexOffset - 5f) / 10f;
-                }
-                else
-                {
-                    g0 = GridData.Instance.GridDatas[currentPath[start - 1]].PosV3;
-                    g1 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
-                    g2 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
-                    t = (hexOffset + 5f) / 10f;
-                }
-                Vector3 p0 = g0 + (g1 - g0) / 2;
-                Vector3 p1 = g1;
-                Vector3 p2 = g1 + (g2 - g1) / 2;
+                Transform targetTran = td.TrainSprite;
+                if (k > 0)
+                    targetTran = td.TrainSprite.GetChild(k - 1);
 
-                td.TrainSprite.position = GlobalDataTypes.BezierCurve(p0, p1, p2, t);
-                if (t < .98f)
-                    td.TrainSprite.up = GlobalDataTypes.BezierCurve(p0, p1, p2, t + .01f) - td.TrainSprite.position;
+                //targetTran.parent = null;
+                
+                float length = td.Progress * wholeDistance;
+
+                // difference maker
+                length -= gap * k;
+
+                int start = Mathf.FloorToInt(length / 10f);
+
+                float hexOffset = length - (start * 10);
+
+                if (length > 0 && (start > 0 || hexOffset > 5) && ((start < currentPath.Count - 2) || (start < currentPath.Count - 1 && hexOffset < 5)))
+                {
+                    Vector3 g0;
+                    Vector3 g1;
+                    Vector3 g2;
+                    float t;
+                    if (hexOffset > 5)
+                    {
+                        g0 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
+                        g1 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
+                        g2 = GridData.Instance.GridDatas[currentPath[start + 2]].PosV3;
+                        t = (hexOffset - 5f) / 10f;
+                    }
+                    else
+                    {
+                        g0 = GridData.Instance.GridDatas[currentPath[start - 1]].PosV3;
+                        g1 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
+                        g2 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
+                        t = (hexOffset + 5f) / 10f;
+                    }
+                    Vector3 p0 = g0 + (g1 - g0) / 2;
+                    Vector3 p1 = g1;
+                    Vector3 p2 = g1 + (g2 - g1) / 2;
+
+                    targetTran.position = GlobalDataTypes.BezierCurve(p0, p1, p2, t);
+                    if (t < .98f)
+                        targetTran.up = GlobalDataTypes.BezierCurve(p0, p1, p2, t + .01f) - targetTran.position;
+                    else
+                        targetTran.up = g2 - targetTran.position;
+                }
                 else
-                    td.TrainSprite.up = g2 - td.TrainSprite.position;
+                {
+                    if (length < 0)
+                        start = 0;
+
+                    GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
+                    GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
+                    targetTran.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
+                    if (length < 0)
+                    {
+                        Transform temp = k == 1 ? td.TrainSprite : td.TrainSprite.GetChild(k - 2);
+                        targetTran.position = temp.position + (g0.PosV3 - g1.PosV3).normalized * gap;
+                    }
+
+                    targetTran.up = (g1.PosV3 - g0.PosV3).normalized;
+                }
+
+                //if (k > 0)
+                //{
+                //    targetTran.SetParent(td.TrainSprite);
+                //    targetTran.SetSiblingIndex(k - 1);
+                //}
             }
-            else
-            {
-                GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
-                GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
-                td.TrainSprite.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
-                td.TrainSprite.up = (g1.PosV3 - g0.PosV3).normalized;
-            }
-            
 
         }
 
@@ -393,8 +423,19 @@ public class TrainManager : MonoBehaviour
             td.Progress = 0;
             td.CurrentIndex = 0;
             td.TrainSprite = Instantiate(TrainPrefab).transform;
-            td.TrainSprite.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.TrainOrder;
-            td.TrainSprite.GetComponent<SpriteRenderer>().color = GlobalDataTypes.RarityColors[level];
+
+            SpriteRenderer[] srs = td.TrainSprite.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer sr in srs)
+            {
+                sr.sortingOrder = GlobalDataTypes.TrainOrder;
+                sr.color = GlobalDataTypes.RarityColors[level];
+            }
+
+            for (int i = 0; i < level; i++)
+            {
+                AddBox(td.TrainSprite);
+            }
+
             td.Passengers = new List<TravelData>();
 
             td.Level = level;
@@ -415,6 +456,12 @@ public class TrainManager : MonoBehaviour
         }
 
         CancelTrain();
+    }
+
+    private void AddBox(Transform tran)
+    {
+        GameObject box = Instantiate(tran.GetChild(0).gameObject);
+        box.transform.SetParent(tran);
     }
 
     public int TrainCache;
@@ -454,7 +501,11 @@ public class TrainManager : MonoBehaviour
 
         AllTrains[TrainCache].Level++;
         AllTrains[TrainCache].Capacity = GlobalDataTypes.TrainCapacity[AllTrains[TrainCache].Level];
-        AllTrains[TrainCache].TrainSprite.GetComponent<SpriteRenderer>().color = GlobalDataTypes.RarityColors[AllTrains[TrainCache].Level];
+
+        SpriteRenderer[] srs = AllTrains[TrainCache].TrainSprite.GetComponentsInChildren<SpriteRenderer>();
+        foreach (SpriteRenderer sr in srs)
+            sr.color = GlobalDataTypes.RarityColors[AllTrains[TrainCache].Level];
+        AddBox(AllTrains[TrainCache].TrainSprite);
 
         InputManager.Instance.ExitSelectionMode();
     }
