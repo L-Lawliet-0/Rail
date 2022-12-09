@@ -157,6 +157,7 @@ public class TrainManager : MonoBehaviour
                 CityManager.Instance.TrainArrivedAtStation(td);
                 updateCapacity = true;
 
+                continue;
                 goto TOP;
             }
 
@@ -218,13 +219,16 @@ public class TrainManager : MonoBehaviour
                     GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
                     GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
                     targetTran.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
+                    targetTran.up = (g1.PosV3 - g0.PosV3).normalized;
+
                     if (length < 0)
                     {
                         Transform temp = k == 1 ? td.TrainSprite : td.TrainSprite.GetChild(k - 2);
                         targetTran.position = temp.position + (g0.PosV3 - g1.PosV3).normalized * gap;
+                        targetTran.up = (td.TrainSprite.position - targetTran.position).normalized;
                     }
 
-                    targetTran.up = (g1.PosV3 - g0.PosV3).normalized;
+                    
                 }
 
                 //if (k > 0)
