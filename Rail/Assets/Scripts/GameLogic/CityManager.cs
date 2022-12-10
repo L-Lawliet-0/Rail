@@ -714,6 +714,9 @@ public class CityManager : MonoBehaviour
 
     public void AddStationToCity(int gridIndex)
     {
+        if (!GridToCity.ContainsKey(gridIndex))
+            return;
+
         int city = GridToCity[gridIndex];
 
         if (CityStations.ContainsKey(city))
