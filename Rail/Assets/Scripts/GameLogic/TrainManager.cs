@@ -25,6 +25,7 @@ public class TrainManager : MonoBehaviour
         public Transform TrainSprite;
 
         public List<TravelData> Passengers;
+        public List<TrainPosCache> PosCaches;
 
         public bool StationPause; // the train is in a pause in station
         public float PauseCounter;
@@ -36,6 +37,7 @@ public class TrainManager : MonoBehaviour
         public TrainData()
         {
             TrainName = "G" + TrainNameIndex++;
+            PosCaches = new List<TrainPosCache>();
         }
 
         public int CurrentCapacity()
@@ -45,6 +47,14 @@ public class TrainManager : MonoBehaviour
                 cnt += td.Population;
             return cnt;
         }
+    }
+
+    [System.Serializable]
+    public class TrainPosCache
+    {
+        public float Length;
+        public float posX, posY, posZ;
+        public float angleX, angleY, angleZ;
     }
 
     public GameObject TrainPrefab;
@@ -162,81 +172,113 @@ public class TrainManager : MonoBehaviour
             }
 
             // update sprite position based on progress
-
-            float gap = 4.1f;
-            for (int k = 0; k < td.TrainSprite.childCount + 1; k++)
+            List<Transform> subTrains = new List<Transform>();
+            for (int k = td.TrainSprite.childCount - 1; k >= 0; k--)
             {
-                Transform targetTran = td.TrainSprite;
-                if (k > 0)
-                    targetTran = td.TrainSprite.GetChild(k - 1);
+                subTrains.Add(td.TrainSprite.GetChild(k));
+                td.TrainSprite.GetChild(k).parent = null;
+            }
+            subTrains.Reverse();
 
-                //targetTran.parent = null;
-                
-                float length = td.Progress * wholeDistance;
+            
+            // update train head
+            float length = td.Progress * wholeDistance;
 
-                // difference maker
-                length -= gap * k;
+            int start = Mathf.FloorToInt(length / 10f);
 
-                int start = Mathf.FloorToInt(length / 10f);
+            float hexOffset = length - (start * 10);
 
-                float hexOffset = length - (start * 10);
-
-                if (length > 0 && (start > 0 || hexOffset > 5) && ((start < currentPath.Count - 2) || (start < currentPath.Count - 1 && hexOffset < 5)))
+            if ((start > 0 || hexOffset > 5) && ((start < currentPath.Count - 2) || (start < currentPath.Count - 1 && hexOffset < 5)))
+            {
+                Vector3 g0;
+                Vector3 g1;
+                Vector3 g2;
+                float t;
+                if (hexOffset > 5)
                 {
-                    Vector3 g0;
-                    Vector3 g1;
-                    Vector3 g2;
-                    float t;
-                    if (hexOffset > 5)
-                    {
-                        g0 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
-                        g1 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
-                        g2 = GridData.Instance.GridDatas[currentPath[start + 2]].PosV3;
-                        t = (hexOffset - 5f) / 10f;
-                    }
-                    else
-                    {
-                        g0 = GridData.Instance.GridDatas[currentPath[start - 1]].PosV3;
-                        g1 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
-                        g2 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
-                        t = (hexOffset + 5f) / 10f;
-                    }
-                    Vector3 p0 = g0 + (g1 - g0) / 2;
-                    Vector3 p1 = g1;
-                    Vector3 p2 = g1 + (g2 - g1) / 2;
-
-                    targetTran.position = GlobalDataTypes.BezierCurve(p0, p1, p2, t);
-                    if (t < .98f)
-                        targetTran.up = GlobalDataTypes.BezierCurve(p0, p1, p2, t + .01f) - targetTran.position;
-                    else
-                        targetTran.up = g2 - targetTran.position;
+                    g0 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
+                    g1 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
+                    g2 = GridData.Instance.GridDatas[currentPath[start + 2]].PosV3;
+                    t = (hexOffset - 5f) / 10f;
                 }
                 else
                 {
-                    if (length < 0)
-                        start = 0;
-
-                    GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
-                    GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
-                    targetTran.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
-                    targetTran.up = (g1.PosV3 - g0.PosV3).normalized;
-
-                    if (length < 0)
-                    {
-                        Transform temp = k == 1 ? td.TrainSprite : td.TrainSprite.GetChild(k - 2);
-                        targetTran.position = temp.position + (g0.PosV3 - g1.PosV3).normalized * gap;
-                        targetTran.up = (td.TrainSprite.position - targetTran.position).normalized;
-                    }
-
-                    
+                    g0 = GridData.Instance.GridDatas[currentPath[start - 1]].PosV3;
+                    g1 = GridData.Instance.GridDatas[currentPath[start]].PosV3;
+                    g2 = GridData.Instance.GridDatas[currentPath[start + 1]].PosV3;
+                    t = (hexOffset + 5f) / 10f;
                 }
+                Vector3 p0 = g0 + (g1 - g0) / 2;
+                Vector3 p1 = g1;
+                Vector3 p2 = g1 + (g2 - g1) / 2;
 
-                //if (k > 0)
-                //{
-                //    targetTran.SetParent(td.TrainSprite);
-                //    targetTran.SetSiblingIndex(k - 1);
-                //}
+                td.TrainSprite.position = GlobalDataTypes.BezierCurve(p0, p1, p2, t);
+                if (t < .98f)
+                    td.TrainSprite.up = GlobalDataTypes.BezierCurve(p0, p1, p2, t + .01f) - td.TrainSprite.position;
+                else
+                    td.TrainSprite.up = g2 - td.TrainSprite.position;
             }
+            else
+            {
+                GridData.GridSave g0 = GridData.Instance.GridDatas[currentPath[start]];
+                GridData.GridSave g1 = GridData.Instance.GridDatas[currentPath[start + 1]];
+                td.TrainSprite.position = g0.PosV3 + (g1.PosV3 - g0.PosV3).normalized * hexOffset;
+                td.TrainSprite.up = (g1.PosV3 - g0.PosV3).normalized;
+
+            }
+
+            // update train tails
+            float gap = 4.1f;
+
+            TrainPosCache tpc = new TrainPosCache();
+            if (td.PosCaches.Count <= 0)
+                tpc.Length = travelDistance;
+            else
+                tpc.Length = td.PosCaches[td.PosCaches.Count - 1].Length + travelDistance;
+            tpc.posX = td.TrainSprite.position.x;
+            tpc.posY = td.TrainSprite.position.y;
+            tpc.posZ = td.TrainSprite.position.z;
+            tpc.angleX = td.TrainSprite.eulerAngles.x;
+            tpc.angleY = td.TrainSprite.eulerAngles.y;
+            tpc.angleZ = td.TrainSprite.eulerAngles.z;
+            td.PosCaches.Add(tpc);
+
+            // update position
+            float headLength = tpc.Length;
+            int currentTail = 0;
+
+            for (int i = td.PosCaches.Count - 2; i >= 0; i--)
+            {
+                TrainPosCache temp = td.PosCaches[i];
+                if (Mathf.Abs(headLength - temp.Length) >= gap)
+                {
+                    subTrains[currentTail].position = new Vector3(temp.posX, temp.posY, temp.posZ);
+                    subTrains[currentTail].eulerAngles = new Vector3(temp.angleX, temp.angleY, temp.angleZ);
+
+                    headLength -= gap;
+                    currentTail++;
+                    if (currentTail >= subTrains.Count)
+                        break;
+                }
+            }
+
+            // remove unnecessary things
+            bool remove = false;
+            for (int i = td.PosCaches.Count - 2; i >= 0; i--)
+            {
+                if (remove)
+                    td.PosCaches.RemoveAt(i);
+                else if (Mathf.Abs(tpc.Length - td.PosCaches[i].Length) > gap * 7)
+                {
+                    remove = true;
+                }
+            }
+
+            for (int i = 0; i < subTrains.Count; i ++)
+            {
+                subTrains[i].SetParent(td.TrainSprite);
+                subTrains[i].SetSiblingIndex(i);
+            }    
 
         }
 
