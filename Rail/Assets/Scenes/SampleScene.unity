@@ -18123,7 +18123,7 @@ MonoBehaviour:
       Capacity: 10000
       Level: 0
     Covered: 0
-  StationIcon: {fileID: 21300000, guid: bc3812324cfcec244820814319c5e8d9, type: 3}
+  StationIcon: {fileID: 21300000, guid: 0870748b0063f4b9b8c285cc9fff7968, type: 3}
   CrossIcon: {fileID: 21300000, guid: 6eee62c3562c09342826ee2f6d3e4a94, type: 3}
   CoverageCircle: {fileID: 21300000, guid: 99b5ad30c251848a4bfb9870abea4661, type: 3}
 --- !u!114 &519420036
