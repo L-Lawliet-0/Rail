@@ -14,6 +14,8 @@ public class DynamicInfo : MonoBehaviour
     private Image Icon;
     private Text NameText, Title1, Content1, Title2, Content2;
 
+    public Image CityPic;
+
     private void Awake()
     {
         m_Instance = this;
@@ -78,6 +80,9 @@ public class DynamicInfo : MonoBehaviour
 
         //m_Canvas.alpha = 1;
         GetComponent<Animation>().Play("ShiftRight");
+
+        // picture time
+        CityPic.sprite = Resources.Load<Sprite>("CityPics/青岛市/1");
     }
 
     public void Hide()

@@ -46,7 +46,6 @@ public class CityManager : MonoBehaviour
         }
 
         CityStations = new Dictionary<int, List<int>>();
-
     }
 
     private class GDPsort : IComparer<CityData>
