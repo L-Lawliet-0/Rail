@@ -16,6 +16,8 @@ public class DynamicInfo : MonoBehaviour
 
     public Image CityPic;
 
+    private List<Sprite> CitySprites;
+
     private void Awake()
     {
         m_Instance = this;
@@ -31,6 +33,8 @@ public class DynamicInfo : MonoBehaviour
         Content2 = transform.GetChild(2).GetChild(1).GetComponent<Text>();
 
         Hide();
+
+        CitySprites = new List<Sprite>();
     }
 
     public void Activate(GridData.GridSave grid, int roadIndex = -1, TrainManager.TrainData train = null)
@@ -81,14 +85,69 @@ public class DynamicInfo : MonoBehaviour
         //m_Canvas.alpha = 1;
         GetComponent<Animation>().Play("ShiftRight");
 
-        // picture time
-        CityPic.sprite = Resources.Load<Sprite>("CityPics/青岛市/1");
+        CitySprites.Clear();
+        for (int i = 1; i < 6; i++)
+        {
+            // picture time
+            Sprite og = Resources.Load<Sprite>("CityPics/" + grid.name.Split(",")[1] + "/" + i.ToString());
+            int length = Mathf.Min(og.texture.width, og.texture.height);
+            Texture2D corp = new Texture2D(length, length);
+            corp.SetPixels(og.texture.GetPixels(0, 0, length, length));
+            corp.Apply();
+
+            Sprite final = Sprite.Create(corp, new Rect(0, 0, length, length), Vector2.one * .5f);
+            CitySprites.Add(final);
+        }
+        StartCoroutine("FadePicture");
     }
 
     public void Hide()
     {
         //m_Canvas.alpha = 0;
         GetComponent<Animation>().Play("ShiftLeft");
+        StopAllCoroutines();
+    }
+
+    private IEnumerator FadePicture()
+    {
+        int currentIndex = Random.Range(0, 5);
+        float fadeTime = 2f;
+        float transparency = .2f;
+
+        TOP:
+        CityPic.sprite = CitySprites[currentIndex];
+        CityPic.color = new Color(1, 1, 1, transparency);
+        float counter = fadeTime;
+
+        // show image
+        while (counter > 0)
+        {
+            CityPic.color += Color.black * Time.deltaTime / fadeTime * (1 - transparency);
+            counter -= Time.deltaTime;
+            yield return null;
+        }
+
+        CityPic.color = Color.white;
+        yield return new WaitForSeconds(3); // display time
+
+        // fade away
+        counter = fadeTime;
+        while (counter > 0)
+        {
+            CityPic.color -= Color.black * Time.deltaTime / fadeTime * (1 - transparency);
+            counter -= Time.deltaTime;
+            yield return null;
+        }
+
+        List<int> indexRange = new List<int>();
+        for (int i = 0; i < 5; i++)
+        {
+            if (i != currentIndex)
+                indexRange.Add(i);
+        }
+        currentIndex = indexRange[Random.Range(0, indexRange.Count)];
+
+        goto TOP;
     }
 
 }
