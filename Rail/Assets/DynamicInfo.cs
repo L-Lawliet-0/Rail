@@ -92,7 +92,13 @@ public class DynamicInfo : MonoBehaviour
             Sprite og = Resources.Load<Sprite>("CityPics/" + grid.name.Split(",")[1] + "/" + i.ToString());
             int length = Mathf.Min(og.texture.width, og.texture.height);
             Texture2D corp = new Texture2D(length, length);
-            corp.SetPixels(og.texture.GetPixels(0, 0, length, length));
+            if (og.texture.width > og.texture.height)
+            {
+                int offset = (og.texture.width - og.texture.height) / 2;
+                corp.SetPixels(og.texture.GetPixels(offset, 0, length, length)); // corp the middle part
+            }
+            else
+                corp.SetPixels(og.texture.GetPixels(0, 0, length, length));
             corp.Apply();
 
             Sprite final = Sprite.Create(corp, new Rect(0, 0, length, length), Vector2.one * .5f);
