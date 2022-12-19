@@ -46,6 +46,19 @@ public class CityManager : MonoBehaviour
         }
 
         CityStations = new Dictionary<int, List<int>>();
+
+        //StartCoroutine("RunTest");
+    }
+
+    private IEnumerator RunTest()
+    {
+        foreach (CityData cd in InitialCityData.Sheet1)
+        {
+            DynamicInfo.PicTest(cd.CityName.Split(',')[1]);
+            yield return null;
+        }
+
+        Debug.LogError("Test Finished and Passed!");
     }
 
     private class GDPsort : IComparer<CityData>
@@ -280,6 +293,7 @@ public class CityManager : MonoBehaviour
         TravelPanel.GetComponent<Animation>().Play("ShiftRight");
     }
 
+    private const float hurryWidth = 32;
     public void VisualizeTravelData(List<TravelData> datas)
     {
         // visualize this data set
@@ -305,7 +319,11 @@ public class CityManager : MonoBehaviour
             // name of the city
             rect.GetChild(0).GetComponent<Text>().text = CityDatas[datas[i].TargetCity].CityName.Split(',')[1];
             rect.GetChild(0).gameObject.SetActive(true);
+            rect.GetChild(1).gameObject.SetActive(true);
+            rect.GetChild(2).gameObject.SetActive(true);
+            rect.GetChild(2).GetComponent<Text>().text = datas[i].Population.ToString();
 
+            continue;
             // calculate the population
             float population = datas[i].Population / 100f;
             float decimial = population - Mathf.FloorToInt(population);
@@ -316,7 +334,7 @@ public class CityManager : MonoBehaviour
                 GameObject people = Instantiate(content.GetChild(0).GetChild(1).gameObject);
                 RectTransform rectTran = people.GetComponent<RectTransform>();
                 rectTran.SetParent(rect);
-                rectTran.localPosition = Vector3.right * c * 22 - 53 * Vector3.right;
+                rectTran.localPosition = Vector3.right * c * hurryWidth - 48 * Vector3.right;
                 people.SetActive(true);
             }
 
@@ -325,7 +343,7 @@ public class CityManager : MonoBehaviour
                 GameObject people = Instantiate(content.GetChild(0).GetChild(1).gameObject);
                 RectTransform rectTran = people.GetComponent<RectTransform>();
                 rectTran.SetParent(rect);
-                rectTran.localPosition = Vector3.right * peopleCnt * 22 - 53 * Vector3.right;
+                rectTran.localPosition = Vector3.right * peopleCnt * hurryWidth - 48 * Vector3.right;
                 people.SetActive(true);
                 people.GetComponent<Image>().fillAmount = decimial;
             }
@@ -358,20 +376,24 @@ public class CityManager : MonoBehaviour
         // one person indicate one hundred person
         population /= 100f;
         float decimial = population - Mathf.FloorToInt(population);
+        float width = HumanCntPrefab.GetComponent<SpriteRenderer>().size.x;
+        float height = HumanCntPrefab.GetComponent<SpriteRenderer>().size.y;
+        float widthGap = width;
+        float heightGap = height * 1.5f;
         int peopleCnt = Mathf.FloorToInt(population);
-        Vector3 peopleStartPos = end - Vector3.right * 6 * peopleCnt / 2;
+        Vector3 peopleStartPos = end - Vector3.right * widthGap * peopleCnt / 2;
         for (int c = 0; c < peopleCnt; c++)
         {
             GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
-            obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * c * 6;
+            obj.transform.position = peopleStartPos + Vector3.up * heightGap + Vector3.right * c * widthGap;
             obj.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.PeopleCntOrder;
         }
 
         if (decimial > 0)
         {
             GameObject obj = Instantiate(HumanCntPrefab, TravelNeedsParent);
-            obj.transform.position = peopleStartPos + Vector3.up * 20 + Vector3.right * 6 * peopleCnt;
-            obj.GetComponent<SpriteRenderer>().size = new Vector2(4.44f * decimial, 12);
+            obj.transform.position = peopleStartPos + Vector3.up * heightGap + Vector3.right * widthGap * peopleCnt;
+            obj.GetComponent<SpriteRenderer>().size = new Vector2(width * decimial, height);
             obj.GetComponent<SpriteRenderer>().sortingOrder = GlobalDataTypes.PeopleCntOrder;
         }
     }

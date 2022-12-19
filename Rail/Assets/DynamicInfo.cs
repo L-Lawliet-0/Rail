@@ -7,12 +7,12 @@ public class DynamicInfo : MonoBehaviour
 {
     private static DynamicInfo m_Instance;
     public static DynamicInfo Instance { get { return m_Instance; } }
-    public Sprite CitySprite, TrainSprite, StationSprite, TrackSprite;
+    public Sprite CitySprite, TrainSprite, StationSprite, TrackSprite, SpeedIcon, TrackLengthIcon, TrainCapacityIcon, MaxCapIcon, CurrentCapIcon, PopulationIcon, GDPicon;
 
     private CanvasGroup m_Canvas;
 
-    private Image Icon;
-    private Text NameText, Title1, Content1, Title2, Content2;
+    private Image Icon, Icon1, Icon2;
+    private Text NameText, Content1, Content2;
 
     public Image CityPic;
 
@@ -26,10 +26,10 @@ public class DynamicInfo : MonoBehaviour
         Icon = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         NameText = transform.GetChild(0).GetChild(1).GetComponent<Text>();
 
-        Title1 = transform.GetChild(1).GetChild(0).GetComponent<Text>();
+        Icon1 = transform.GetChild(1).GetChild(0).GetComponent<Image>();
         Content1 = transform.GetChild(1).GetChild(1).GetComponent<Text>();
 
-        Title2 = transform.GetChild(2).GetChild(0).GetComponent<Text>();
+        Icon2 = transform.GetChild(2).GetChild(0).GetComponent<Image>();
         Content2 = transform.GetChild(2).GetChild(1).GetComponent<Text>();
 
         Hide();
@@ -47,18 +47,18 @@ public class DynamicInfo : MonoBehaviour
         if (roadIndex != -1)
         {
             Icon.sprite = TrackSprite;
-            Title1.text = "Speed : ";
-            Content1.text = GlobalDataTypes.Speeds[RoadManager.Instance.RoadLevels[roadIndex]].ToString();
-            Title2.text = "Length : ";
+            Icon1.sprite = SpeedIcon;
+            Content1.text = GlobalDataTypes.Speeds[RoadManager.Instance.RoadLevels[roadIndex]].ToString() + "km/h";
+            Icon2.sprite = TrackLengthIcon;
             Content2.text = (RoadManager.Instance.AllRoads[roadIndex].Count - 1) * 10 + " km";
         }
         else if (train != null)
         {
             NameText.text = train.TrainName;
             Icon.sprite = TrainSprite;
-            Title1.text = "Speed : ";
-            Content1.text = GlobalDataTypes.Speeds[train.Level].ToString();
-            Title2.text = "Capacity : ";
+            Icon1.sprite = SpeedIcon;
+            Content1.text = GlobalDataTypes.Speeds[train.Level].ToString() + "km/h";
+            Icon2.sprite = TrainCapacityIcon;
             Content2.text = train.CurrentCapacity() + " / " + train.Capacity;
         }
         else
@@ -66,24 +66,29 @@ public class DynamicInfo : MonoBehaviour
             if (grid.StationData != null)
             {
                 Icon.sprite = StationSprite;
-                Title1.text = "Max Capacity : ";
-                Content1.text = grid.StationData.Capacity.ToString();
-                Title2.text = "Current Capacity : ";
-                Content2.text = grid.StationData.CurrentCount().ToString();
+                Icon1.sprite = MaxCapIcon;
+                Content1.text = grid.StationData.Capacity.ToString() + "(Max)";
+                Icon2.sprite = CurrentCapIcon;
+                Content2.text = grid.StationData.CurrentCount().ToString() + "(Current)";
             }
             else
             {
                 Icon.sprite = CitySprite;
                 CityData city = CityManager.Instance.CityDatas[CityManager.Instance.GridToCity[grid.Index]];
-                Title1.text = "GDP per capita : ";
-                Content1.text = (city.GDP * 10000).ToString();
-                Title2.text = "Population : ";
-                Content2.text = city.ResidentPopulation.ToString();
+                Icon1.sprite = GDPicon;
+                Content1.text = (city.GDP * 10000).ToString() + " rmb/person";
+                Icon2.sprite = PopulationIcon;
+                Content2.text = city.ResidentPopulation.ToString() + " residents";
             }
         }
 
         //m_Canvas.alpha = 1;
         GetComponent<Animation>().Play("ShiftRight");
+
+        Resources.UnloadUnusedAssets();
+
+        for (int i = CitySprites.Count - 1; i >= 0; i--)
+            Destroy(CitySprites[i]);
 
         CitySprites.Clear();
         for (int i = 1; i < 6; i++)
@@ -105,6 +110,18 @@ public class DynamicInfo : MonoBehaviour
             CitySprites.Add(final);
         }
         StartCoroutine("FadePicture");
+    }
+
+    public static void PicTest(string city)
+    {
+        Resources.UnloadUnusedAssets();
+        for (int i = 1; i < 6; i++)
+        {
+            Sprite og = Resources.Load<Sprite>("CityPics/" + city + "/" + i.ToString());
+            if (og == null || og.texture == null)
+                Debug.LogError("Error : " + city);
+            og.texture.GetPixels(0, 0, og.texture.width, og.texture.height);
+        }
     }
 
     public void Hide()

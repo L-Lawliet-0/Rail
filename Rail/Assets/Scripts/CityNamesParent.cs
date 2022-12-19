@@ -112,14 +112,14 @@ public class CityNamesParent : MonoBehaviour
                 float decimial = population - Mathf.FloorToInt(population);
                 int peopleCnt = Mathf.FloorToInt(population);
 
-                Vector3 startPos = Vector3.left * 2.3f * peopleCnt / 2f;
+                Vector3 startPos = Vector3.left * 5f * peopleCnt / 2f;
 
                 for (int c = 0; c < peopleCnt; c++)
                 {
                     GameObject people = Instantiate(TrainObjs[i].GetChild(0).gameObject);
                     RectTransform rectTran = people.GetComponent<RectTransform>();
                     rectTran.SetParent(TrainObjs[i]);
-                    rectTran.localPosition = startPos + Vector3.right * 2.3f * c;
+                    rectTran.localPosition = startPos + Vector3.right * 5f * c;
                     people.SetActive(true);
                 }
 
@@ -128,7 +128,7 @@ public class CityNamesParent : MonoBehaviour
                     GameObject people = Instantiate(TrainObjs[i].GetChild(0).gameObject);
                     RectTransform rectTran = people.GetComponent<RectTransform>();
                     rectTran.SetParent(TrainObjs[i]);
-                    rectTran.localPosition = startPos + Vector3.right * peopleCnt * 2.3f;
+                    rectTran.localPosition = startPos + Vector3.right * peopleCnt * 5f;
                     people.SetActive(true);
                     people.GetComponent<Image>().fillAmount = decimial;
                 };
