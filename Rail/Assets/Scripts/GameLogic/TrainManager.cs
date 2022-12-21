@@ -22,6 +22,7 @@ public class TrainManager : MonoBehaviour
         public bool Selected;
         public float TrainPrice; // per km
 
+        [System.NonSerialized]
         public Transform TrainSprite;
 
         public List<TravelData> Passengers;
@@ -709,6 +710,39 @@ public class TrainManager : MonoBehaviour
         {
             AllTrains[TrainCache].TrainPrice = value;
             HudManager.Instance.PriceAdjustor.GetChild(0).GetComponent<UnityEngine.UI.Text>().text = value + " per km";
+        }
+    }
+
+    public void Clear()
+    {
+        for (int i = 0; i < AllTrains.Count; i++)
+        {
+            Destroy(AllTrains[i].TrainSprite.gameObject);
+        }
+        AllTrains.Clear();
+        CityNamesParent.Instance.ClearTrainCounter();
+    }
+
+    public void Reconstruct()
+    {
+        for (int i = 0; i < AllTrains.Count; i++)
+        {
+            TrainData td = AllTrains[i];
+            td.TrainSprite = Instantiate(TrainPrefab).transform;
+
+            SpriteRenderer[] srs = td.TrainSprite.GetComponentsInChildren<SpriteRenderer>();
+            foreach (SpriteRenderer sr in srs)
+            {
+                sr.sortingOrder = GlobalDataTypes.TrainOrder;
+                sr.color = GlobalDataTypes.RarityColors[td.Level];
+            }
+
+            for (int k = 0; k < td.Level; k++)
+            {
+                AddBox(td.TrainSprite);
+            }
+
+            CityNamesParent.Instance.CreateTrainCounter(td);
         }
     }
 }

@@ -365,4 +365,35 @@ public class GameMain : MonoBehaviour
         TrainManager.Instance.RepathMode = true;
         InputManager.Instance.EnterTrainMode(HighLightGrid);
     }
+
+    public void ReconstructStationAndCross()
+    {
+        for (int i = 0; i < GridData.Instance.GridDatas.Count; i++)
+        {
+            GridData.GridSave grid = GridData.Instance.GridDatas[i];
+
+            if (grid.StationData != null)
+            {
+                GameObject obj = new GameObject();
+                obj.transform.position = grid.PosV3;
+                SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
+                sr.sprite = StationIcon;
+                sr.sortingOrder = GlobalDataTypes.StationOrder;
+
+                IconManager.Instance.AddOrUpdateIcon(grid.Index, obj);
+                IconManager.Instance.ChangeIconColor(grid.Index, GlobalDataTypes.RarityColors[grid.StationData.Level]);
+                CityManager.Instance.AddStationToCity(grid.Index);
+            }
+            else if (grid.CrossData != null)
+            {
+                GameObject obj = new GameObject();
+                obj.transform.position = grid.PosV3;
+                SpriteRenderer sr = obj.AddComponent<SpriteRenderer>();
+                sr.sprite = CrossIcon;
+                sr.sortingOrder = GlobalDataTypes.StationOrder;
+
+                IconManager.Instance.AddOrUpdateIcon(grid.Index, obj);
+            }
+        }
+    }
 }

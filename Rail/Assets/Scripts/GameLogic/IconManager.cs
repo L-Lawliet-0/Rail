@@ -45,4 +45,14 @@ public class IconManager : MonoBehaviour
             pair.Value.transform.localScale = Vector3.one * 1 + Vector3.one * 15f * mult;
         }
     }
+
+    public void ClearAllIcon()
+    {
+        foreach (KeyValuePair<int, GameObject> pair in StationIcons)
+        {
+            Destroy(pair.Value);
+        }
+
+        StationIcons.Clear();
+    }
 }

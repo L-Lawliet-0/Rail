@@ -97,6 +97,14 @@ public class CityNamesParent : MonoBehaviour
         TrainObjs.Add(rect);
     }
 
+    public void ClearTrainCounter()
+    {
+        for (int i = 0; i < TrainObjs.Count; i++)
+            Destroy(TrainObjs[i].gameObject);
+        TrainObjs.Clear();
+        TrainDatas.Clear();
+    }
+
     public void UpdateTrainObjects(bool UpdateCapacity = false)
     {
         for (int i = 0; i < TrainObjs.Count; i++)

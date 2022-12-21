@@ -118,7 +118,7 @@ public class CityManager : MonoBehaviour
     // calculate and log travel need info
     // 
     //
-    private List<List<TravelData>> TravelNeeds;
+    public List<List<TravelData>> TravelNeeds;
     public void CalculateTravelNeed()
     {
         TravelNeeds = new List<List<TravelData>>();
@@ -748,5 +748,12 @@ public class CityManager : MonoBehaviour
             list.Add(gridIndex);
             CityStations.Add(city, list);
         }
+    }
+
+    public void ClearCityData()
+    {
+        CityStations.Clear();
+        CityDatas.Clear();
+        TravelNeeds.Clear();
     }
 }

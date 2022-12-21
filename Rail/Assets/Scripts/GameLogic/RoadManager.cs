@@ -509,4 +509,58 @@ public class RoadManager : MonoBehaviour
             hex.transform.parent = CacheHighLight;
         }
     }
+
+    public void Clear()
+    {
+        for (int i = 0; i < AllVisuals.Count; i++)
+        {
+            Destroy(AllVisuals[i]);
+        }
+        AllVisuals.Clear();
+        AllRoads.Clear();
+        RoadLevels.Clear();
+    }
+
+    public void Reconstruct()
+    {
+        for (int i = 0; i < AllRoads.Count; i++)
+        {
+            List<int> roads = AllRoads[i];
+            GameObject visualParent = new GameObject();
+            visualParent.transform.position = Vector3.zero;
+            for (int k = 1; k < roads.Count - 1; k++)
+            {
+                GridData.GridSave g = GridData.Instance.GridDatas[roads[k]];
+
+                GameObject line = Instantiate(RoadLine);
+                line.transform.position = g.PosV3;
+                Vector3 g0 = GridData.Instance.GridDatas[roads[k - 1]].PosV3;
+                Vector3 g1 = g.PosV3;
+                Vector3 g2 = GridData.Instance.GridDatas[roads[k + 1]].PosV3;
+
+                Vector3 p0 = g0 + (g1 - g0) / 2;
+                Vector3 p1 = g1;
+                Vector3 p2 = g1 + (g2 - g1) / 2;
+
+                LineRenderer lr = line.GetComponent<LineRenderer>();
+                lr.positionCount = 11;
+                float offset = 1f / (lr.positionCount - 1);
+                Vector3[] positions = new Vector3[lr.positionCount];
+                for (int j = 0; j < lr.positionCount; j++)
+                {
+                    positions[j] = GlobalDataTypes.BezierCurve(p0, p1, p2, offset * j);
+                }
+
+                lr.startWidth = LineSize;
+                lr.endWidth = LineSize;
+
+                lr.SetPositions(positions);
+                lr.sortingOrder = GlobalDataTypes.TrackOrder;
+
+                line.transform.SetParent(visualParent.transform);
+            }
+            AllVisuals.Add(visualParent);
+            SetRoadColor(i, GlobalDataTypes.TrackRarityColors[RoadLevels[i]]);
+        }
+    }
 }
