@@ -71,6 +71,35 @@ public class SaveControl : MonoBehaviour
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(file, CityManager.Instance.TravelNeeds);
         }
+
+        // time parameter
+        string timePath = path + "Time";
+        using (Stream file = File.Open(timePath, FileMode.OpenOrCreate))
+        {
+            TimeProperties tp = new TimeProperties();
+            tp.DayCounter = TimeManager.Instance.DayCounter;
+            tp.HourCounter = TimeManager.Instance.HourCounter;
+            tp.MonthCount = TimeManager.Instance.MonthCount;
+            tp.DayCount = TimeManager.Instance.DayCount;
+            tp.HourCount = TimeManager.Instance.HourCount;
+            tp.MonthlyGoal = TimeManager.Instance.MonthlyGoal;
+            tp.GoalTrack = TimeManager.Instance.GoalTrack;
+            tp.LastDayTrafficCount = TimeManager.Instance.LastDayTrafficCount;
+            tp.LastDayIncomeCount = TimeManager.Instance.LastDayIncomeCount;
+            tp.MoneyCount = EconManager.Instance.MoneyCount;
+            BinaryFormatter bf = new BinaryFormatter();
+            bf.Serialize(file, tp);
+        }
+    }
+
+    [System.Serializable]
+    public class TimeProperties
+    {
+        public float DayCounter, HourCounter;
+        public int MonthCount, DayCount, HourCount;
+        public int MonthlyGoal, GoalTrack;
+        public int LastDayTrafficCount, LastDayIncomeCount;
+        public int MoneyCount;
     }
 
     public void Load()
@@ -159,6 +188,26 @@ public class SaveControl : MonoBehaviour
         TrainManager.Instance.AllTrains = AllTrains;
         TrainManager.Instance.GridConnectedRoads = GridConnectedRoads;
         TrainManager.Instance.Reconstruct();
+
+        // load time and etc stuff
+        string timePath = path + "Time";
+        using (Stream file = File.Open(timePath, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            TimeProperties tp = new TimeProperties();
+            tp = bf.Deserialize(file) as TimeProperties;
+
+            TimeManager.Instance.DayCounter = tp.DayCounter;
+            TimeManager.Instance.HourCounter = tp.HourCounter;
+            TimeManager.Instance.MonthCount = tp.MonthCount;
+            TimeManager.Instance.DayCount = tp.DayCount;
+            TimeManager.Instance.HourCount = tp.HourCount;
+            TimeManager.Instance.MonthlyGoal = tp.MonthlyGoal;
+            TimeManager.Instance.GoalTrack = tp.GoalTrack;
+            TimeManager.Instance.LastDayTrafficCount = tp.LastDayTrafficCount;
+            TimeManager.Instance.LastDayIncomeCount = tp.LastDayIncomeCount;
+            EconManager.Instance.MoneyCount = tp.MoneyCount;
+        }
     }
 
     private void Update()
