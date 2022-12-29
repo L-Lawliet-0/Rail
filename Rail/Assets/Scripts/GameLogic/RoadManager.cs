@@ -558,6 +558,19 @@ public class RoadManager : MonoBehaviour
                 lr.sortingOrder = GlobalDataTypes.TrackOrder;
 
                 line.transform.SetParent(visualParent.transform);
+
+                lr.useWorldSpace = false;
+                MeshCollider mc = lr.gameObject.AddComponent<MeshCollider>();
+                Mesh mesh = new Mesh();
+                lr.BakeMesh(mesh, Camera.main, false);
+                Vector3[] vertices = mesh.vertices;
+                for (int v = 0; v < vertices.Length; v++)
+                    vertices[v] -= lr.transform.position;
+                mesh.vertices = vertices;
+                mc.sharedMesh = mesh;
+                lr.useWorldSpace = true;
+
+                lr.gameObject.layer = LayerMask.NameToLayer("Road");
             }
             AllVisuals.Add(visualParent);
             SetRoadColor(i, GlobalDataTypes.TrackRarityColors[RoadLevels[i]]);

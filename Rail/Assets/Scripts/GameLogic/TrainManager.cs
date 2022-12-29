@@ -84,7 +84,7 @@ public class TrainManager : MonoBehaviour
         ConstructConnections();
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         bool updateCapacity = false;
         foreach (TrainData td in AllTrains)
@@ -94,7 +94,7 @@ public class TrainManager : MonoBehaviour
 
             if (td.StationPause)
             {
-                td.PauseCounter -= Time.deltaTime;
+                td.PauseCounter -= Time.fixedDeltaTime;
                 if (td.PauseCounter <= 0)
                     td.StationPause = false;
 
@@ -130,7 +130,7 @@ public class TrainManager : MonoBehaviour
 
             float speed = Mathf.Min(roadSpeed, trainSpeed) / 3600f;
 
-            float travelDistance = speed * Time.deltaTime * TimeManager.RealTimeToGameTime * .5f; // the distance this train travel in last frame, divided by two because night yield less traffic
+            float travelDistance = speed * Time.fixedDeltaTime * TimeManager.RealTimeToGameTime * .5f; // the distance this train travel in last frame, divided by two because night yield less traffic
 
             float wholeDistance = 10f * (currentPath.Count - 1);
 
@@ -229,7 +229,7 @@ public class TrainManager : MonoBehaviour
             }
 
             // update train tails
-            float gap = 4.1f;
+            float gap = 5.1f;
 
             TrainPosCache tpc = new TrainPosCache();
             if (td.PosCaches.Count <= 0)

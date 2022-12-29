@@ -109,7 +109,7 @@ public class GridData : MonoBehaviour
 
     public void LoadData()
     {
-        string dataPath = Application.dataPath + "/GridDatas";
+        string dataPath = Application.streamingAssetsPath + "/GridDatas";
         using (Stream file = File.Open(dataPath, FileMode.Open))
         {
             BinaryFormatter bf = new BinaryFormatter();
