@@ -354,7 +354,8 @@ public class CityManager : MonoBehaviour
     public void Clear()
     {
         //TravelPanel.gameObject.SetActive(false);
-        TravelPanel.GetComponent<Animation>().Play("ShiftLeft");
+        if (TravelPanel.GetComponent<RectTransform>().anchoredPosition.x > -128)
+            TravelPanel.GetComponent<Animation>().Play("ShiftLeft");
         for (int i = TravelNeedsParent.childCount - 1; i >= 0; i--)
             Destroy(TravelNeedsParent.GetChild(i).gameObject);
     }

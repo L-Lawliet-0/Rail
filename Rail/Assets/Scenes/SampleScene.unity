@@ -18350,6 +18350,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   TrainPrefab: {fileID: 5311718612199252323, guid: 123498b4b99884a61bea0cddc52c454a, type: 3}
   AllTrains: []
+  CurrentPath: []
   RepathMode: 0
   TrainCache: 0
 --- !u!114 &519420040
@@ -22481,6 +22482,7 @@ GameObject:
   - component: {fileID: 619394804}
   - component: {fileID: 619394805}
   - component: {fileID: 619394806}
+  - component: {fileID: 619394807}
   m_Layer: 0
   m_Name: Global Light 2D
   m_TagString: Untagged
@@ -22657,6 +22659,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 16e66cea3aa8fd846b81d7693a0269c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &619394807
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 619394800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c6ce356a6bd984ad987701bcb1700f9c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &621995823

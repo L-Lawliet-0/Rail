@@ -111,9 +111,10 @@ public class GameMain : MonoBehaviour
         }
     }
 
+    // test edited!!!!!
     public void TryBuildStation(int level)
     {
-        if (HighLightHex)
+        if (HighLightGrid != null || HighLightHex)
         {
             if (HighLightGrid.StationData != null || HighLightGrid.CrossData != null)
             {

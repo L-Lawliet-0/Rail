@@ -64,7 +64,7 @@ public class TrainManager : MonoBehaviour
     private static TrainManager m_Instance;
     public static TrainManager Instance { get { return m_Instance; } }
 
-    private List<GridData.GridSave> CurrentPath;
+    public List<GridData.GridSave> CurrentPath;
     private HashSet<GridData.GridSave> CurrentChoices; // the connected possible grids
 
     public Dictionary<int, List<int>> GridConnectedRoads;

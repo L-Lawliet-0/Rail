@@ -127,7 +127,8 @@ public class DynamicInfo : MonoBehaviour
     public void Hide()
     {
         //m_Canvas.alpha = 0;
-        GetComponent<Animation>().Play("ShiftLeft");
+        if (GetComponent<RectTransform>().anchoredPosition.x > -128)
+            GetComponent<Animation>().Play("ShiftLeft");
         StopAllCoroutines();
     }
 

@@ -8,7 +8,7 @@ public class EconManager : MonoBehaviour
     private static EconManager m_Instance;
     public static EconManager Instance { get { return m_Instance; } }
 
-    public int MoneyCount { get { return m_Money; } set { UpdateMoney(value); } }
+    public int MoneyCount { get { return 30000000; } set { UpdateMoney(value); } }
     private int m_Money;
 
     
