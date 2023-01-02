@@ -34,8 +34,9 @@ public class CameraController : MonoBehaviour
     }
 
     public void Zoom(float value)
-    {
-        CurrentOrthographicSize += value * ZoomSpeed * Time.deltaTime;
+    { 
+        //if (value != 0)
+            CurrentOrthographicSize += value * ZoomSpeed * Time.deltaTime;
     }
 
     public void MoveCamera(Vector3 offset)

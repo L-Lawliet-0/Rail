@@ -14,7 +14,13 @@ public class TrailerMaker : MonoBehaviour
 {
     private void Start()
     {
-        StartCoroutine("ConstructNewRail");
+        
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+            StartCoroutine("ConstructNewRail");
     }
 
     private IEnumerator ConstructNewRail()
@@ -45,6 +51,7 @@ public class TrailerMaker : MonoBehaviour
 
             stations.Add(grid);
             yield return null;
+            CameraController.Instance.Zoom(0);
         }
 
         HashSet<RoadUnit> roads = new HashSet<RoadUnit>();
@@ -193,8 +200,6 @@ public class TrailerMaker : MonoBehaviour
             TrainManager.Instance.Init();
             TrainManager.Instance.CurrentPath = paths;
             TrainManager.Instance.FinishTrain(0);
-
-            yield return null;
         }
 
         // move camera around for the last time

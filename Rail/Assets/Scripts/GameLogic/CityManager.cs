@@ -169,6 +169,27 @@ public class CityManager : MonoBehaviour
         // visitor needs
         for (int i = 0; i < CityDatas.Count; i++)
         {
+            TravelNeeds[i].Sort(new Tsorter());
+            float tp = 0;
+            for (int j = TravelNeeds[i].Count - 1; j >= 10; j--)
+            {
+                tp += TravelNeeds[i][j].Population;
+                TravelNeeds[i].RemoveAt(j);
+            }
+
+            float cm = 0;
+            for (int j = 0; j < TravelNeeds[i].Count; j++)
+            {
+                cm += TravelNeeds[i][j].Mult;
+                tp += TravelNeeds[i][j].Population;
+            }
+
+
+            for (int j = 0; j < TravelNeeds[i].Count; j++)
+            {
+                TravelNeeds[i][j].Population = Mathf.FloorToInt(tp * TravelNeeds[i][j].Mult / cm);
+            }
+
             List<int> keys = new List<int>(CityDatas[i].VisitorPopulation.Keys);
             foreach (int key in keys)
             {

@@ -77,6 +77,7 @@ public class TrainManager : MonoBehaviour
         AllTrains = new List<TrainData>();
         RoadIndexs = new Dictionary<GridData.GridSave, GameObject>();
         TrainCache = -1;
+        StationTrains = new Dictionary<int, List<int>>();
     }
 
     private void Start()
@@ -172,15 +173,17 @@ public class TrainManager : MonoBehaviour
                 goto TOP;
             }
 
+            
             // update sprite position based on progress
             List<Transform> subTrains = new List<Transform>();
+            
             for (int k = td.TrainSprite.childCount - 1; k >= 0; k--)
             {
                 subTrains.Add(td.TrainSprite.GetChild(k));
                 td.TrainSprite.GetChild(k).parent = null;
             }
             subTrains.Reverse();
-
+            
             
             // update train head
             float length = td.Progress * wholeDistance;
@@ -248,6 +251,7 @@ public class TrainManager : MonoBehaviour
             float headLength = tpc.Length;
             int currentTail = 0;
 
+            
             for (int i = td.PosCaches.Count - 2; i >= 0; i--)
             {
                 TrainPosCache temp = td.PosCaches[i];
@@ -262,7 +266,7 @@ public class TrainManager : MonoBehaviour
                         break;
                 }
             }
-
+            
             // remove unnecessary things
             bool remove = false;
             for (int i = td.PosCaches.Count - 2; i >= 0; i--)
@@ -493,6 +497,8 @@ public class TrainManager : MonoBehaviour
             AllTrains.Add(td);
 
             CityNamesParent.Instance.CreateTrainCounter(td);
+
+            AddNewTrains(td, AllTrains.Count - 1);
         }
         else
         {
@@ -557,22 +563,31 @@ public class TrainManager : MonoBehaviour
         InputManager.Instance.ExitSelectionMode();
     }
 
+    public Dictionary<int, List<int>> StationTrains;
+    public void AddNewTrains(TrainData train, int trainIndex)
+    {
+        foreach (int index in train.Paths)
+        {
+            if (GridData.Instance.GridDatas[index].StationData != null)
+            {
+                if (!StationTrains.ContainsKey(index))
+                    StationTrains.Add(index, new List<int>());
+
+                StationTrains[index].Add(trainIndex);
+            }
+        }
+    }
+
     public bool FindRoute(int startGrid, int targetGrid, List<int> routes)
     {
-        if (routes.Count > 3)
+        if (routes.Count > 2)
             return false; // dont over search
 
         List<TrainData> trains = new List<TrainData>();
-        foreach (TrainData td in AllTrains)
+        if (StationTrains.ContainsKey(targetGrid))
         {
-            foreach (int index in td.Paths)
-            {
-                if (index == targetGrid && GridData.Instance.GridDatas[index].StationData != null)
-                {
-                    trains.Add(td);
-                    break;
-                }
-            }
+            foreach (int index in StationTrains[targetGrid])
+                trains.Add(AllTrains[index]);
         }
 
         if (trains.Count == 0)
@@ -603,8 +618,11 @@ public class TrainManager : MonoBehaviour
 
     public bool TrainPassByCheck(int currentGrid, int targetGrid, int timeInterval)
     {
-        foreach (TrainData td in AllTrains)
+        if (!StationTrains.ContainsKey(currentGrid))
+            return false;
+        foreach (int Tindex in StationTrains[currentGrid])
         {
+            TrainData td = AllTrains[Tindex];
             bool containCity = false;
             foreach (int index in td.Paths)
             {
@@ -617,7 +635,7 @@ public class TrainManager : MonoBehaviour
 
             if (td.Paths.Contains(currentGrid) && containCity)
             {
-
+                return true;
 
                 // check if this train can be arrived within time interval
                 float timeUsed = 0;
@@ -700,6 +718,8 @@ public class TrainManager : MonoBehaviour
 
         if (routes.Count == 0)
             return false;
+
+        return true;
 
         return TrainPassByCheck(currentGrid, targetCity, timeInterval);
     }
