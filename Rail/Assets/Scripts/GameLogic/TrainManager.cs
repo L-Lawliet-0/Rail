@@ -24,6 +24,8 @@ public class TrainManager : MonoBehaviour
 
         [System.NonSerialized]
         public Transform TrainSprite;
+        [System.NonSerialized]
+        public List<Transform> otherTransforms;
 
         public List<TravelData> Passengers;
         public List<TrainPosCache> PosCaches;
@@ -88,8 +90,10 @@ public class TrainManager : MonoBehaviour
     private void FixedUpdate()
     {
         bool updateCapacity = false;
-        foreach (TrainData td in AllTrains)
+        bool[] updateTrains = new bool[AllTrains.Count];
+        for (int q = 0; q < AllTrains.Count; q++)
         {
+            TrainData td = AllTrains[q];
             if (td.Selected)
                 continue;
 
@@ -168,21 +172,27 @@ public class TrainManager : MonoBehaviour
                 // drop and pick up passengers
                 CityManager.Instance.TrainArrivedAtStation(td);
                 updateCapacity = true;
+                updateTrains[q] = true;
 
                 continue;
                 goto TOP;
             }
 
-            
+
             // update sprite position based on progress
-            List<Transform> subTrains = new List<Transform>();
-            
-            for (int k = td.TrainSprite.childCount - 1; k >= 0; k--)
+
+            if (td.TrainSprite.childCount > 0)
             {
-                subTrains.Add(td.TrainSprite.GetChild(k));
-                td.TrainSprite.GetChild(k).parent = null;
+                List<Transform> subTrains = new List<Transform>();
+
+                for (int k = td.TrainSprite.childCount - 1; k >= 0; k--)
+                {
+                    subTrains.Add(td.TrainSprite.GetChild(k));
+                    td.TrainSprite.GetChild(k).parent = null;
+                }
+                subTrains.Reverse();
+                td.otherTransforms = subTrains;
             }
-            subTrains.Reverse();
             
             
             // update train head
@@ -257,12 +267,12 @@ public class TrainManager : MonoBehaviour
                 TrainPosCache temp = td.PosCaches[i];
                 if (Mathf.Abs(headLength - temp.Length) >= gap)
                 {
-                    subTrains[currentTail].position = new Vector3(temp.posX, temp.posY, temp.posZ);
-                    subTrains[currentTail].eulerAngles = new Vector3(temp.angleX, temp.angleY, temp.angleZ);
+                    td.otherTransforms[currentTail].position = new Vector3(temp.posX, temp.posY, temp.posZ);
+                    td.otherTransforms[currentTail].eulerAngles = new Vector3(temp.angleX, temp.angleY, temp.angleZ);
 
                     headLength -= gap;
                     currentTail++;
-                    if (currentTail >= subTrains.Count)
+                    if (currentTail >= td.otherTransforms.Count)
                         break;
                 }
             }
@@ -279,15 +289,9 @@ public class TrainManager : MonoBehaviour
                 }
             }
 
-            for (int i = 0; i < subTrains.Count; i ++)
-            {
-                subTrains[i].SetParent(td.TrainSprite);
-                subTrains[i].SetSiblingIndex(i);
-            }    
-
         }
 
-        CityNamesParent.Instance.UpdateTrainObjects(updateCapacity);
+        CityNamesParent.Instance.UpdateTrainObjects(updateTrains);
     }
 
     // initalize gridconnectedroads based on existing roads
@@ -484,7 +488,7 @@ public class TrainManager : MonoBehaviour
 
             for (int i = 0; i < level; i++)
             {
-                AddBox(td.TrainSprite);
+                AddBox(td);
             }
 
             td.Passengers = new List<TravelData>();
@@ -511,10 +515,18 @@ public class TrainManager : MonoBehaviour
         CancelTrain();
     }
 
-    private void AddBox(Transform tran)
+    private void AddBox(TrainData train)
     {
-        GameObject box = Instantiate(tran.GetChild(0).gameObject);
-        box.transform.SetParent(tran);
+        if (train.TrainSprite.childCount > 0)
+        {
+            GameObject box = Instantiate(train.TrainSprite.GetChild(0).gameObject);
+            box.transform.SetParent(train.TrainSprite);
+        }
+        else
+        {
+            GameObject box = Instantiate(train.otherTransforms[0].gameObject);
+            train.otherTransforms.Add(box.transform);
+        }
     }
 
     public int TrainCache;
@@ -558,7 +570,7 @@ public class TrainManager : MonoBehaviour
         SpriteRenderer[] srs = AllTrains[TrainCache].TrainSprite.GetComponentsInChildren<SpriteRenderer>();
         foreach (SpriteRenderer sr in srs)
             sr.color = GlobalDataTypes.RarityColors[AllTrains[TrainCache].Level];
-        AddBox(AllTrains[TrainCache].TrainSprite);
+        AddBox(AllTrains[TrainCache]);
 
         InputManager.Instance.ExitSelectionMode();
     }
@@ -759,7 +771,7 @@ public class TrainManager : MonoBehaviour
 
             for (int k = 0; k < td.Level; k++)
             {
-                AddBox(td.TrainSprite);
+                AddBox(td);
             }
 
             CityNamesParent.Instance.CreateTrainCounter(td);

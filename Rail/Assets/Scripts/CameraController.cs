@@ -76,6 +76,7 @@ public class CameraController : MonoBehaviour
         maxY = CameraCenterPos.y + MapHeight / 2 - value;
         ClampCameraPos();
 
+
         // update border line visualization
         if (value < 1000)
         {
@@ -98,6 +99,8 @@ public class CameraController : MonoBehaviour
 
             CityNamesParent.Instance.ActivateNames(-1);
         }
+
+        return;
 
         float scale = (value - 48f) / (2600 - 48f);
         InputManager.Instance.Marker.transform.localScale = Vector3.one + Vector3.one * Mathf.Lerp(0, 15f, scale);

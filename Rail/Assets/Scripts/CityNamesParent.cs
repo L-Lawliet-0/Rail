@@ -32,6 +32,7 @@ public class CityNamesParent : MonoBehaviour
         {
             transform.GetChild(i).gameObject.SetActive(i == index);
 
+            /*
             if (i == index)
             {
                 for (int j = 0; j < transform.GetChild(i).childCount; j++)
@@ -40,7 +41,7 @@ public class CityNamesParent : MonoBehaviour
                     transform.GetChild(i).GetChild(j).GetComponent<Text>().color = Color.black;
                 }
             }
-            
+            */
         }
     }
 
@@ -105,13 +106,13 @@ public class CityNamesParent : MonoBehaviour
         TrainDatas.Clear();
     }
 
-    public void UpdateTrainObjects(bool UpdateCapacity = false)
+    public void UpdateTrainObjects(bool[] updates)
     {
         for (int i = 0; i < TrainObjs.Count; i++)
         {
             TrainObjs[i].position = TrainDatas[i].TrainSprite.position + Vector3.up * 6;
 
-            if (UpdateCapacity)
+            if (updates[i])
             {
                 for (int d = TrainObjs[i].childCount - 1; d >= 1; d--)
                     Destroy(TrainObjs[i].GetChild(d).gameObject);
