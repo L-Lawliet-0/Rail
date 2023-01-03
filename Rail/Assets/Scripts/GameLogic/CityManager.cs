@@ -113,6 +113,8 @@ public class CityManager : MonoBehaviour
                 }
             }
         }
+
+        StartCoroutine("FlushNeedsToStation");
     }
 
     // calculate and log travel need info
@@ -630,102 +632,110 @@ public class CityManager : MonoBehaviour
     /// <summary>
     /// hourly operation, flush the travel into each citys train station
     /// </summary>
-    public void FlushNeedsToStation()
+    public IEnumerator FlushNeedsToStation()
     {
-        for (int i = 0; i < GridData.Instance.GridDatas.Count; i++)
+        while (true)
         {
-            GridData.GridSave grid = GridData.Instance.GridDatas[i];
-
-            // we only check grid that has a station built on it
-            if (!grid.name.Equals("sea") && grid.StationData != null)
+            for (int i = 0; i < GridData.Instance.GridDatas.Count; i++)
             {
-                int cityIndex = GridToCity[grid.Index];
+                GridData.GridSave grid = GridData.Instance.GridDatas[i];
 
-                // check existing queue, force them to leave if their needs can't be sat
-                for (int j = grid.StationData.StationQueue.Count - 1; j >= 0; j--)
+                // we only check grid that has a station built on it
+                if (!grid.name.Equals("sea") && grid.StationData != null)
                 {
-                    TravelData td = grid.StationData.StationQueue[j];
-                    if (!TrainManager.Instance.TrainPassByCheck(grid.Index, td.TravelPath[0], 60 * 60 * 3))
+                    int cityIndex = GridToCity[grid.Index];
+
+                    // check existing queue, force them to leave if their needs can't be sat
+                    for (int j = grid.StationData.StationQueue.Count - 1; j >= 0; j--)
                     {
-                        // force them to leave station
-                        AdjustPopulation(cityIndex, td.HomeCity, td.Population);
-                        grid.StationData.StationQueue.RemoveAt(j);
-                    }
-                }
-
-                int capacity = grid.StationData.Capacity - grid.StationData.CurrentCount();
-                
-
-                if (capacity > 0)
-                {
-                    List<int> keys = new List<int>(grid.StationData.CityCoverage.Keys);
-
-                    foreach (int cityKey in keys)
-                    {
-                        if (capacity <= 0)
-                            break;
-
-                        for (int j = TravelNeeds[cityKey].Count - 1; j >= 0; j--)
+                        TravelData td = grid.StationData.StationQueue[j];
+                        if (!TrainManager.Instance.TrainPassByCheck(grid.Index, td.TravelPath[0], 60 * 60 * 3))
                         {
-                            TravelData td = TravelNeeds[cityKey][j];
-                            if (td.TargetCity == cityIndex)
-                                continue;
+                            // force them to leave station
+                            AdjustPopulation(cityIndex, td.HomeCity, td.Population);
+                            grid.StationData.StationQueue.RemoveAt(j);
+                        }
+                    }
 
-                            List<int> routes = new List<int>();
+                    int capacity = grid.StationData.Capacity - grid.StationData.CurrentCount();
 
-                            int population = Mathf.FloorToInt(td.Population * grid.StationData.CityCoverage[cityKey]);
 
-                            // if less than 5 people, we flush all of them or 5 people in side the station
-                            if (population < 5 && td.Population > 0 && grid.StationData.CityCoverage[cityKey] > 0)
-                                population = Mathf.Min(td.Population, 5);
+                    if (capacity > 0)
+                    {
+                        List<int> keys = new List<int>(grid.StationData.CityCoverage.Keys);
 
-                            if (population > 0 && TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3, out routes))
+                        foreach (int cityKey in keys)
+                        {
+                            if (capacity <= 0)
+                                break;
+
+                            for (int j = TravelNeeds[cityKey].Count - 1; j >= 0; j--)
                             {
-                                // check if this can be fulfilled
-                                if (capacity >= population)
+                                TravelData td = TravelNeeds[cityKey][j];
+                                if (td.TargetCity == cityIndex)
+                                    continue;
+
+                                List<int> routes = new List<int>();
+
+                                int population = Mathf.FloorToInt(td.Population * grid.StationData.CityCoverage[cityKey]);
+
+                                // if less than 5 people, we flush all of them or 5 people in side the station
+                                if (population < 5 && td.Population > 0 && grid.StationData.CityCoverage[cityKey] > 0)
+                                    population = Mathf.Min(td.Population, 5);
+
+                                if (population > 0 && TrainManager.Instance.TrainPassBy(grid.Index, td.TargetCity, 60 * 60 * 3, out routes))
                                 {
-                                    TravelData newTD = new TravelData()
+                                    // check if this can be fulfilled
+                                    if (capacity >= population)
                                     {
-                                        HomeCity = td.HomeCity,
-                                        TargetCity = td.TargetCity,
-                                        Population = population,
-                                        TravelPath = routes
-                                    };
+                                        TravelData newTD = new TravelData()
+                                        {
+                                            HomeCity = td.HomeCity,
+                                            TargetCity = td.TargetCity,
+                                            Population = population,
+                                            TravelPath = routes
+                                        };
 
-                                    grid.StationData.StationQueue.Add(newTD);
+                                        grid.StationData.StationQueue.Add(newTD);
 
-                                    TravelNeeds[cityKey][j].Population -= population;
-                                    if (TravelNeeds[cityKey][j].Population <= 0)
-                                        TravelNeeds[cityKey].RemoveAt(j);
-                                    AdjustPopulation(cityKey, td.HomeCity, -population);
+                                        TravelNeeds[cityKey][j].Population -= population;
+                                        if (TravelNeeds[cityKey][j].Population <= 0)
+                                            TravelNeeds[cityKey].RemoveAt(j);
+                                        AdjustPopulation(cityKey, td.HomeCity, -population);
 
-                                    capacity -= population;
+                                        capacity -= population;
 
-                                    if (capacity <= 0)
+                                        if (capacity <= 0)
+                                            break;
+                                    }
+                                    else
+                                    {
+                                        TravelData newTD = new TravelData()
+                                        {
+                                            HomeCity = td.HomeCity,
+                                            TargetCity = td.TargetCity,
+                                            Population = capacity,
+                                            TravelPath = routes
+                                        };
+
+                                        grid.StationData.StationQueue.Add(newTD);
+                                        TravelNeeds[cityKey][j].Population -= capacity;
+                                        AdjustPopulation(cityKey, td.HomeCity, -capacity);
+
+                                        capacity = 0;
                                         break;
-                                }
-                                else
-                                {
-                                    TravelData newTD = new TravelData()
-                                    {
-                                        HomeCity = td.HomeCity,
-                                        TargetCity = td.TargetCity,
-                                        Population = capacity,
-                                        TravelPath = routes
-                                    };
-
-                                    grid.StationData.StationQueue.Add(newTD);
-                                    TravelNeeds[cityKey][j].Population -= capacity;
-                                    AdjustPopulation(cityKey, td.HomeCity, -capacity);
-
-                                    capacity = 0;
-                                    break;
+                                    }
                                 }
                             }
                         }
                     }
+
+                    Debug.LogError("iteration");
+                    yield return new WaitForSeconds(3600 / TimeManager.RealTimeToGameTime / Mathf.Max(1, StationCountCache));
                 }
             }
+
+            yield return null;
         }
     }
 
@@ -770,7 +780,11 @@ public class CityManager : MonoBehaviour
             list.Add(gridIndex);
             CityStations.Add(city, list);
         }
+
+        StationCountCache++;
     }
+
+    private int StationCountCache;
 
     public void ClearCityData()
     {

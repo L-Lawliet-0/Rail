@@ -100,7 +100,7 @@ public class TimeManager : MonoBehaviour
             HourCounter -= HourSecs;
             // an hour has passed
             // flush travel needs to station
-            CityManager.Instance.FlushNeedsToStation();
+            //CityManager.Instance.FlushNeedsToStation();
             HourCount++;
             if (HourCount > 23)
                 HourCount = 0;

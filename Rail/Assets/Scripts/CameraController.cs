@@ -35,7 +35,7 @@ public class CameraController : MonoBehaviour
 
     public void Zoom(float value)
     { 
-        //if (value != 0)
+        if (value != 0)
             CurrentOrthographicSize += value * ZoomSpeed * Time.deltaTime;
     }
 
@@ -100,11 +100,13 @@ public class CameraController : MonoBehaviour
             CityNamesParent.Instance.ActivateNames(-1);
         }
 
-        return;
 
         float scale = (value - 48f) / (2600 - 48f);
         InputManager.Instance.Marker.transform.localScale = Vector3.one + Vector3.one * Mathf.Lerp(0, 15f, scale);
         IconManager.Instance.UpdateSize(scale);
+
+        return;
+
         RoadManager.Instance.UpdateRoadSize(scale);
     }
 }

@@ -32,7 +32,7 @@ public class CityNamesParent : MonoBehaviour
         {
             transform.GetChild(i).gameObject.SetActive(i == index);
 
-            /*
+            
             if (i == index)
             {
                 for (int j = 0; j < transform.GetChild(i).childCount; j++)
@@ -41,7 +41,7 @@ public class CityNamesParent : MonoBehaviour
                     transform.GetChild(i).GetChild(j).GetComponent<Text>().color = Color.black;
                 }
             }
-            */
+            
         }
     }
 
