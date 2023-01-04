@@ -47,6 +47,7 @@ public class CameraController : MonoBehaviour
         ClampCameraPos();
     }
 
+    private float visible_x_min, visible_x_max, visible_y_min, visible_y_max;
     public void ClampCameraPos()
     {
         float x = transform.position.x;
@@ -54,6 +55,11 @@ public class CameraController : MonoBehaviour
         x = Mathf.Clamp(x, minX, maxX);
         y = Mathf.Clamp(y, minY, maxY);
         transform.position = new Vector3(x, y, transform.position.z);
+
+        visible_x_min = transform.position.x - CamWidth / 2;
+        visible_x_max = transform.position.x + CamWidth / 2;
+        visible_y_min = transform.position.y - CurrentOrthographicSize;
+        visible_y_max = transform.position.y + CurrentOrthographicSize;
     }
 
     public void UpdateOrthographicSize(float value)
@@ -105,8 +111,32 @@ public class CameraController : MonoBehaviour
         InputManager.Instance.Marker.transform.localScale = Vector3.one + Vector3.one * Mathf.Lerp(0, 15f, scale);
         IconManager.Instance.UpdateSize(scale);
 
+        Vector3 scale3 = Vector3.one + Vector3.one * Mathf.Lerp(0, 9f, scale);
+        foreach (TrainManager.TrainData td in TrainManager.Instance.AllTrains)
+        {
+            td.TrainSprite.localScale = scale3;
+            if (td.otherTransforms != null)
+            {
+                foreach (Transform tran in td.otherTransforms)
+                    tran.localScale = scale3;
+            }
+        }
+
         return;
 
         RoadManager.Instance.UpdateRoadSize(scale);
+    }
+
+    // is this position visible by camera?
+    public bool VisibleByCamera(Vector3 worldPos)
+    {
+        return worldPos.x > visible_x_min && worldPos.x < visible_x_max && worldPos.y > visible_y_min && worldPos.y < visible_y_max;
+
+    }
+
+    private const float Tolerance = 1000;
+    public bool BiggerVisible(Vector3 worldPos)
+    {
+        return worldPos.x > visible_x_min - Tolerance && worldPos.x < visible_x_max + Tolerance && worldPos.y > visible_y_min - Tolerance && worldPos.y < visible_y_max + Tolerance;
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 public class TrainManager : MonoBehaviour
 {
@@ -37,6 +38,10 @@ public class TrainManager : MonoBehaviour
         public bool Poped;
 
         public string TrainName;
+
+        public bool VisibleByCam;
+        public bool OnBecomingVisible;
+
         public TrainData()
         {
             TrainName = "G" + TrainNameIndex++;
@@ -94,6 +99,12 @@ public class TrainManager : MonoBehaviour
         for (int q = 0; q < AllTrains.Count; q++)
         {
             TrainData td = AllTrains[q];
+            bool tempV = td.VisibleByCam;
+            td.VisibleByCam = CameraController.Instance.VisibleByCamera(td.TrainSprite.position);
+            if (!tempV && td.VisibleByCam)
+                td.OnBecomingVisible = true;
+            else
+                td.OnBecomingVisible = false;
             if (td.Selected)
                 continue;
 
@@ -106,7 +117,8 @@ public class TrainManager : MonoBehaviour
                 if (!td.Poped)
                 {
                     td.Poped = true;
-                    CityNamesParent.Instance.ShowBoardInfo(td);
+                    if (td.VisibleByCam && CameraController.Instance.CurrentOrthographicSize < 400)
+                        CityNamesParent.Instance.ShowBoardInfo(td);
                 }
 
                 continue;
@@ -199,8 +211,21 @@ public class TrainManager : MonoBehaviour
             float length = td.Progress * wholeDistance;
 
             int start = Mathf.FloorToInt(length / 10f);
-
             float hexOffset = length - (start * 10);
+
+            if (!CameraController.Instance.BiggerVisible(GridData.Instance.GridDatas[currentPath[start]].PosV3) || CameraController.Instance.CurrentOrthographicSize > 1000)
+            {
+                td.TrainSprite.up = (GridData.Instance.GridDatas[currentPath[start + 1]].PosV3 - GridData.Instance.GridDatas[currentPath[start]].PosV3).normalized;
+                td.TrainSprite.position = GridData.Instance.GridDatas[currentPath[start]].PosV3 + td.TrainSprite.up * hexOffset;
+                foreach (Transform tran in td.otherTransforms)
+                    tran.gameObject.SetActive(false);
+                continue;
+            }
+
+            foreach (Transform tran in td.otherTransforms)
+                tran.gameObject.SetActive(true);
+
+            
 
             if ((start > 0 || hexOffset > 5) && ((start < currentPath.Count - 2) || (start < currentPath.Count - 1 && hexOffset < 5)))
             {
@@ -242,7 +267,7 @@ public class TrainManager : MonoBehaviour
             }
 
             // update train tails
-            float gap = 5.1f;
+            float gap = 5.1f * td.TrainSprite.localScale.x;
 
             TrainPosCache tpc = new TrainPosCache();
             if (td.PosCaches.Count <= 0)

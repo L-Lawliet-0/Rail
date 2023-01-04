@@ -112,7 +112,7 @@ public class CityNamesParent : MonoBehaviour
         {
             TrainObjs[i].position = TrainDatas[i].TrainSprite.position + Vector3.up * 6;
 
-            if (updates[i])
+            if (((updates[i] && TrainDatas[i].VisibleByCam) || TrainDatas[i].OnBecomingVisible) && CameraController.Instance.CurrentOrthographicSize < 500)
             {
                 for (int d = TrainObjs[i].childCount - 1; d >= 1; d--)
                     Destroy(TrainObjs[i].GetChild(d).gameObject);

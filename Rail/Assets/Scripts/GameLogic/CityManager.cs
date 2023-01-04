@@ -730,7 +730,6 @@ public class CityManager : MonoBehaviour
                         }
                     }
 
-                    Debug.LogError("iteration");
                     yield return new WaitForSeconds(3600 / TimeManager.RealTimeToGameTime / Mathf.Max(1, StationCountCache));
                 }
             }
