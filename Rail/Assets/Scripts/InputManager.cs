@@ -32,7 +32,7 @@ public class InputManager : MonoBehaviour
 
     void Update()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
+        if (!Main.Instance.IsPlaying || EventSystem.current.IsPointerOverGameObject())
         {
             PressedTime = 1;
             return;

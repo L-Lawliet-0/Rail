@@ -94,6 +94,9 @@ public class TrainManager : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!Main.Instance.IsPlaying)
+            return;
+
         bool updateCapacity = false;
         bool[] updateTrains = new bool[AllTrains.Count];
         for (int q = 0; q < AllTrains.Count; q++)

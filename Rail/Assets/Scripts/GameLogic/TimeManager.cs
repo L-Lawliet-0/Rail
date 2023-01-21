@@ -59,14 +59,8 @@ public class TimeManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            // advance an hour
-            DayCounter += 3601;
-            HourCounter += 3601;
-
-            CityManager.Instance.FlushNeedsToStation();
-        }
+        if (!Main.Instance.IsPlaying)
+            return;
 
         DayCounter += Time.deltaTime * RealTimeToGameTime;
 
