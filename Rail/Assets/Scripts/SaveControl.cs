@@ -14,9 +14,14 @@ public class SaveControl : MonoBehaviour
         m_Instance = this;
     }
 
-    public void Save()
+    public void Save(int slot)
     {
-        string path = Application.dataPath + "/Save/";
+        string path = Application.persistentDataPath + "/Save/Slot" + slot + "/";
+        if (Application.isEditor)
+            path = Application.dataPath + "/Save/Slot" + slot + "/";
+
+        Directory.CreateDirectory(path.Substring(0, path.Length - 1));
+
         // save station data
         // which is all the grids
         string stationPath = path + "Grids";
@@ -90,6 +95,8 @@ public class SaveControl : MonoBehaviour
             BinaryFormatter bf = new BinaryFormatter();
             bf.Serialize(file, tp);
         }
+
+        Main.Instance.RefreshSLpanel(slot);
     }
 
     [System.Serializable]
@@ -102,9 +109,11 @@ public class SaveControl : MonoBehaviour
         public int MoneyCount;
     }
 
-    public void Load()
+    public void Load(int slot)
     {
-        string path = Application.dataPath + "/Save/";
+        string path = Application.persistentDataPath + "/Save/Slot" + slot + "/";
+        if (Application.isEditor)
+            path = Application.dataPath + "/Save/Slot" + slot + "/";
         string stationPath = path + "Grids";
         string roadPath = path + "Paths";
         string roadLevelPath = path + "RoadLevels";
@@ -208,13 +217,80 @@ public class SaveControl : MonoBehaviour
             TimeManager.Instance.LastDayIncomeCount = tp.LastDayIncomeCount;
             EconManager.Instance.MoneyCount = tp.MoneyCount;
         }
+
+        Main.Instance.ForcePlay();
+    }
+
+    public Main.SaveSummary TryReadSave(int slot)
+    {
+        string path = Application.persistentDataPath + "/Save/Slot" + slot + "/";
+        if (Application.isEditor)
+            path = Application.dataPath + "/Save/Slot" + slot + "/";
+        string stationPath = path + "Grids";
+        string roadPath = path + "Paths";
+        string trainPath = path + "Trains";
+
+        if (!File.Exists(stationPath) || !File.Exists(roadPath) || !File.Exists(trainPath))
+            return null;
+
+        Main.SaveSummary ss = new Main.SaveSummary();
+
+        List<GridData.GridSave> GridDatas;
+        List<List<int>> AllRoads;
+        List<TrainManager.TrainData> AllTrains;
+
+        using (Stream file = File.Open(stationPath, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            GridDatas = bf.Deserialize(file) as List<GridData.GridSave>;
+
+            ss.StationCount = 0;
+            foreach (GridData.GridSave grid in GridDatas)
+            {
+                if (grid.StationData != null)
+                    ss.StationCount++;
+            }
+        }
+
+        using (Stream file = File.Open(trainPath, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            AllTrains = bf.Deserialize(file) as List<TrainManager.TrainData>;
+
+            ss.TrainCount = AllTrains.Count;
+        }
+
+        using (Stream file = File.Open(roadPath, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            AllRoads = bf.Deserialize(file) as List<List<int>>;
+
+            ss.TrackLength = 0;
+            foreach (List<int> road in AllRoads)
+            {
+                ss.TrackLength += (road.Count - 1) * 10;
+            }
+        }
+
+        string timePath = path + "Time";
+        using (Stream file = File.Open(timePath, FileMode.Open))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            TimeProperties tp = new TimeProperties();
+            tp = bf.Deserialize(file) as TimeProperties;
+
+
+            ss.WeekCount = tp.MonthCount;
+        }
+
+        return ss;
     }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.S))
-            Save();
+            Save(1);
         if (Input.GetKeyDown(KeyCode.L))
-            Load();
+            Load(1);
     }
 }

@@ -64,7 +64,6 @@ public class GridData : MonoBehaviour
         }
     }
 
-
     public List<GridSave> GridDatas;
     private void Awake()
     {

@@ -790,5 +790,6 @@ public class CityManager : MonoBehaviour
         CityStations.Clear();
         CityDatas.Clear();
         TravelNeeds.Clear();
+        StationCountCache = 0;
     }
 }

@@ -778,9 +778,14 @@ public class TrainManager : MonoBehaviour
         for (int i = 0; i < AllTrains.Count; i++)
         {
             Destroy(AllTrains[i].TrainSprite.gameObject);
+            for (int j = AllTrains[i].otherTransforms.Count - 1; j >= 0; j--)
+            {
+                Destroy(AllTrains[i].otherTransforms[j].gameObject);
+            }
         }
         AllTrains.Clear();
         CityNamesParent.Instance.ClearTrainCounter();
+        StationTrains.Clear();
     }
 
     public void Reconstruct()
@@ -803,6 +808,7 @@ public class TrainManager : MonoBehaviour
             }
 
             CityNamesParent.Instance.CreateTrainCounter(td);
+            AddNewTrains(AllTrains[i], i);
         }
     }
 }
