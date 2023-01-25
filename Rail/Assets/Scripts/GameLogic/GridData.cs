@@ -65,6 +65,7 @@ public class GridData : MonoBehaviour
     }
 
     public List<GridSave> GridDatas;
+    public static List<GridSave> GridDatasCache;
     private void Awake()
     {
         m_Instance = this;
@@ -93,9 +94,10 @@ public class GridData : MonoBehaviour
             {
                 HexSaver.HexInfo hi = datas[i];
                 initDatas.Add(new GridSave() { name = hi.name, posX = hi.posX, posY = hi.posY, CrossData = null, StationData = null, Index = i });
+                Debug.LogError(initDatas[i].Index);
             }
 
-            dataPath = Application.dataPath + "/GridDatas";
+            dataPath = Application.streamingAssetsPath + "/GridDatas";
             using (Stream file = File.Open(dataPath, FileMode.OpenOrCreate))
             {
                 BinaryFormatter bf = new BinaryFormatter();
@@ -113,6 +115,12 @@ public class GridData : MonoBehaviour
         {
             BinaryFormatter bf = new BinaryFormatter();
             GridDatas = bf.Deserialize(file) as List<GridSave>;
+        }
+
+        GridDatasCache = new List<GridSave>();
+        foreach (GridSave grid in GridDatas)
+        {
+            GridDatasCache.Add(grid);
         }
 
         /*

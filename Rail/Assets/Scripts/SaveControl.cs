@@ -28,7 +28,15 @@ public class SaveControl : MonoBehaviour
         using (Stream file = File.Open(stationPath, FileMode.OpenOrCreate))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            bf.Serialize(file, GridData.Instance.GridDatas);
+
+            List<GridData.GridSave> saveData = new List<GridData.GridSave>();
+            foreach (GridData.GridSave grid in GridData.Instance.GridDatas)
+            {
+                if (grid.CrossData != null || grid.StationData != null)
+                    saveData.Add(grid);
+            }
+
+            bf.Serialize(file, saveData);
         }
 
         // save road data
@@ -133,7 +141,17 @@ public class SaveControl : MonoBehaviour
         using (Stream file = File.Open(stationPath, FileMode.Open))
         {
             BinaryFormatter bf = new BinaryFormatter();
-            GridDatas = bf.Deserialize(file) as List<GridData.GridSave>;
+            List<GridData.GridSave> loadData = bf.Deserialize(file) as List<GridData.GridSave>;
+            GridDatas = new List<GridData.GridSave>();
+
+            int loadIndex = 0;
+            for (int i = 0; i < GridData.GridDatasCache.Count; i++)
+            {
+                if (loadIndex < loadData.Count && loadData[loadIndex].Index == i)
+                    GridDatas.Add(loadData[loadIndex++]);
+                else
+                    GridDatas.Add(GridData.GridDatasCache[i]);
+            }
         }
 
         using (Stream file = File.Open(roadPath, FileMode.Open))
